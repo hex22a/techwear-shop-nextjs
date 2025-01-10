@@ -1,5 +1,7 @@
 import Image from "next/image";
 import layout from "@/app/ui/layout.module.css"
+import Brands from "@/app/ui/brands";
+import Featured from "@/app/ui/featured";
 
 export default function Home() {
   return (
@@ -35,51 +37,19 @@ export default function Home() {
                     />
                 </div>
             </div>
-            <div className="bg-black">
-                <div className={`${layout.container} flex flex-row flex-wrap justify-around items-center min-h-32`}>
-                    <div className="relative min-h-10 min-w-24 md:min-w-36 my-4 md:my-0">
-                        <Image
-                            className="object-contain"
-                            src="/krakatau.svg"
-                            alt="krakatau logo"
-                            fill
-                        />
-                    </div>
-                    <div className="relative min-h-10  min-w-24 md:min-w-36 my-4 md:my-0">
-                        <Image
-                            className="object-contain"
-                            src="/arcteryx.svg"
-                            alt="arcteryx logo"
-                            fill
-                        />
-                    </div>
-                    <div className="relative min-h-10  min-w-24 md:min-w-36 my-4 md:my-0">
-                        <Image
-                            className="object-contain"
-                            src="/acronym.svg"
-                            alt="acronym logo"
-                            fill
-                        />
-                    </div>
-                    <div className="relative min-h-10  min-w-24 md:min-w-36 my-4 md:my-0">
-                        <Image
-                            className="object-contain"
-                            src="/cp-company.svg"
-                            alt="cp company logo"
-                            fill
-                        />
-                    </div>
-                    <div className="relative min-h-10 min-w-24 md:min-w-36 my-4 md:my-0">
-                        <Image
-                            className="object-contain"
-                            src="/the-north-face.svg"
-                            alt="north face logo"
-                            fill
-                        />
-                    </div>
+            <Brands/>
+            <Featured title="New Arrivals"/>
+            <hr className={layout.container}/>
+            <Featured title="Top Selling"/>
+            <div className={`${layout.container} bg-gray-100 rounded-3xl`}>
+                <h1 className="text-center text-5xl font-bold pt-16 pb-14">Browse by dress style</h1>
+                <div className="flex flex-row flex-wrap justify-center items-center">
+                    <div className="bg-white flex-grow-0 basis-1/3">Casual</div>
+                    <div className="bg-white flex-grow-1 basis-2/3">Formal</div>
+                    <div className="bg-white flex-grow-1 basis-2/3">Party</div>
+                    <div className="bg-white flex-grow-0 basis-1/3">Gym</div>
                 </div>
             </div>
-
         </main>
         <footer className="grid grid-cols-12">footer</footer>
     </>

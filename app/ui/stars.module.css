@@ -1,0 +1,29 @@
+.star {
+    text-align:left;
+    font-style:normal;
+    display:inline-block;
+    position: relative;
+    unicode-bidi: bidi-override;
+
+    --rating: attr(data-rating);
+    --num-stars: 5;
+    --fill-width: calc((var(--rating) / var(--num-stars)) * 100%);
+}
+
+.star::before {
+    display:block;
+    content: '★★★★★';
+    color: #eee;
+}
+
+.star::after {
+    white-space:nowrap;
+    position:absolute;
+    top:0;
+    left:0;
+    content: '★★★★★';
+    width: var(--fill-width);
+    color: #ff8c00;
+    overflow:hidden;
+    height:100%;
+}
