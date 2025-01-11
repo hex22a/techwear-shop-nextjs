@@ -9,22 +9,22 @@ export default function Home() {
         <main>
             <div className={`${layout.container} block md:grid md:grid-cols-2`}>
                 <div className="flex flex-col justify-center items-start">
-                    <h1>FIND CLOTHES THAT MATCHES YOUR STYLE</h1>
-                    <p>Browse through our diverse range of meticulously crafted garments, designed to bring out your
+                    <h1 className="font-bold text-4xl md:text-6xl mb-8">FIND CLOTHES THAT MATCHES YOUR STYLE</h1>
+                    <p className="text-sm md:text-base mb-8">Browse through our diverse range of meticulously crafted garments, designed to bring out your
                         individuality and cater to your sense of style.</p>
-                    <button>Shop Now</button>
-                    <div>
-                        <div className="inline-block">
-                            <h2>200+</h2>
-                            <p>International Brands</p>
+                    <button className="bg-black text-white w-full md:w-auto rounded-full px-16 py-4 mb-12">Shop Now</button>
+                    <div className="flex flex-row flex-wrap justify-center items-stretch">
+                        <div className="inline-block border-r pr-4">
+                            <h2 className="text-3xl md:text-4xl">200+</h2>
+                            <p className="text-sm md:text-base opacity-60">International Brands</p>
                         </div>
-                        <div className="inline-block">
-                            <h2>2,000+</h2>
-                            <p>High-Quality Products</p>
+                        <div className="inline-block md:border-r px-4">
+                            <h2 className="text-3xl md:text-4xl">2,000+</h2>
+                            <p className="text-sm md:text-base opacity-60">High-Quality Products</p>
                         </div>
-                        <div className="inline-block">
-                            <h2>30,000+</h2>
-                            <p>Happy Customers</p>
+                        <div className="inline-block md:pl-4">
+                            <h2 className="text-3xl md:text-4xl">30,000+</h2>
+                            <p className="text-sm md:text-base opacity-60">Happy Customers</p>
                         </div>
                     </div>
                 </div>

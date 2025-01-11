@@ -5,7 +5,7 @@ import Price from "@/app/ui/price";
 
 export default function Featured(props: {title: string}) {
     return (
-        <div className={layout.container}>
+        <div className={`${layout.container} pb-16`}>
             <h1 className="text-center text-5xl font-bold pt-16 pb-14">{props.title}</h1>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-x-5">
                 <div>
@@ -72,7 +72,7 @@ export default function Featured(props: {title: string}) {
                 </div>
             </div>
             <div className="text-center mt-10">
-                <button>View All</button>
+                <button className="border border-black rounded-full w-full md:w-auto px-20 py-4">View All</button>
             </div>
         </div>
     );
