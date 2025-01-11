@@ -7,7 +7,7 @@ export default function Featured(props: {title: string}) {
     return (
         <div className={layout.container}>
             <h1 className="text-center text-5xl font-bold pt-16 pb-14">{props.title}</h1>
-            <div className="grid grid-cols-4 gap-x-5">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-5">
                 <div>
                     <div className="relative bg-gray-100 rounded-xl h-72 mb-4">
                         <Image
@@ -40,7 +40,7 @@ export default function Featured(props: {title: string}) {
                     </div>
                     <div><Price price="$500"/></div>
                 </div>
-                <div>
+                <div className="hidden md:block">
                     <div className="relative bg-gray-100 rounded-xl h-72 mb-4">
                         <Image
                             className="object-contain"
@@ -55,7 +55,7 @@ export default function Featured(props: {title: string}) {
                     </div>
                     <div><Price price="$600"/></div>
                 </div>
-                <div>
+                <div className="hidden md:block">
                     <div className="relative bg-gray-100 rounded-xl h-72 mb-4">
                         <Image
                             className="object-contain"

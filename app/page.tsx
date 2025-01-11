@@ -41,13 +41,49 @@ export default function Home() {
             <Featured title="New Arrivals"/>
             <hr className={layout.container}/>
             <Featured title="Top Selling"/>
-            <div className={`${layout.container} bg-gray-100 rounded-3xl`}>
+            <div className={`${layout.container} bg-gray-100 rounded-3xl px-6 pb-7 md:px-16 md:pb-20`}>
                 <h1 className="text-center text-5xl font-bold pt-16 pb-14">Browse by dress style</h1>
-                <div className="flex flex-row flex-wrap justify-center items-center">
-                    <div className="bg-white flex-grow-0 basis-1/3">Casual</div>
-                    <div className="bg-white flex-grow-1 basis-2/3">Formal</div>
-                    <div className="bg-white flex-grow-1 basis-2/3">Party</div>
-                    <div className="bg-white flex-grow-0 basis-1/3">Gym</div>
+                <div className="flex flex-col md:flex-row md:flex-wrap justify-center items-stretch md:items-center gap-5">
+                    <div className="bg-white rounded-3xl md:flex-grow-0 md:basis-[calc(33.33%-10px)] min-h-48 md:min-h-72 overflow-hidden relative">
+                        <div className="relative top-6 left-9 z-10 font-bold text-3xl">Casual</div>
+                        <Image
+                            className="absolute bottom-0 right-0"
+                            src="/dress-style/casual.webp"
+                            alt="casual"
+                            width={400}
+                            height={400}
+                        />
+                    </div>
+                    <div className="bg-white rounded-3xl md:flex-grow-1 md:basis-[calc(66.66%-10px)] min-h-48 md:min-h-72 overflow-hidden relative">
+                        <div className="relative top-6 left-9 z-10 font-bold text-3xl">Formal</div>
+                        <Image
+                            className="absolute bottom-0 right-0"
+                            src="/dress-style/formal.webp"
+                            alt="formal"
+                            width={600}
+                            height={600}
+                        />
+                    </div>
+                    <div className="bg-white rounded-3xl md:flex-grow-1 md:basis-[calc(66.66%-10px)] min-h-48 md:min-h-72 overflow-hidden relative">
+                        <div className="relative top-6 left-9 z-10 font-bold text-3xl">Casual</div>
+                        <Image
+                            className="absolute bottom-0 right-0"
+                            src="/dress-style/outdoor.webp"
+                            alt="outdoor"
+                            width={600}
+                            height={600}
+                        />
+                    </div>
+                    <div className="bg-white rounded-3xl md:flex-grow-0 md:basis-[calc(33.33%-10px)] min-h-48 md:min-h-72 overflow-hidden relative">
+                        <div className="relative top-6 left-9 z-10 font-bold text-3xl">Party</div>
+                        <Image
+                            className="absolute bottom-0 right-0"
+                            src="/dress-style/party.jpg"
+                            alt="party"
+                            width={400}
+                            height={400}
+                        />
+                    </div>
                 </div>
             </div>
         </main>
