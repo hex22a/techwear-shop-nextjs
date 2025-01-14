@@ -3,6 +3,7 @@ import layout from "@/app/ui/layout.module.css"
 import Brands from "@/app/ui/brands";
 import Featured from "@/app/ui/featured";
 import Carousel from "@/app/ui/carousel";
+import Footer from "@/app/ui/footer";
 
 export default function Home() {
   return (
@@ -87,9 +88,13 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <Carousel />
+            <div className="mb-20">
+                <Carousel />
+            </div>
         </main>
-        <footer className="grid grid-cols-12">footer</footer>
+        <footer>
+            <Footer />
+        </footer>
     </>
   );
 }

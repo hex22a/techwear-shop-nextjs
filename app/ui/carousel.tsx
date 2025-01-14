@@ -6,6 +6,7 @@ import Arrow from "@/app/ui/vector/arrow.svg";
 import Stars from "@/app/ui/stars";
 import { useState } from "react";
 import Image from "next/image";
+import { useMediaQuery } from "react-responsive";
 
 export type CarouselItem = {
     id: number;
@@ -60,11 +61,14 @@ const carouselItems: CarouselItem[] = [
 ];
 
 export default function Carousel() {
+    const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
     const [currentIndex, setCurrentIndex] = useState(0);
     const [items] = useState(carouselItems);
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [direction, setDirection] = useState(-1);
     const [orderMap, setOrderMap] = useState(new Array(items.length).fill(0).map((_, i) => i + 1));
+
+    const slideShift = isMobile ? 14.28 : 11.11;
 
     function next() {
         if (isTransitioning) return;
@@ -103,7 +107,7 @@ export default function Carousel() {
     return (
         <div>
             <div className={`${layout.container} relative pt-16 pb-9`}>
-                <h1 className="inline-block text-left text-5xl font-bold">Our happy customers</h1>
+                <h1 className="inline-block text-left text-4xl md:text-5xl font-bold">Our happy customers</h1>
                 <div className={`${styles.arrows} inline-block`}>
                     <button onClick={prev}>
                         <Arrow className="inline-block rotate-180"/>
@@ -115,17 +119,17 @@ export default function Carousel() {
             </div>
             <div
                 className={`${layout.container} py-5 relative before:absolute before:top-0 before:-left-full before:w-full before:h-full before:z-10 before:backdrop-blur-sm after:absolute after:top-0 after:-right-full after:w-full after:h-full after:z-10 after:backdrop-blur-sm`}>
-                <div className="w-[300%] -translate-x-[22.22%]">
+                <div className="w-[700%] -translate-x-[28.57%] md:w-[300%] md:-translate-x-[22.22%]">
                     <div
-                        className="flex flex-row flex-nowrap justify-start gap-5 items-stretch transition-transform ease-in-out duration-500"
+                        className="flex flex-row flex-nowrap justify-start gap-5 items-stretch"
                         style={{
                             transition: isTransitioning ? 'transform 0.5s ease-in-out' : 'none',
-                            transform: isTransitioning ? `translateX(${direction * 11.11}%)` : 'translateX(0)',
+                            transform: isTransitioning ? `translateX(${direction * slideShift}%)` : 'translateX(0)',
                         }}
                         onTransitionEnd={handleTransitionEnd}>
                         {items.map((item, i) =>
                             <div key={item.id}
-                                 className={` border border-gray-500 rounded-xl px-8 py-7 w-[calc(11.11%-1rem)]`}
+                                 className={` border border-gray-500 rounded-xl px-8 py-7 w-1/3 md:w-[calc(11.11%-1rem)]`}
                                  style={{
                                      order: orderMap[i],
                                  }}
