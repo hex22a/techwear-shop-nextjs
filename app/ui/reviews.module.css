@@ -1,0 +1,5 @@
+.arrows {
+    position: absolute;
+    right: 0;
+    bottom: calc(0px + 3.5rem);
+}
