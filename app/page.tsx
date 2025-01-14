@@ -1,10 +1,8 @@
 import Image from "next/image";
 import layout from "@/app/ui/layout.module.css"
-import styles from "@/app/ui/reviews.module.css"
 import Brands from "@/app/ui/brands";
 import Featured from "@/app/ui/featured";
-import Arrow from "@/app/ui/vector/arrow.svg";
-import Stars from "@/app/ui/stars";
+import Carousel from "@/app/ui/carousel";
 
 export default function Home() {
   return (
@@ -89,55 +87,7 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <div>
-                <div className={`${layout.container} relative pt-16 pb-14`}>
-                    <h1 className="inline-block text-left text-5xl font-bold">Our happy customers</h1>
-                    <div className={`${styles.arrows} inline-block`}>
-                        <Arrow className="inline-block rotate-180"/>
-                        <Arrow className="inline-block"/>
-                    </div>
-                </div>
-                <div className={layout.container}>
-                    <div className="relative text-nowrap before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-white/75 before:z-10 after:absolute after:top-0 after:-right-full after:w-full after:h-full after:bg-white/75 after:z-0">
-                        <div className="border border-gray-500 rounded-xl inline-block w-full md:w-[calc(33.33%-1.25rem)] mr-5 px-8 py-7">
-                            <Stars rating={5}/>
-                            <h3>Alex K.</h3>
-                            <p className="text-wrap">"I'm blown away by the quality and style of the clothes I received
-                                from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded
-                                my expectations.”</p>
-                        </div>
-                        <div className="border border-gray-500 rounded-xl inline-block w-full md:w-[calc(33.33%-1.25rem)] mr-5 px-8 py-7">
-                            <Stars rating={5}/>
-                            <h3>Sarah M.</h3>
-                            <p className="text-wrap">"I'm blown away by the quality and style of the clothes I received
-                                from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded
-                                my expectations.”</p>
-                        </div>
-                        <div className="border border-gray-500 rounded-xl inline-block w-full md:w-[calc(33.33%-1.25rem)] mr-5 px-8 py-7">
-                            <Stars rating={5}/>
-                            <h3>Alex K.</h3>
-                            <p className="text-wrap">"I'm blown away by the quality and style of the clothes I received
-                                from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded
-                                my expectations.”</p>
-                        </div>
-                        <div className="border border-gray-500 rounded-xl inline-block w-full md:w-[calc(33.33%-1.25rem)] mr-5 px-8 py-7">
-                            <Stars rating={5}/>
-                            <h3>Alex K.</h3>
-                            <p className="text-wrap">"I'm blown away by the quality and style of the clothes I received
-                                from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded
-                                my expectations.”</p>
-                        </div>
-                        <div className="border border-gray-500 rounded-xl inline-block w-96 px-8 py-7 absolute -left-1/3">
-                            <Stars rating={5}/>
-                            <h3>Alex K.</h3>
-                            <p className="text-wrap">"I'm blown away by the quality and style of the clothes I received
-                                from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded
-                                my expectations.”</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+            <Carousel />
         </main>
         <footer className="grid grid-cols-12">footer</footer>
     </>
