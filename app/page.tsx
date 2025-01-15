@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <>
         <Header/>
-        <main>
+        <main className="mt-40">
             <div className="bg-[rgba(240,240,240,1)]">
                 <div className={`${layout.container} block md:grid md:grid-cols-2`}>
                     <div className="flex flex-col justify-center items-start">
