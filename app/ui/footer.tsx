@@ -8,7 +8,7 @@ import Image from "next/image";
 
 export default function Footer() {
     return (
-        <div className="relative">
+        <footer className="relative">
             <div className={layout.container}>
                 <div
                     className="bg-black rounded-3xl flex flex-col md:flex-row justify-between items-center px-6 py-8 md:px-16 md:py-11 mb-14">
@@ -116,8 +116,8 @@ export default function Footer() {
                         />
                     </div>
                 </div>
-                <div className="absolute bottom-0 left-0 right-0 bg-gray-100 -z-10 h-5/6"></div>
+                <div className="absolute bottom-0 left-0 right-0 bg-[rgba(240,240,240,1)] -z-10 h-5/6"></div>
             </div>
-        </div>
+        </footer>
     )
 }
