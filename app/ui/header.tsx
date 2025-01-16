@@ -45,20 +45,30 @@ export default function Header() {
                         <Burger height={24} width={24}/>
                     </button>
                     <h1 className={`${isSearchExpanded ? 'hidden' : 'block'} text-nowrap md:block text-xl md:text-3xl`}>Tech Shop</h1>
-                    <ul className={`${isLinkGroupVisible ? 'block' : 'hidden' } bg-white fixed bottom-0 left-0 w-full md:w-auto rounded-t-3xl md:static md:flex md:flex-row md:justify-start md:items-center md:gap-6`}>
-                        <li className="group relative">
-                            <a href="#">Shop <Dropdown className="inline"/></a>
-                            <ul className="hidden group-hover:block absolute top-10 left-0 bg-white w-48">
-                                <li><a href="#">SS2025</a></li>
-                                <li><a href="#">FW2024</a></li>
-                                <li><a href="#">Men</a></li>
-                                <li><a href="#">Women</a></li>
-                                <li><a href="#">Kids</a></li>
+                    <ul className={`${isLinkGroupVisible ? 'bottom-0' : '-bottom-full' } bg-white fixed  left-0 w-full md:w-auto rounded-t-3xl md:static flex flex-col md:flex-row md:justify-start items-center gap-6 py-6 md:py-0 transition-all ease-in-out duration-200`}
+                        role="menu">
+                        <li className="group relative" role="menuitem">
+                            <input type="checkbox" id="submenu-toggle" className="hidden peer"/>
+                            <label
+                                className="cursor-pointer"
+                                htmlFor="submenu-toggle"
+                                aria-controls="submenu"
+                                tabIndex={0}
+                                role="button"
+                            >
+                                Shop <Dropdown className="inline"/>
+                            </label>
+                            <ul className="hidden group-hover:block peer-checked:block peer-focus-within:block group-focus-within:block focus-within:block absolute top-6 left-0 bg-white w-28 p-1.5 rounded-xl shadow-lg">
+                                <li role="menuitem"><a href="#">SS2025</a></li>
+                                <li role="menuitem"><a href="#">FW2024</a></li>
+                                <li role="menuitem"><a href="#">Men</a></li>
+                                <li role="menuitem"><a href="#">Women</a></li>
+                                <li role="menuitem"><a href="#">Kids</a></li>
                             </ul>
                         </li>
-                        <li><a href="#">On Sale</a></li>
-                        <li><a href="#">New Arrivals</a></li>
-                        <li><a href="#">Brands</a></li>
+                        <li><a role="menuitem" href="#">On Sale</a></li>
+                        <li><a role="menuitem" href="#">New Arrivals</a></li>
+                        <li><a role="menuitem" href="#">Brands</a></li>
                     </ul>
                     <div className="flex flex-row flex-nowrap justify-between items-center md:flex-grow gap-3">
                         <form className="md:flex-grow">
