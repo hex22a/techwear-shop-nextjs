@@ -2,9 +2,9 @@
 
 import layout from "@/app/ui/layout.module.css";
 import Cross from "@/app/ui/vector/cross.svg";
-import Dropdown from "@/app/ui/vector/dropdown.svg";
+import SlimArrow from "@/app/ui/vector/slim-arrow.svg";
 import Cart from "@/app/ui/vector/cart.svg";
-import Userpic from "@/app/ui/vector/userpic.svg";
+import UserPic from "@/app/ui/vector/userpic.svg";
 import Burger from "@/app/ui/vector/burger.svg";
 import Search from "@/app/ui/vector/search.svg";
 import { useState } from "react";
@@ -56,7 +56,7 @@ export default function Header() {
                                 tabIndex={0}
                                 role="button"
                             >
-                                Shop <Dropdown className="inline"/>
+                                Shop <SlimArrow className="inline"/>
                             </label>
                             <ul className="hidden group-hover:block peer-checked:block peer-focus-within:block group-focus-within:block focus-within:block absolute top-6 left-0 bg-white w-28 p-1.5 rounded-xl shadow-lg">
                                 <li role="menuitem"><a href="#">SS2025</a></li>
@@ -86,7 +86,7 @@ export default function Header() {
                             <Cart />
                         </a>
                         <a href="#">
-                            <Userpic />
+                            <UserPic />
                         </a>
                     </div>
                 </div>
