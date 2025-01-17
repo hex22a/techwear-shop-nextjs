@@ -8,6 +8,10 @@ import Stars from "@/app/ui/stars";
 import Price from "@/app/ui/price";
 import Featured from "@/app/ui/featured";
 import OrderForm from "@/app/product/ui/order_form";
+import Tabs, {Tab} from "@/app/product/ui/tabs";
+
+import Filters from "@/app/ui/vector/filters.svg";
+import Review from "@/app/ui/review";
 
 const sitePath = [
     {
@@ -37,10 +41,11 @@ export default function ProductPage () {
                     <Breadcrumbs sitePath={sitePath}/>
                 </div>
             </div>
-            <main className={layout.container}>
-                <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-5">
+            <div className={layout.container}>
+                <main className="grid grid-cols-1 md:grid-cols-2 md:gap-x-5">
                     <div className="flex flex-col md:flex-row-reverse justify-between items-center gap-3.5">
-                        <div className="relative w-full md:w-[530px] h-[290px] md:h-full bg-gray-300 rounded-xl overflow-hidden">
+                        <div
+                            className="relative w-full md:w-[530px] h-[290px] md:h-full bg-gray-300 rounded-xl overflow-hidden">
                             <Image
                                 className="object-cover"
                                 src="/items/napa-anor.webp"
@@ -49,7 +54,8 @@ export default function ProductPage () {
                             />
                         </div>
                         <div className="flex flex-row md:flex-col gap-3.5 items-stretch">
-                            <div className="relative min-w-28 min-h-36 md:w-[152px] md:h-[167px] bg-gray-300 rounded-xl overflow-hidden">
+                            <div
+                                className="relative min-w-28 min-h-36 md:w-[152px] md:h-[167px] bg-gray-300 rounded-xl overflow-hidden">
                                 <Image
                                     className="object-cover"
                                     src="/items/NA4I5F176-ALT1.webp"
@@ -57,7 +63,8 @@ export default function ProductPage () {
                                     fill
                                 />
                             </div>
-                            <div className="relative min-w-28 min-h-36 md:w-[152px] md:h-[167px] bg-gray-300 rounded-xl overflow-hidden">
+                            <div
+                                className="relative min-w-28 min-h-36 md:w-[152px] md:h-[167px] bg-gray-300 rounded-xl overflow-hidden">
                                 <Image
                                     className="object-cover"
                                     src="/items/NA4I5F176-ALT2.webp"
@@ -65,7 +72,8 @@ export default function ProductPage () {
                                     fill
                                 />
                             </div>
-                            <div className="relative min-w-28 min-h-36 md:w-[152px] md:h-[167px] bg-gray-300 rounded-xl overflow-hidden">
+                            <div
+                                className="relative min-w-28 min-h-36 md:w-[152px] md:h-[167px] bg-gray-300 rounded-xl overflow-hidden">
                                 <Image
                                     className="object-cover"
                                     src="/items/NA4I5F176-ALT3.webp"
@@ -84,7 +92,8 @@ export default function ProductPage () {
                             <Price price="$1000" discount={{newPrice: "$600", percent: "-40%"}}/>
                         </div>
                         <p>
-                            A contemporary take on the iconic Skidoo jacket, this is a loose-fit anorak for women made in
+                            A contemporary take on the iconic Skidoo jacket, this is a loose-fit anorak for women made
+                            in
                             stretch, water-resistant fabric. It features a faux- fur trim around the hood, Norwegian
                             flag patch, and the iconic front flap pocket complete with our signature Napapijri
                             Geographic graphic.
@@ -92,8 +101,41 @@ export default function ProductPage () {
                         <hr className="my-6"/>
                         <OrderForm/>
                     </div>
+                </main>
+                <div className="mt-20">
+                    <Tabs activeTab={Tab.REVIEWS}/>
                 </div>
-            </main>
+                <div className="flex justify-between items-center">
+                    <div>
+                        <span>All reviews</span><span>(451)</span>
+                    </div>
+                    <div>
+                        <button className="bg-gray-200 rounded-full md:p-3 p-2">
+                            <Filters className="fill-black" width={24} height={24}/>
+                        </button>
+                        <select name="order" id="order">
+                            <option value="1">Latest</option>
+                            <option value="2">Oldest</option>
+                            <option value="3">Worst to best</option>
+                            <option value="4">Best to worst</option>
+                        </select>
+                        <button className="bg-black text-white rounded-full py-3 md:py-3.5 px-3 md:px-5" type="button">Write a review</button>
+                    </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 mt-10">
+                    <Review id={1} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
+                    <Review id={2} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
+                    <Review id={3} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
+                    <Review id={4} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
+                    <Review id={5} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
+                    <Review id={6} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
+                    <Review id={7} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
+                    <Review id={8} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
+                </div>
+                <div className="text-center mt-5 md:mt-9">
+                    <button className="border border-gray-500 rounded-full px-16 py-4">Load More Reviews</button>
+                </div>
+            </div>
             <Featured title="You might also like"/>
             <Footer/>
         </>

@@ -3,10 +3,9 @@
 import layout from "@/app/ui/layout.module.css";
 import styles from "@/app/ui/reviews.module.css";
 import Arrow from "@/app/ui/vector/arrow.svg";
-import Stars from "@/app/ui/stars";
 import { useState } from "react";
-import Image from "next/image";
 import { useMediaQuery } from "react-responsive";
+import Review from "@/app/ui/review";
 
 export type CarouselItem = {
     id: number;
@@ -129,25 +128,12 @@ export default function Carousel() {
                         onTransitionEnd={handleTransitionEnd}>
                         {items.map((item, i) =>
                             <div key={item.id}
-                                 className={` border border-gray-500 rounded-xl px-8 py-7 w-1/3 md:w-[calc(11.11%-1rem)]`}
+                                 className="w-1/3 md:w-[calc(11.11%-1rem)]"
                                  style={{
                                      order: orderMap[i],
                                  }}
                             >
-                                <div className="mb-5">
-                                    <Stars rating={item.rating}/>
-                                </div>
-                                <div className="leading-6 mb-3">
-                                    <h3 className="inline-block mr-1 align-middle">{item.title}</h3>
-                                    <Image
-                                        className="inline-block align-middle"
-                                        src="/verified.svg"
-                                        alt="verified checkmark"
-                                        width={24}
-                                        height={24}
-                                    />
-                                </div>
-                                <p className="text-wrap">{item.comment}</p>
+                                <Review {...item}/>
                             </div>
                         )}
                     </div>
