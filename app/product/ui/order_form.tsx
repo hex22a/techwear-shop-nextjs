@@ -114,8 +114,7 @@ export default function OrderForm() {
                         +
                     </button>
                 </span>
-                <button className="bg-black text-white rounded-full py-3 md:py-3.5 w-full" type="submit">Add to Cart
-                </button>
+                <button className="bg-black text-white rounded-full py-3 md:py-3.5 w-full" type="submit">Add to Cart</button>
             </div>
         </form>
     )

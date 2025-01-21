@@ -1,4 +1,5 @@
 import layout from "@/app/ui/layout.module.css"
+import styles from "@/app/product/page.module.css"
 
 import Header from "@/app/ui/header";
 import Footer from "@/app/ui/footer";
@@ -102,24 +103,26 @@ export default function ProductPage () {
                         <OrderForm/>
                     </div>
                 </main>
-                <div className="mt-20">
+                <div className="mt-20 mb-6">
                     <Tabs activeTab={Tab.REVIEWS}/>
                 </div>
                 <div className="flex justify-between items-center">
                     <div>
-                        <span>All reviews</span><span>(451)</span>
+                        <span className="font-bold mr-2">All reviews</span><span className="opacity-60">(451)</span>
                     </div>
-                    <div>
-                        <button className="bg-gray-200 rounded-full md:p-3 p-2">
+                    <div className="flex flex-row items-center gap-2.5">
+                        <button className="bg-[rgba(240,240,240,1)] rounded-full md:p-3 p-2">
                             <Filters className="fill-black" width={24} height={24}/>
                         </button>
-                        <select name="order" id="order">
-                            <option value="1">Latest</option>
-                            <option value="2">Oldest</option>
-                            <option value="3">Worst to best</option>
-                            <option value="4">Best to worst</option>
-                        </select>
-                        <button className="bg-black text-white rounded-full py-3 md:py-3.5 px-3 md:px-5" type="button">Write a review</button>
+                        <form className="hidden md:block">
+                            <select className={`${styles.order_select} rounded-full appearance-none md:p-3 md:px-5 p-2`} name="order" id="order">
+                                <option value="1">Latest</option>
+                                <option value="2">Oldest</option>
+                                <option value="3">Worst to best</option>
+                                <option value="4">Best to worst</option>
+                            </select>
+                        </form>
+                        <button className="bg-black text-white text-sm md:text-base rounded-full py-3 md:py-3.5 px-3 md:px-5" type="button">Write a review</button>
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 mt-10">

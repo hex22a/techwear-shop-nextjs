@@ -21,3 +21,7 @@ input[type="radio"]:checked + .radio_mark_check::after {
         transform: scale(1) translate(-50%, -50%);
     }
 }
+
+.order_select {
+    background: rgba(240, 240, 240, 1) url("/slim-arrow.svg") no-repeat calc(100% - 20px) center;
+}
