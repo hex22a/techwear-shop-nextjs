@@ -56,7 +56,7 @@ export default function Header() {
                                 tabIndex={0}
                                 role="button"
                             >
-                                Shop <SlimArrow className="inline"/>
+                                Shop <SlimArrow className="inline fill-black" width={16} height={16}/>
                             </label>
                             <ul className="hidden group-hover:block peer-checked:block peer-focus-within:block group-focus-within:block focus-within:block absolute top-6 left-0 bg-white w-28 p-1.5 rounded-xl shadow-lg">
                                 <li role="menuitem"><a href="#">SS2025</a></li>

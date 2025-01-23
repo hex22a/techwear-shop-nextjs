@@ -12,7 +12,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
                 <span key={`${item.name}${index}`} className={index < sitePath.length - 1 ? `mr-3 opacity-60` : 'opacity-100'}>
                     <a href={item.url} className="mr-1">{item.name}</a>
                     {index < sitePath.length - 1 &&
-                        <SlimArrow className="inline-block mb-1 -rotate-90"/>
+                        <SlimArrow className="inline-block fill-black mb-1 -rotate-90" width={16} height={16}/>
                     }
                 </span>
             ))}
