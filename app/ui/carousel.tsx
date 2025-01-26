@@ -109,10 +109,10 @@ export default function Carousel() {
                 <h1 className="inline-block text-left text-4xl md:text-5xl font-bold">Our happy customers</h1>
                 <div className={`${styles.arrows} inline-block`}>
                     <button onClick={prev}>
-                        <Arrow className="inline-block rotate-180"/>
+                        <Arrow className="inline-block fill-black rotate-180" height={24} width={24}/>
                     </button>
                     <button onClick={next}>
-                        <Arrow className="inline-block"/>
+                        <Arrow className="inline-block fill-black" height={24} width={24}/>
                     </button>
                 </div>
             </div>
