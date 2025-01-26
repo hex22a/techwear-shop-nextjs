@@ -7,20 +7,3 @@
     pointer-events: all;
     cursor: pointer;
 }
-
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance : none;
-    background-color: black;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-}
-
-
-input[type="range"]::-moz-range-thumb {
-    -moz-appearance: none;
-    background-color: black;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-}
