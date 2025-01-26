@@ -112,7 +112,7 @@ export default function SearchPage() {
   return (
       <>
           <Header />
-          <div className="mt-32 md:mt-40">
+          <div>
               <div className={`${layout.container} py-6`}>
                   <Breadcrumbs sitePath={sitePath}/>
               </div>

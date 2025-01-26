@@ -37,10 +37,8 @@ export default function ProductPage () {
     return (
         <>
             <Header />
-            <div className="mt-32 md:mt-40">
-                <div className={`${layout.container} py-6`}>
-                    <Breadcrumbs sitePath={sitePath}/>
-                </div>
+            <div className={`${layout.container} py-6`}>
+                <Breadcrumbs sitePath={sitePath}/>
             </div>
             <div className={layout.container}>
                 <main className="grid grid-cols-1 md:grid-cols-2 md:gap-x-5">

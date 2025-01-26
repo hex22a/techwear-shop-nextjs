@@ -8,6 +8,7 @@ import UserPic from "@/app/ui/vector/userpic.svg";
 import Burger from "@/app/ui/vector/burger.svg";
 import Search from "@/app/ui/vector/search.svg";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Header() {
     const [isDiscountVisible, setIsDiscountVisible] = useState(true);
@@ -32,7 +33,7 @@ export default function Header() {
                 <div
                     className="bg-black text-white text-xs md:text-base text-center py-2.5 z-50">
                     <div className={`${layout.container} relative`}>
-                        Sign up and get 20% off to your first order. <a className="underline" href="#">Sign Up Now</a>
+                        Sign up and get 20% off to your first order. <Link className="underline" href="/signup">Sign Up Now</Link>
                         <button onClick={closeDiscount} className="hidden md:block absolute top-0.5 right-0">
                             <Cross height={20} width={20} fill="#fff"/>
                         </button>
@@ -44,7 +45,9 @@ export default function Header() {
                     <button onClick={toggleLinkGroup} className="md:hidden">
                         <Burger height={24} width={24}/>
                     </button>
-                    <h1 className={`${isSearchExpanded ? 'hidden' : 'block'} text-nowrap md:block text-xl md:text-3xl`}>Tech Shop</h1>
+                    <Link href="/">
+                        <h1 className={`${isSearchExpanded ? 'hidden' : 'block'} text-nowrap md:block text-xl md:text-3xl`}>Tech Shop</h1>
+                    </Link>
                     <ul className={`${isLinkGroupVisible ? 'bottom-0' : '-bottom-full' } bg-white fixed  left-0 w-full md:w-auto rounded-t-3xl md:static flex flex-col md:flex-row md:justify-start items-center gap-6 py-6 md:py-0 transition-all ease-in-out duration-200`}
                         role="menu">
                         <li className="group relative" role="menuitem">
