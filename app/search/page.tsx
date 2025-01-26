@@ -3,8 +3,10 @@ import Footer from "@/app/ui/footer";
 import layout from "@/app/ui/layout.module.css";
 import Breadcrumbs from "@/app/ui/breadcrumbs";
 import Item, {ItemProps} from "@/app/ui/item";
+import Arrow from "@/app/ui/vector/arrow.svg";
 
 import Filters from "./ui/filters";
+import SearchResultsHeader, { SearchResultsHeaderProps } from "@/app/search/ui/search_results_header";
 
 const sitePath = [
     {
@@ -16,6 +18,12 @@ const sitePath = [
         url: '#',
     },
 ]
+
+const searchResultsHeaderProps: SearchResultsHeaderProps = {
+    indexFirst: 1,
+    indexLast: 10,
+    totalCount: 100
+}
 
 const items: ItemProps[] = [
     {
@@ -110,29 +118,46 @@ export default function SearchPage() {
               </div>
           </div>
           <div className={layout.container}>
-              <div className="flex flex-row justify-between items-start gap-5">
-                  <aside className="border border-gray-300 rounded-2xl py-5 px-6 w-1/4">
-                      <Filters />
-                  </aside>
+              <div className="flex flex-col md:flex-row justify-between items-start gap-5">
+                  <Filters />
                   <main className="flex-grow">
-                      <div className="flex flex-row justify-between items-center">
-                          <h1 className="text-4xl">Casual</h1>
-                          <span>
-                              <span className="text-sm">Showing 1-10 of 100 Products</span>
-                              <span>Sort by: Most Popular</span>
-                          </span>
+                      <div className="hidden md:block md:mb-4">
+                          <SearchResultsHeader {...searchResultsHeaderProps} />
                       </div>
-                      <div className="grid grid-cols-3 gap-x-5 gap-y-9">
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-x-5 gap-y-9">
                           {items.map((item) => (
                               <div key={item.id}>
                                   <Item {...item}/>
                               </div>
                           ))}
                       </div>
+                      <hr className="mt-8 mb-5"/>
+                      <div className="flex flex-row justify-between items-stretch mb-20 text-sm md:text-base ">
+                          <button className="border py-2 px-3 md:px-3.5 rounded-xl">
+                              <div className="flex flex-row justify-start items-center gap-0.5 md:gap-2">
+                                  <Arrow className="fill-black rotate-180" width={24} height={24}/>
+                                  Previous
+                              </div>
+                          </button>
+                          <div className="text-[rgba(0,0,0,.5)] flex flex-row justify-start items-center">
+                              <button className="h-8 w-8 md:h-10 md:w-10 rounded-xl">1</button>
+                              <button className="h-8 w-8 md:h-10 md:w-10 rounded-xl">2</button>
+                              <button className="hidden md:block h-8 w-8 md:h-10 md:w-10 rounded-xl">3</button>
+                              <button className="h-8 w-8 md:h-10 md:w-10 rounded-xl">...</button>
+                              <button className="hidden md:block h-8 w-8 md:h-10 md:w-10 rounded-xl">8</button>
+                              <button className="h-8 w-8 md:h-10 md:w-10 rounded-xl">9</button>
+                              <button className="h-8 w-8 md:h-10 md:w-10 rounded-xl">10</button>
+                          </div>
+                          <button className="border py-2 px-3 md:px-3.5 rounded-xl">
+                              <div className="flex flex-row justify-start items-center gap-2">
+                                  Next
+                                  <Arrow className="fill-black" width={24} height={24}/>
+                              </div>
+                          </button>
+                      </div>
                   </main>
               </div>
           </div>
-
           <Footer/>
       </>
   );

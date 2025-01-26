@@ -78,7 +78,7 @@ export default function Home() {
                     </div>
                     <div
                         className="bg-white rounded-3xl md:flex-grow-1 md:basis-[calc(66.66%-10px)] min-h-48 md:min-h-72 overflow-hidden relative">
-                        <div className="relative top-6 left-9 z-10 font-bold text-3xl">Casual</div>
+                        <div className="relative top-6 left-9 z-10 font-bold text-3xl">Outdoor</div>
                         <Image
                             className="absolute bottom-0 right-0"
                             src="/dress-style/outdoor.webp"

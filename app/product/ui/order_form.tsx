@@ -1,6 +1,6 @@
 'use client';
 
-import styles from "@/app/product/page.module.css";
+import colors from "@/app/ui/colors.module.css";
 import { useState } from "react";
 
 export default function OrderForm() {
@@ -26,21 +26,21 @@ export default function OrderForm() {
                         <input className="hidden peer" type="radio" name="color" id="color-red"
                                value="red" aria-checked={true}/>
                         <div
-                            className={`${styles.radio_mark_check} relative inline-block w-9 h-9 bg-red-500 rounded-full`}
+                            className={`${colors.radio_mark_check} relative inline-block w-9 h-9 bg-red-500 rounded-full`}
                             tabIndex={0}></div>
                     </label>
                     <label htmlFor="color-blue">
                         <input className="hidden peer" type="radio" name="color" id="color-blue"
                                value="blue" aria-checked={false}/>
                         <div
-                            className={`${styles.radio_mark_check} relative inline-block w-9 h-9 bg-blue-500 rounded-full`}
+                            className={`${colors.radio_mark_check} relative inline-block w-9 h-9 bg-blue-500 rounded-full`}
                             tabIndex={0}></div>
                     </label>
                     <label htmlFor="color-black">
                         <input className="hidden peer" type="radio" name="color" id="color-black"
                                value="black" aria-checked={false}/>
                         <div
-                            className={`${styles.radio_mark_check} relative inline-block w-9 h-9 bg-black rounded-full`}
+                            className={`${colors.radio_mark_check} relative inline-block w-9 h-9 bg-black rounded-full`}
                             tabIndex={0}></div>
                     </label>
                 </div>
