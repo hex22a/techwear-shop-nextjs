@@ -1,4 +1,4 @@
-import styles from "@/app/product/page.module.css"
+import styles from "@/app/product/[id]/page.module.css"
 
 import Header from "@/app/ui/header";
 import Footer from "@/app/ui/footer";
@@ -7,11 +7,13 @@ import Image from "next/image";
 import Stars from "@/app/ui/stars";
 import Price from "@/app/ui/price";
 import Featured from "@/app/ui/featured";
-import OrderForm from "@/app/product/ui/order_form";
-import Tabs, {Tab} from "@/app/product/ui/tabs";
-
 import Filters from "@/app/ui/vector/filters.svg";
 import Review from "@/app/ui/review";
+
+import Tabs, {Tab} from "./ui/tabs";
+import OrderForm from "./ui/order_form";
+import {Color, Product, Size} from "@/app/lib/definitions";
+import {fetchProduct} from "@/app/lib/data";
 
 const sitePath = [
     {
@@ -32,7 +34,13 @@ const sitePath = [
     },
 ]
 
-export default function ProductPage () {
+export default async function ProductPage (props: {params: Promise<{id: string}>}) {
+    const params = await props.params;
+    const id = params.id;
+    const { name, price, description, photo_url, photos, sizes, colors }: Product = await fetchProduct(id);
+    const sizesArray: Size[] = Array.from(sizes.entries()).map(([, value]) => ({...value}));
+    const colorsArray: Color[] = Array.from(colors.entries()).map(([, value]) => ({...value}));
+
     return (
         <>
             <Header />
@@ -44,60 +52,40 @@ export default function ProductPage () {
                     <div className="flex flex-col md:flex-row-reverse justify-between items-center gap-3.5">
                         <div
                             className="relative w-full md:w-[530px] h-[290px] md:h-full bg-gray-300 rounded-xl overflow-hidden">
-                            <Image
-                                className="object-cover"
-                                src="/items/napa-anor.webp"
-                                alt="Napapijri Anorak"
-                                fill
-                            />
+                            {photo_url &&
+                                <Image
+                                    className="object-cover"
+                                    src={photo_url}
+                                    alt={`${name} photo`}
+                                    fill
+                                />
+                            }
                         </div>
                         <div className="flex flex-row md:flex-col gap-3.5 items-stretch">
-                            <div
-                                className="relative min-w-28 min-h-36 md:w-[152px] md:h-[167px] bg-gray-300 rounded-xl overflow-hidden">
-                                <Image
-                                    className="object-cover"
-                                    src="/items/NA4I5F176-ALT1.webp"
-                                    alt="Napapijri Anorak"
-                                    fill
-                                />
-                            </div>
-                            <div
-                                className="relative min-w-28 min-h-36 md:w-[152px] md:h-[167px] bg-gray-300 rounded-xl overflow-hidden">
-                                <Image
-                                    className="object-cover"
-                                    src="/items/NA4I5F176-ALT2.webp"
-                                    alt="Napapijri Anorak"
-                                    fill
-                                />
-                            </div>
-                            <div
-                                className="relative min-w-28 min-h-36 md:w-[152px] md:h-[167px] bg-gray-300 rounded-xl overflow-hidden">
-                                <Image
-                                    className="object-cover"
-                                    src="/items/NA4I5F176-ALT3.webp"
-                                    alt="Napapijri Anorak"
-                                    fill
-                                />
-                            </div>
+                            {Array.from(photos.entries()).map(([key, value]) => (
+                                <div key={key}
+                                    className="relative min-w-28 min-h-36 md:w-[152px] md:h-[167px] bg-gray-300 rounded-xl overflow-hidden">
+                                    <Image
+                                        className="object-cover"
+                                        src={value.url}
+                                        alt={`${name} alt photo ${key}`}
+                                        fill
+                                    />
+                                </div>
+                            ))}
                         </div>
                     </div>
                     <div>
-                        <h1 className="text-4xl">Skidoo 2.0 Anorak Jacket</h1>
+                        <h1 className="text-4xl">{name}</h1>
                         <div>
                             <Stars rating={4.5}/>
                         </div>
                         <div>
-                            <Price price="$1000" discount={{newPrice: "$600", percent: "-40%"}}/>
+                            <Price price={`$${price}`} discount={{newPrice: "$600", percent: "-40%"}}/>
                         </div>
-                        <p>
-                            A contemporary take on the iconic Skidoo jacket, this is a loose-fit anorak for women made
-                            in
-                            stretch, water-resistant fabric. It features a faux- fur trim around the hood, Norwegian
-                            flag patch, and the iconic front flap pocket complete with our signature Napapijri
-                            Geographic graphic.
-                        </p>
+                        <p>{description}</p>
                         <hr className="my-6"/>
-                        <OrderForm/>
+                        <OrderForm sizes={sizesArray} colors={colorsArray}/>
                     </div>
                 </main>
                 <div className="mt-20 mb-6">
