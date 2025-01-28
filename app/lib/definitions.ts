@@ -6,7 +6,7 @@ export type Color = {
 export type Size = {
     id: number;
     size: string;
-    value: number;
+    value: string;
 }
 
 export type Style = {
@@ -33,6 +33,30 @@ export type Photo = {
     url: string;
 }
 
+export type ProductRaw = {
+    id: number,
+    name: string,
+    price: number,
+    discount_percent: number,
+    description: string,
+    details: string,
+    photo_url: string,
+    alt_photo_id: number,
+    alt_photo_url: string,
+    color_id: number,
+    color_hex_value: string,
+    size_id: number,
+    size: string,
+    size_value: string,
+    review_id: number,
+    review: string,
+    review_rating: number,
+    review_verified: boolean,
+    review_author: string,
+    review_created_at: Date,
+}
+
+
 export type Product = {
     id: number;
     name: string;
@@ -43,7 +67,7 @@ export type Product = {
     colors: Map<number, Color>;
     sizes: Map<number, Size>;
     price: number;
-    discount: {
+    discount?: {
         newPrice: number;
         percent: number;
     };

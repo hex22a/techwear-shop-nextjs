@@ -1,5 +1,5 @@
 import { sql } from '@vercel/postgres'
-import {Category, Color, Product, Size, Style} from "@/app/lib/definitions";
+import {Category, Color, Product, ProductRaw, Size, Style} from "@/app/lib/definitions";
 
 export async function fetchAllColors(): Promise<Color[]> {
     try {
@@ -43,9 +43,12 @@ export async function fetchAllCategories(): Promise<Category[]> {
 
 export async function fetchProduct(id: string): Promise<Product> {
     try {
-        const queryResult = await sql`
+        const queryResult = await sql<ProductRaw>`
             SELECT
                 product.id as id,
+                product.name as name,
+                product.price as price,
+                product.discount as discount_percent,
                 product.description as description,
                 product.details as details,
                 product.photo_url as photo_url,
@@ -68,7 +71,7 @@ export async function fetchProduct(id: string): Promise<Product> {
                             INNER JOIN size s on s.id = ps.size_id
                             LEFT JOIN public.review r on product.id = r.product_id
                 WHERE product.id = ${id}`;
-        const product: Product = { ...queryResult.rows[0] as Product, photos: new Map(), colors: new Map(), sizes: new Map(), reviews: new Map() }
+        const product: Product = { photos: new Map(), colors: new Map(), sizes: new Map(), reviews: new Map(), ...queryResult.rows[0] }
         queryResult.rows.forEach(row => {
             product.photos.set(row.alt_photo_id, {
                 id: row.alt_photo_id,
@@ -87,11 +90,18 @@ export async function fetchProduct(id: string): Promise<Product> {
                 id: row.review_id,
                 rating: row.review_rating,
                 review: row.review,
-                verified: row.review_virified,
+                verified: row.review_verified,
                 created_at: row.review_created_at,
                 author: row.review,
             })
         })
+        const discount = queryResult.rows[0].discount_percent;
+        if (queryResult.rows[0].discount_percent) {
+            product.discount = {
+                newPrice: product.price - product.price * discount / 100,
+                percent: discount,
+            }
+        }
         console.log(product)
         return product
     } catch (error) {
