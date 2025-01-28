@@ -1,6 +1,5 @@
 'use client';
 
-import layout from "@/app/ui/layout.module.css";
 import styles from "@/app/ui/reviews.module.css";
 import Arrow from "@/app/ui/vector/arrow.svg";
 import { useState } from "react";
@@ -105,7 +104,7 @@ export default function Carousel() {
 
     return (
         <div>
-            <div className={`${layout.container} relative pt-16 pb-9`}>
+            <div className="relative pt-16 pb-9 max-w-96 md:max-w-[78rem] my-0 mx-auto">
                 <h1 className="inline-block text-left text-4xl md:text-5xl font-bold">Our happy customers</h1>
                 <div className={`${styles.arrows} inline-block`}>
                     <button onClick={prev}>
@@ -117,7 +116,7 @@ export default function Carousel() {
                 </div>
             </div>
             <div
-                className={`${layout.container} py-5 relative before:absolute before:top-0 before:-left-full before:w-full before:h-full before:z-10 before:backdrop-blur-sm after:absolute after:top-0 after:-right-full after:w-full after:h-full after:z-10 after:backdrop-blur-sm`}>
+                className="py-5 relative before:absolute before:top-0 before:-left-full before:w-full before:h-full before:z-10 before:backdrop-blur-sm after:absolute after:top-0 after:-right-full after:w-full after:h-full after:z-10 after:backdrop-blur-sm max-w-96 md:max-w-[78rem] my-0 mx-auto">
                 <div className="w-[700%] -translate-x-[28.57%] md:w-[300%] md:-translate-x-[22.22%]">
                     <div
                         className="flex flex-row flex-nowrap justify-start gap-5 items-stretch"

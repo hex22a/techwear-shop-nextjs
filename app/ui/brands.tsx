@@ -1,10 +1,9 @@
-import layout from "@/app/ui/layout.module.css";
 import Image from "next/image";
 
 export default function Brands() {
     return (
         <div className="bg-black">
-            <div className={`${layout.container} flex flex-row flex-wrap justify-around items-center min-h-32`}>
+            <div className="flex flex-row flex-wrap justify-around items-center min-h-32 max-w-96 md:max-w-[78rem] my-0 mx-auto">
                 <div className="relative min-h-10 min-w-24 md:min-w-36 my-4 md:my-0">
                     <Image
                         className="object-contain"

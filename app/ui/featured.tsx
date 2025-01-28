@@ -1,4 +1,3 @@
-import layout from "@/app/ui/layout.module.css";
 import Item, {ItemProps} from "@/app/ui/item";
 
 const items: ItemProps[] = [
@@ -42,7 +41,7 @@ const items: ItemProps[] = [
 
 export default function Featured(props: {title: string}) {
     return (
-        <div className={`${layout.container} pb-16`}>
+        <div className="max-w-96 md:max-w-[78rem] my-0 mx-auto pb-16">
             <h1 className="text-center text-5xl font-bold pt-16 pb-14">{props.title}</h1>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-x-5">
                 {items.map((item, i) => (

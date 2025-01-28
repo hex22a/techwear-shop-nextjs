@@ -1,6 +1,5 @@
 'use client';
 
-import layout from "@/app/ui/layout.module.css";
 import Cross from "@/app/ui/vector/cross.svg";
 import SlimArrow from "@/app/ui/vector/slim-arrow.svg";
 import Cart from "@/app/ui/vector/cart.svg";
@@ -32,7 +31,7 @@ export default function Header() {
             {isDiscountVisible &&
                 <div
                     className="bg-black text-white text-xs md:text-base text-center py-2.5 z-50">
-                    <div className={`${layout.container} relative`}>
+                    <div className="relative max-w-96 md:max-w-[78rem] my-0 mx-auto">
                         Sign up and get 20% off to your first order. <Link className="underline" href="/signup">Sign Up Now</Link>
                         <button onClick={closeDiscount} className="hidden md:block absolute top-0.5 right-0">
                             <Cross height={20} width={20} fill="#fff"/>
@@ -41,7 +40,7 @@ export default function Header() {
                 </div>
             }
             <nav className="bg-white py-6 md:py-9 z-40">
-                <div className={`${layout.container} flex flex-row justify-between items-center md:gap-10`}>
+                <div className="flex flex-row justify-between items-center md:gap-10 max-w-96 md:max-w-[78rem] my-0 mx-auto">
                     <button onClick={toggleLinkGroup} className="md:hidden">
                         <Burger height={24} width={24}/>
                     </button>

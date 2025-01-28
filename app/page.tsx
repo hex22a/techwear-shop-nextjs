@@ -1,5 +1,4 @@
 import Image from "next/image";
-import layout from "@/app/ui/layout.module.css"
 import Brands from "@/app/ui/brands";
 import Featured from "@/app/ui/featured";
 import Carousel from "@/app/ui/carousel";
@@ -12,7 +11,7 @@ export default function Home() {
         <Header/>
         <main>
             <div className="bg-[rgba(240,240,240,1)]">
-                <div className={`${layout.container} block md:grid md:grid-cols-2`}>
+                <div className="block md:grid md:grid-cols-2 max-w-96 md:max-w-[78rem] my-0 mx-auto">
                     <div className="flex flex-col justify-center items-start">
                         <h1 className="font-bold text-4xl md:text-6xl mb-8">FIND CLOTHES THAT MATCHES YOUR STYLE</h1>
                         <p className="text-sm md:text-base mb-8">Browse through our diverse range of meticulously
@@ -48,9 +47,9 @@ export default function Home() {
             </div>
             <Brands/>
             <Featured title="New Arrivals"/>
-            <hr className={layout.container}/>
+            <hr className="max-w-96 md:max-w-[78rem] my-0 mx-auto"/>
             <Featured title="Top Selling"/>
-            <div className={`${layout.container} bg-gray-100 rounded-3xl px-6 pb-7 md:px-16 md:pb-20`}>
+            <div className="bg-gray-100 rounded-3xl px-6 pb-7 md:px-16 md:pb-20 max-w-96 md:max-w-[78rem] my-0 mx-auto">
                 <h1 className="text-center text-5xl font-bold pt-16 pb-14">Browse by dress style</h1>
                 <div
                     className="flex flex-col md:flex-row md:flex-wrap justify-center items-stretch md:items-center gap-5">

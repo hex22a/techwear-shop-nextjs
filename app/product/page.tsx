@@ -1,4 +1,3 @@
-import layout from "@/app/ui/layout.module.css"
 import styles from "@/app/product/page.module.css"
 
 import Header from "@/app/ui/header";
@@ -37,10 +36,10 @@ export default function ProductPage () {
     return (
         <>
             <Header />
-            <div className={`${layout.container} py-6`}>
-                <Breadcrumbs sitePath={sitePath}/>
-            </div>
-            <div className={layout.container}>
+            <div className="max-w-96 md:max-w-[78rem] my-0 mx-auto">
+                <div className="py-6">
+                    <Breadcrumbs sitePath={sitePath}/>
+                </div>
                 <main className="grid grid-cols-1 md:grid-cols-2 md:gap-x-5">
                     <div className="flex flex-col md:flex-row-reverse justify-between items-center gap-3.5">
                         <div
@@ -136,8 +135,8 @@ export default function ProductPage () {
                 <div className="text-center mt-5 md:mt-9">
                     <button className="border border-gray-500 rounded-full px-16 py-4">Load More Reviews</button>
                 </div>
+                <Featured title="You might also like"/>
             </div>
-            <Featured title="You might also like"/>
             <Footer/>
         </>
     )

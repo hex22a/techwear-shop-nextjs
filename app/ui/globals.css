@@ -44,8 +44,8 @@ input[type="range"]::-moz-range-thumb {
 }
 
 body {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
   min-height: 100vh;
   padding-top: 8rem;
   color: var(--foreground);
@@ -67,4 +67,8 @@ body, html {
 h1, h2, h3, h4, h5, h6 {
   /*noinspection CssUnresolvedCustomProperty*/
   font-family: var(--font-integral);
+}
+
+footer {
+  align-self: end;
 }

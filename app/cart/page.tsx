@@ -1,5 +1,4 @@
 import Header from "@/app/ui/header";
-import layout from "@/app/ui/layout.module.css";
 import Footer from "@/app/ui/footer";
 
 export default function CartPage() {
@@ -7,6 +6,7 @@ export default function CartPage() {
         <>
             <Header/>
             <main>
+                1111
             </main>
             <Footer />
         </>

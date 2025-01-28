@@ -1,6 +1,5 @@
 import Header from "@/app/ui/header";
 import Footer from "@/app/ui/footer";
-import layout from "@/app/ui/layout.module.css";
 import Breadcrumbs from "@/app/ui/breadcrumbs";
 import Item, {ItemProps} from "@/app/ui/item";
 import Arrow from "@/app/ui/vector/arrow.svg";
@@ -125,12 +124,10 @@ export default async function SearchPage() {
     return (
       <>
           <Header />
-          <div>
-              <div className={`${layout.container} py-6`}>
+          <div className="max-w-96 md:max-w-[78rem] my-0 mx-auto">
+              <div className="py-6">
                   <Breadcrumbs sitePath={sitePath}/>
               </div>
-          </div>
-          <div className={layout.container}>
               <div className="flex flex-col md:flex-row justify-between items-start gap-5">
                   <Filters categories={categories} colors={colors} sizes={sizes} dressStyles={dressStyles} />
                   <main className="flex-grow">

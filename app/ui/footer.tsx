@@ -1,4 +1,3 @@
-import layout from "@/app/ui/layout.module.css";
 import styles from "./footer.module.css";
 import Facebook from "@/app/ui/vector/facebook.svg"
 import Twitter from "@/app/ui/vector/twitter.svg"
@@ -9,7 +8,7 @@ import Image from "next/image";
 export default function Footer() {
     return (
         <footer className="relative">
-            <div className={layout.container}>
+            <div className="max-w-96 md:max-w-[78rem] my-0 mx-auto">
                 <div
                     className="bg-black rounded-3xl flex flex-col md:flex-row justify-between items-center px-6 py-8 md:px-16 md:py-11 mb-14">
                     <h1 className="text-white text-4xl w-full mb-8 md:w-1/2">STAY UPTO DATE ABOUT OUR LATEST OFFERS</h1>
