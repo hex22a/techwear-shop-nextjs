@@ -5,19 +5,19 @@ const items: ItemProps[] = [
         id: '1',
         title: "Napapijri Anorak",
         rating: 5,
-        price: "$1000",
+        price: 1000,
         imageUrl: "/items/napa-anor.webp",
         imageAlt: "anorak",
         discount: {
-            newPrice: "$800",
-            percent: "-20%"
+            newPrice: 800,
+            percent: 20
         }
     },
     {
         id: '2',
         title: "Riot Division Pants",
         rating: 4.8,
-        price: "$500",
+        price: 500,
         imageUrl: "/items/riot-pants.webp",
         imageAlt: "pants",
     },
@@ -25,7 +25,7 @@ const items: ItemProps[] = [
         id: '3',
         title: "MA.STRUM Jacket",
         rating: 3.9,
-        price: "$600",
+        price: 600,
         imageUrl: "/items/mastrum-jacket.jpg",
         imageAlt: "jacket",
     },
@@ -33,7 +33,7 @@ const items: ItemProps[] = [
         id: '4',
         title: "MA.STRUM Jacket",
         rating: 4.5,
-        price: "$2000",
+        price: 2000,
         imageUrl: "/items/mastrum.jpg",
         imageAlt: "mastrum",
     }

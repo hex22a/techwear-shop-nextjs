@@ -6,12 +6,12 @@ export type ItemProps = {
     id: string;
     title: string;
     rating: number;
-    price: string;
+    price: number;
     imageUrl: string;
     imageAlt: string;
     discount?: {
-        newPrice: string;
-        percent: string;
+        newPrice: number;
+        percent: number;
     };
 }
 
