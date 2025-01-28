@@ -7,6 +7,7 @@ import Arrow from "@/app/ui/vector/arrow.svg";
 
 import Filters from "./ui/filters";
 import SearchResultsHeader, { SearchResultsHeaderProps } from "@/app/search/ui/search_results_header";
+import {fetchAllCategories, fetchAllColors, fetchAllSizes, fetchAllStyles} from "@/app/lib/data";
 
 const sitePath = [
     {
@@ -108,8 +109,20 @@ const items: ItemProps[] = [
     },
 ]
 
-export default function SearchPage() {
-  return (
+export default async function SearchPage() {
+    const [
+        colors,
+        sizes,
+        dressStyles,
+        categories,
+    ] = await Promise.all([
+        fetchAllColors(),
+        fetchAllSizes(),
+        fetchAllStyles(),
+        fetchAllCategories(),
+    ])
+
+    return (
       <>
           <Header />
           <div>
@@ -119,7 +132,7 @@ export default function SearchPage() {
           </div>
           <div className={layout.container}>
               <div className="flex flex-col md:flex-row justify-between items-start gap-5">
-                  <Filters />
+                  <Filters categories={categories} colors={colors} sizes={sizes} dressStyles={dressStyles} />
                   <main className="flex-grow">
                       <div className="hidden md:block md:mb-4">
                           <SearchResultsHeader {...searchResultsHeaderProps} />
@@ -160,5 +173,5 @@ export default function SearchPage() {
           </div>
           <Footer/>
       </>
-  );
+    );
 }

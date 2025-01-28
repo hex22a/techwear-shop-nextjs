@@ -6,13 +6,14 @@ import SlimArrow from "@/app/ui/vector/slim-arrow.svg";
 import { useState } from "react";
 
 import styles from "./filters.module.css";
-import colors from "@/app/ui/colors.module.css";
+import colors_styles from "@/app/ui/colors.module.css";
 import SearchResultsHeader, {SearchResultsHeaderProps} from "@/app/search/ui/search_results_header";
+import {Category, Color, Size, Style} from "@/app/lib/definitions";
 
-const PRICE_RANGE_MIN = 1000;
-const PRICE_RANGE_MAX = 100000;
+const PRICE_RANGE_MIN = 100;
+const PRICE_RANGE_MAX = 10000;
 const PRICE_RANGE_OFFSET = 2000;
-const PRICE_RANGE_STEP = 100;
+const PRICE_RANGE_STEP = 10;
 
 
 const searchResultsHeaderProps: SearchResultsHeaderProps = {
@@ -21,7 +22,15 @@ const searchResultsHeaderProps: SearchResultsHeaderProps = {
     totalCount: 100
 }
 
-export default function Filters() {
+export type FilterProps = {
+    categories: Category[],
+    colors: Color[],
+    sizes: Size[],
+    dressStyles: Style[],
+}
+
+export default function Filters(props: FilterProps) {
+    const { categories, colors, sizes, dressStyles } = props;
     const [isFiltersVisible, setIsFiltersVisible] = useState(false);
     const [isPriceVisible, setIsPriceVisible] = useState(true);
     const [isColorVisible, setIsColorVisible] = useState(true);
@@ -77,14 +86,12 @@ export default function Filters() {
                     </div>
                     <hr className="my-6" />
                     <ul>
-                        <li className="flex flex-row justify-between items-center">
-                            <span>Jackets</span>
-                            <SlimArrow className="fill-black opacity-60 -rotate-90" width={16} height={16} />
-                        </li>
-                        <li className="flex flex-row justify-between items-center">
-                            <span>Pants</span>
-                            <SlimArrow className="fill-black opacity-60 -rotate-90" width={16} height={16} />
-                        </li>
+                        {categories.map(category => (
+                            <li key={category.id} className="flex flex-row justify-between items-center">
+                                <span>{category.name}</span>
+                                <SlimArrow className="fill-black opacity-60 -rotate-90" width={16} height={16} />
+                            </li>
+                        ))}
                     </ul>
                     <hr className="my-6" />
                     <button type="button" className="w-full" onClick={togglePrice}>
@@ -170,76 +177,16 @@ export default function Filters() {
                         </button>
                         {isColorVisible && (
                             <div className="mt-4 grid grid-cols-5 gap-2">
-                                <label htmlFor="color-green">
-                                    <input className="hidden peer" type="radio" name="color" id="color-green"
-                                           value="green" aria-checked={true}/>
-                                    <div
-                                        className={`${colors.radio_mark_check} relative inline-block w-9 h-9 bg-green-500 rounded-full`}
-                                        tabIndex={0}></div>
-                                </label>
-                                <label htmlFor="color-red">
-                                    <input className="hidden peer" type="radio" name="color" id="color-red"
-                                           value="red" aria-checked={true}/>
-                                    <div
-                                        className={`${colors.radio_mark_check} relative inline-block w-9 h-9 bg-red-500 rounded-full`}
-                                        tabIndex={0}></div>
-                                </label>
-                                <label htmlFor="color-yellow">
-                                    <input className="hidden peer" type="radio" name="color" id="color-yellow"
-                                           value="yellow" aria-checked={true}/>
-                                    <div
-                                        className={`${colors.radio_mark_check} relative inline-block w-9 h-9 bg-yellow-500 rounded-full`}
-                                        tabIndex={0}></div>
-                                </label>
-                                <label htmlFor="color-orange">
-                                    <input className="hidden peer" type="radio" name="color" id="color-orange"
-                                           value="orange" aria-checked={true}/>
-                                    <div
-                                        className={`${colors.radio_mark_check} relative inline-block w-9 h-9 bg-orange-500 rounded-full`}
-                                        tabIndex={0}></div>
-                                </label>
-                                <label htmlFor="color-cyan">
-                                    <input className="hidden peer" type="radio" name="color" id="color-cyan"
-                                           value="cyan" aria-checked={true}/>
-                                    <div
-                                        className={`${colors.radio_mark_check} relative inline-block w-9 h-9 bg-cyan-500 rounded-full`}
-                                        tabIndex={0}></div>
-                                </label>
-                                <label htmlFor="color-blue">
-                                    <input className="hidden peer" type="radio" name="color" id="color-blue"
-                                           value="blue" aria-checked={true}/>
-                                    <div
-                                        className={`${colors.radio_mark_check} relative inline-block w-9 h-9 bg-blue-500 rounded-full`}
-                                        tabIndex={0}></div>
-                                </label>
-                                <label htmlFor="color-purple">
-                                    <input className="hidden peer" type="radio" name="color" id="color-purple"
-                                           value="purple" aria-checked={true}/>
-                                    <div
-                                        className={`${colors.radio_mark_check} relative inline-block w-9 h-9 bg-purple-500 rounded-full`}
-                                        tabIndex={0}></div>
-                                </label>
-                                <label htmlFor="color-pink">
-                                    <input className="hidden peer" type="radio" name="color" id="color-pink"
-                                           value="pink" aria-checked={true}/>
-                                    <div
-                                        className={`${colors.radio_mark_check} relative inline-block w-9 h-9 bg-pink-500 rounded-full`}
-                                        tabIndex={0}></div>
-                                </label>
-                                <label htmlFor="color-white">
-                                    <input className="hidden peer" type="radio" name="color" id="color-white"
-                                           value="white" aria-checked={true}/>
-                                    <div
-                                        className={`${colors.radio_mark_check} relative inline-block w-9 h-9 bg-gray-200 rounded-full`}
-                                        tabIndex={0}></div>
-                                </label>
-                                <label htmlFor="color-black">
-                                    <input className="hidden peer" type="radio" name="color" id="color-black"
-                                           value="black" aria-checked={true}/>
-                                    <div
-                                        className={`${colors.radio_mark_check} relative inline-block w-9 h-9 bg-black rounded-full`}
-                                        tabIndex={0}></div>
-                                </label>
+                                {colors.map(color => (
+                                    <label key={color.id} htmlFor={`color-${color.hex_value}`}>
+                                        <input className="hidden peer" type="radio" name="color" id={`color-${color.hex_value}`}
+                                               value="green" aria-checked={true}/>
+                                        <div
+                                            className={`${colors_styles.radio_mark_check} relative inline-block w-9 h-9 rounded-full`}
+                                            style={{backgroundColor: `#${color.hex_value}`}}
+                                            tabIndex={0}></div>
+                                    </label>
+                                ))}
                             </div>
                         )}
                     </fieldset>
@@ -258,87 +205,17 @@ export default function Filters() {
                         </button>
                         {isSizeVisible && (
                             <div className="mt-4">
-                                <label htmlFor="size-xxs">
-                                    <input className="hidden peer" type="radio" name="size" id="size-xxs"
-                                           value="xxs" aria-checked={true}/>
-                                    <div
-                                        className="relative inline-block bg-gray-300 rounded-full opacity-60 peer-checked:bg-black peer-checked:text-white peer-checked:opacity-100 py-2.5 px-5 md:py-3 md:px-6 m-2"
-                                        tabIndex={0}>
-                                        XX-Small
-                                    </div>
-                                </label>
-                                <label htmlFor="size-xs">
-                                    <input className="hidden peer" type="radio" name="size" id="size-xs"
-                                           value="xs" aria-checked={true}/>
-                                    <div
-                                        className="relative inline-block bg-gray-300 rounded-full opacity-60 peer-checked:bg-black peer-checked:text-white peer-checked:opacity-100 py-2.5 px-5 md:py-3 md:px-6 m-2"
-                                        tabIndex={0}>
-                                        X-Small
-                                    </div>
-                                </label>
-                                <label htmlFor="size-s">
-                                    <input className="hidden peer" type="radio" name="size" id="size-s"
-                                           value="s" aria-checked={true}/>
-                                    <div
-                                        className="relative inline-block bg-gray-300 rounded-full opacity-60 peer-checked:bg-black peer-checked:text-white peer-checked:opacity-100 py-2.5 px-5 md:py-3 md:px-6 m-2"
-                                        tabIndex={0}>
-                                        Small
-                                    </div>
-                                </label>
-                                <label htmlFor="size-m">
-                                    <input className="hidden peer" type="radio" name="size" id="size-m"
-                                           value="m" aria-checked={true}/>
-                                    <div
-                                        className="relative inline-block bg-gray-300 rounded-full opacity-60 peer-checked:bg-black peer-checked:text-white peer-checked:opacity-100 py-2.5 px-5 md:py-3 md:px-6 m-2"
-                                        tabIndex={0}>
-                                        Medium
-                                    </div>
-                                </label>
-                                <label htmlFor="size-l">
-                                    <input className="hidden peer" type="radio" name="size" id="size-l"
-                                           value="l" aria-checked={true}/>
-                                    <div
-                                        className="relative inline-block bg-gray-300 rounded-full opacity-60 peer-checked:bg-black peer-checked:text-white peer-checked:opacity-100 py-2.5 px-5 md:py-3 md:px-6 m-2"
-                                        tabIndex={0}>
-                                        Large
-                                    </div>
-                                </label>
-                                <label htmlFor="size-xl">
-                                    <input className="hidden peer" type="radio" name="size" id="size-xl"
-                                           value="xl" aria-checked={true}/>
-                                    <div
-                                        className="relative inline-block bg-gray-300 rounded-full opacity-60 peer-checked:bg-black peer-checked:text-white peer-checked:opacity-100 py-2.5 px-5 md:py-3 md:px-6 m-2"
-                                        tabIndex={0}>
-                                        X-Large
-                                    </div>
-                                </label>
-                                <label htmlFor="size-xxl">
-                                    <input className="hidden peer" type="radio" name="size" id="size-xxl"
-                                           value="xxl" aria-checked={true}/>
-                                    <div
-                                        className="relative inline-block bg-gray-300 rounded-full opacity-60 peer-checked:bg-black peer-checked:text-white peer-checked:opacity-100 py-2.5 px-5 md:py-3 md:px-6 m-2"
-                                        tabIndex={0}>
-                                        XX-Large
-                                    </div>
-                                </label>
-                                <label htmlFor="size-3xl">
-                                    <input className="hidden peer" type="radio" name="size" id="size-3xl"
-                                           value="3xl" aria-checked={true}/>
-                                    <div
-                                        className="relative inline-block bg-gray-300 rounded-full opacity-60 peer-checked:bg-black peer-checked:text-white peer-checked:opacity-100 py-2.5 px-5 md:py-3 md:px-6 m-2"
-                                        tabIndex={0}>
-                                        3X-Large
-                                    </div>
-                                </label>
-                                <label htmlFor="size-4xl">
-                                    <input className="hidden peer" type="radio" name="size" id="size-4xl"
-                                           value="4xl" aria-checked={true}/>
-                                    <div
-                                        className="relative inline-block bg-gray-300 rounded-full opacity-60 peer-checked:bg-black peer-checked:text-white peer-checked:opacity-100 py-2.5 px-5 md:py-3 md:px-6 m-2"
-                                        tabIndex={0}>
-                                        4X-Large
-                                    </div>
-                                </label>
+                                {sizes.map(size => (
+                                    <label key={size.id} htmlFor={`size-${size.value}`}>
+                                        <input className="hidden peer" type="radio" name="size" id={`size-${size.value}`}
+                                               value={size.value} aria-checked={true}/>
+                                        <div
+                                            className="relative inline-block bg-gray-300 rounded-full opacity-60 peer-checked:bg-black peer-checked:text-white peer-checked:opacity-100 py-2.5 px-5 md:py-3 md:px-6 m-2"
+                                            tabIndex={0}>
+                                            {size.size}
+                                        </div>
+                                    </label>
+                                ))}
                             </div>
                         )}
                     </fieldset>
@@ -357,22 +234,12 @@ export default function Filters() {
                         </button>
                         {isDressStyleVisible && (
                             <ul>
-                                <li className="flex flex-row justify-between items-center">
-                                    <span>Casual</span>
-                                    <SlimArrow className="fill-black opacity-60 -rotate-90" width={16} height={16} />
-                                </li>
-                                <li className="flex flex-row justify-between items-center">
-                                    <span>Formal</span>
-                                    <SlimArrow className="fill-black opacity-60 -rotate-90" width={16} height={16} />
-                                </li>
-                                <li className="flex flex-row justify-between items-center">
-                                    <span>Outdoor</span>
-                                    <SlimArrow className="fill-black opacity-60 -rotate-90" width={16} height={16} />
-                                </li>
-                                <li className="flex flex-row justify-between items-center">
-                                    <span>Party</span>
-                                    <SlimArrow className="fill-black opacity-60 -rotate-90" width={16} height={16} />
-                                </li>
+                                {dressStyles.map(dressStyle => (
+                                    <li key={dressStyle.id} className="flex flex-row justify-between items-center">
+                                        <span>{dressStyle.name}</span>
+                                        <SlimArrow className="fill-black opacity-60 -rotate-90" width={16} height={16} />
+                                    </li>
+                                ))}
                             </ul>
                         )}
                     </fieldset>
