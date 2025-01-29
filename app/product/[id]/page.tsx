@@ -25,11 +25,11 @@ const sitePath = [
         url: '#',
     },
     {
-        name: 'Men',
+        name: 'Wemen',
         url: '#',
     },
     {
-        name: 'T-Shirts',
+        name: 'Jackets',
         url: '#',
     },
 ]
@@ -49,7 +49,7 @@ export default async function ProductPage (props: {params: Promise<{id: string}>
                     <Breadcrumbs sitePath={sitePath}/>
                 </div>
                 <main className="grid grid-cols-1 md:grid-cols-2 md:gap-x-5">
-                    <div className="flex flex-col md:flex-row-reverse justify-between items-center gap-3.5">
+                    <div className="flex flex-col md:flex-row-reverse justify-between items-stretch gap-3.5">
                         <div
                             className="relative w-full md:w-[530px] h-[290px] md:h-full bg-gray-300 rounded-xl overflow-hidden">
                             {photo_url &&
@@ -61,7 +61,7 @@ export default async function ProductPage (props: {params: Promise<{id: string}>
                                 />
                             }
                         </div>
-                        <div className="flex flex-row md:flex-col gap-3.5 items-stretch">
+                        <div className="flex flex-row justify-between md:flex-col gap-3.5 items-stretch">
                             {Array.from(photos.entries()).map(([key, value]) => (
                                 <div key={key}
                                     className="relative min-w-28 min-h-36 md:w-[152px] md:h-[167px] bg-gray-300 rounded-xl overflow-hidden">
