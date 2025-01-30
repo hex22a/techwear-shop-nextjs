@@ -1,5 +1,17 @@
 import { sql } from '@vercel/postgres'
-import {Category, Color, Product, ProductRaw, Size, Style} from "@/app/lib/definitions";
+import {
+    Category,
+    Color,
+    PasskeySerialized,
+    Product,
+    ProductRaw,
+    Size,
+    Style,
+    User, UserWithPasskeyRaw,
+    UserWithPasskeysSerialized
+} from "@/app/lib/definitions";
+
+import { isoBase64URL } from '@simplewebauthn/server/helpers';
 
 export async function fetchAllColors(): Promise<Color[]> {
     try {
@@ -107,5 +119,87 @@ export async function fetchProduct(id: string): Promise<Product> {
     } catch (error) {
         console.error(`Database error: ${error}`)
         throw new Error(`Failed to fetch product id: ${id}`)
+    }
+}
+
+export async function findUser(username: string): Promise<User> {
+    const queryResult = await sql<User>`SELECT * FROM public.user WHERE username = ${username}`
+    console.log(queryResult.rows)
+    return queryResult.rows[0] || null;
+}
+
+export async function findUserWithPasskeys(username: string): Promise<UserWithPasskeysSerialized> {
+    try {
+        const queryResult = await sql<UserWithPasskeyRaw>`
+                    SELECT
+                        *
+                    FROM
+                        public.user
+                    LEFT JOIN passkey ON public.user.id = passkey.internal_user_id
+                    WHERE public.user.username = ${username}`
+        const user: UserWithPasskeysSerialized = { passkeys: new Map(), ...queryResult.rows[0] }
+        queryResult.rows.forEach(row => {
+            const passkey: PasskeySerialized = { ...row, cred_public_key: isoBase64URL.fromBuffer(row.cred_public_key, 'base64url') }
+            user.passkeys.set(row.cred_id, passkey)
+        })
+        console.log(user)
+        return user;
+    } catch (error) {
+        console.error(`Database error: ${error}`)
+        throw new Error(`Failed to fetch user: ${username}`)
+    }
+}
+
+export async function createUser(username: string, passkey: PasskeySerialized): Promise<User> {
+    const {
+        cred_id,
+        counter,
+        cred_public_key,
+        backup_eligible,
+        backup_status,
+        webauthn_user_id,
+        transports
+    } = passkey;
+    try {
+        const queryResult = await sql<User>`
+            WITH new_user AS (
+                INSERT INTO public.user (username) VALUES (${username}) RETURNING id
+            )
+            INSERT INTO passkey (
+                internal_user_id,
+                cred_id,
+                counter,
+                cred_public_key,
+                backup_eligible,
+                backup_status,
+                webauthn_user_id,
+                transports
+            )
+            VALUES (
+                (SELECT id FROM new_user),
+                ${cred_id},
+                ${counter},
+                ${cred_public_key},
+                ${backup_eligible},
+                ${backup_status},
+                ${webauthn_user_id},
+                ARRAY[${JSON.stringify(transports)}]
+            )
+            RETURNING *;
+        `
+        return queryResult.rows[0]
+    } catch (error) {
+        console.error(`Database error: ${error}`)
+        throw new Error(`Failed to create user: ${username}`)
+    }
+}
+
+export async function getPasskeyWithUserId(cred_id: string, internal_user_id: string): Promise<PasskeySerialized> {
+    try {
+        const queryResult = await sql<PasskeySerialized>`SELECT * FROM passkey WHERE cred_id = ${cred_id} AND internal_user_id = ${internal_user_id}`
+        return queryResult.rows[0];
+    } catch (error) {
+        console.error(`Database error: ${error}`)
+        throw new Error(`Failed to fetch passkey: ${cred_id}`)
     }
 }

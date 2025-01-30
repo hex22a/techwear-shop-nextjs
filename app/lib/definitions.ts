@@ -73,3 +73,32 @@ export type Product = {
     };
     photo_url: string;
 }
+
+export type User = {
+    id: string;
+    username: string;
+    created_at: Date;
+}
+
+export type UserWithPasskeyRaw = User & Passkey
+
+export type UserWithPasskeysSerialized = User & {
+    passkeys: Map<string, PasskeySerialized>;
+}
+
+export type Passkey = {
+    cred_id: string;
+    cred_public_key: Uint8Array;
+    internal_user_id?: string;
+    webauthn_user_id?: string;
+    counter: number;
+    backup_eligible: boolean;
+    backup_status: boolean;
+    transports: string[];
+    created_at?: Date;
+    last_used?: Date;
+}
+
+export type PasskeySerialized = Omit<Passkey, 'cred_public_key'> & {
+    cred_public_key: string;
+}
