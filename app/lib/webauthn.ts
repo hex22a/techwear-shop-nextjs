@@ -16,10 +16,9 @@ import {getCurrentSession, updateCurrentSession} from './session';
 import {isoBase64URL} from '@simplewebauthn/server/helpers';
 import {createUser, findUser, findUserWithPasskeys, getPasskeyWithUserId} from "@/app/lib/data";
 import {PasskeySerialized} from "@/app/lib/definitions";
+import {ORIGIN, RP_ID} from "@/app/lib/constants";
 
 const RP_NAME = 'Techwear Shop';
-const RP_ID = process.env.NODE_ENV === 'production' ? process.env.VERCEL_URL ?? 'techwear-shop-nextjs.vercel.app' : 'localhost';
-const ORIGIN = process.env.NODE_ENV === 'production' ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
 
 export const generateWebAuthnRegistrationOptions = async (username: string) => {
     const user = await findUser(username);
@@ -33,7 +32,7 @@ export const generateWebAuthnRegistrationOptions = async (username: string) => {
 
     const opts: GenerateRegistrationOptionsOpts = {
         rpName: RP_NAME,
-        rpID: process.env.VERCEL_URL || RP_ID,
+        rpID: RP_ID,
         userID: new TextEncoder().encode(username),
         userName: username,
         timeout: 60000,
@@ -73,8 +72,8 @@ export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON)
     const opts: VerifyRegistrationResponseOpts = {
         response: data,
         expectedChallenge: `${currentChallenge}`,
-        expectedOrigin: `https://${process.env.VERCEL_URL}` || ORIGIN,
-        expectedRPID: process.env.VERCEL_URL || RP_ID,
+        expectedOrigin: ORIGIN,
+        expectedRPID: RP_ID,
         requireUserVerification: false,
     };
     const verification = await verifyRegistrationResponse(opts);
@@ -139,7 +138,7 @@ export const generateWebAuthnLoginOptions = async (username: string) => {
             publicKey: value.cred_public_key,
         })),
         userVerification: 'required',
-        rpID: process.env.VERCEL_URL || RP_ID,
+        rpID: RP_ID,
     };
     const options = await generateAuthenticationOptions(opts);
 
@@ -184,8 +183,8 @@ export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
     const opts: VerifyAuthenticationResponseOpts = {
         response: data,
         expectedChallenge: `${currentChallenge}`,
-        expectedOrigin: `https://${process.env.VERCEL_URL}` || ORIGIN,
-        expectedRPID: process.env.VERCEL_URL || RP_ID,
+        expectedOrigin: ORIGIN,
+        expectedRPID: RP_ID,
         credential: {
             id: dbAuthenticator.cred_id,
             publicKey: isoBase64URL.toBuffer(dbAuthenticator.cred_public_key),
