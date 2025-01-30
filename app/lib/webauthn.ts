@@ -19,7 +19,7 @@ import {PasskeySerialized} from "@/app/lib/definitions";
 
 const RP_NAME = 'Techwear Shop';
 const RP_ID = process.env.NODE_ENV === 'production' ? process.env.VERCEL_URL ?? 'techwear-shop-nextjs.vercel.app' : 'localhost';
-const ORIGIN = process.env.NODE_ENV === 'production' ? process.env.VERCEL_URL ?? 'https://techwear-shop-nextjs.vercel.app/' : 'http://localhost:3000';
+const ORIGIN = process.env.NODE_ENV === 'production' ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
 
 export const generateWebAuthnRegistrationOptions = async (username: string) => {
     const user = await findUser(username);
