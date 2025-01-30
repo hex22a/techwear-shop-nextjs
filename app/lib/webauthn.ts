@@ -33,7 +33,7 @@ export const generateWebAuthnRegistrationOptions = async (username: string) => {
 
     const opts: GenerateRegistrationOptionsOpts = {
         rpName: RP_NAME,
-        rpID: RP_ID,
+        rpID: process.env.VERCEL_URL || RP_ID,
         userID: new TextEncoder().encode(username),
         userName: username,
         timeout: 60000,
@@ -73,8 +73,8 @@ export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON)
     const opts: VerifyRegistrationResponseOpts = {
         response: data,
         expectedChallenge: `${currentChallenge}`,
-        expectedOrigin: ORIGIN,
-        expectedRPID: RP_ID,
+        expectedOrigin: `https://${process.env.VERCEL_URL}` || ORIGIN,
+        expectedRPID: process.env.VERCEL_URL || RP_ID,
         requireUserVerification: false,
     };
     const verification = await verifyRegistrationResponse(opts);
@@ -139,7 +139,7 @@ export const generateWebAuthnLoginOptions = async (username: string) => {
             publicKey: value.cred_public_key,
         })),
         userVerification: 'required',
-        rpID: RP_ID,
+        rpID: process.env.VERCEL_URL || RP_ID,
     };
     const options = await generateAuthenticationOptions(opts);
 
@@ -184,8 +184,8 @@ export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
     const opts: VerifyAuthenticationResponseOpts = {
         response: data,
         expectedChallenge: `${currentChallenge}`,
-        expectedOrigin: ORIGIN,
-        expectedRPID: RP_ID,
+        expectedOrigin: `https://${process.env.VERCEL_URL}` || ORIGIN,
+        expectedRPID: process.env.VERCEL_URL || RP_ID,
         credential: {
             id: dbAuthenticator.cred_id,
             publicKey: isoBase64URL.toBuffer(dbAuthenticator.cred_public_key),
