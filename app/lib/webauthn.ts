@@ -16,7 +16,7 @@ import {getCurrentSession, updateCurrentSession} from './session';
 import {isoBase64URL} from '@simplewebauthn/server/helpers';
 import {createUser, findUser, findUserWithPasskeys, getPasskeyWithUserId} from "@/app/lib/data";
 import {PasskeySerialized} from "@/app/lib/definitions";
-import {ORIGIN, RP_ID} from "@/app/lib/constants";
+import {getOrigin, getRpId} from "@/app/lib/constants";
 
 const RP_NAME = 'Techwear Shop';
 
@@ -32,7 +32,7 @@ export const generateWebAuthnRegistrationOptions = async (username: string) => {
 
     const opts: GenerateRegistrationOptionsOpts = {
         rpName: RP_NAME,
-        rpID: RP_ID,
+        rpID: getRpId(),
         userID: new TextEncoder().encode(username),
         userName: username,
         timeout: 60000,
@@ -72,8 +72,8 @@ export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON)
     const opts: VerifyRegistrationResponseOpts = {
         response: data,
         expectedChallenge: `${currentChallenge}`,
-        expectedOrigin: ORIGIN,
-        expectedRPID: RP_ID,
+        expectedOrigin: getOrigin(),
+        expectedRPID: getRpId(),
         requireUserVerification: false,
     };
     const verification = await verifyRegistrationResponse(opts);
@@ -138,7 +138,7 @@ export const generateWebAuthnLoginOptions = async (username: string) => {
             publicKey: value.cred_public_key,
         })),
         userVerification: 'required',
-        rpID: RP_ID,
+        rpID: getRpId(),
     };
     const options = await generateAuthenticationOptions(opts);
 
@@ -183,8 +183,8 @@ export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
     const opts: VerifyAuthenticationResponseOpts = {
         response: data,
         expectedChallenge: `${currentChallenge}`,
-        expectedOrigin: ORIGIN,
-        expectedRPID: RP_ID,
+        expectedOrigin: getOrigin(),
+        expectedRPID: getRpId(),
         credential: {
             id: dbAuthenticator.cred_id,
             publicKey: isoBase64URL.toBuffer(dbAuthenticator.cred_public_key),
