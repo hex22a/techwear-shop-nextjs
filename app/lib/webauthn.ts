@@ -16,7 +16,6 @@ import {getCurrentSession, updateCurrentSession} from './session';
 import {isoBase64URL} from '@simplewebauthn/server/helpers';
 import {createUser, findUser, findUserWithPasskeys, getPasskeyWithUserId} from "@/app/lib/data";
 import {PasskeySerialized} from "@/app/lib/definitions";
-import {getOrigin, getRpId} from "@/app/lib/constants";
 
 const RP_NAME = 'Techwear Shop';
 
@@ -32,7 +31,7 @@ export const generateWebAuthnRegistrationOptions = async (username: string) => {
 
     const opts: GenerateRegistrationOptionsOpts = {
         rpName: RP_NAME,
-        rpID: getRpId(),
+        rpID: process.env.NEXT_PUBLIC_SITE_URL || 'localhost',
         userID: new TextEncoder().encode(username),
         userName: username,
         timeout: 60000,
@@ -72,8 +71,8 @@ export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON)
     const opts: VerifyRegistrationResponseOpts = {
         response: data,
         expectedChallenge: `${currentChallenge}`,
-        expectedOrigin: getOrigin(),
-        expectedRPID: getRpId(),
+        expectedOrigin: `https://${process.env.NEXT_PUBLIC_SITE_URL}`,
+        expectedRPID: process.env.NEXT_PUBLIC_SITE_URL || 'localhost',
         requireUserVerification: false,
     };
     const verification = await verifyRegistrationResponse(opts);
@@ -138,7 +137,7 @@ export const generateWebAuthnLoginOptions = async (username: string) => {
             publicKey: value.cred_public_key,
         })),
         userVerification: 'required',
-        rpID: getRpId(),
+        rpID: process.env.NEXT_PUBLIC_SITE_URL || 'localhost',
     };
     const options = await generateAuthenticationOptions(opts);
 
@@ -183,8 +182,8 @@ export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
     const opts: VerifyAuthenticationResponseOpts = {
         response: data,
         expectedChallenge: `${currentChallenge}`,
-        expectedOrigin: getOrigin(),
-        expectedRPID: getRpId(),
+        expectedOrigin: `https://${process.env.NEXT_PUBLIC_SITE_URL}`,
+        expectedRPID: process.env.NEXT_PUBLIC_SITE_URL || 'localhost',
         credential: {
             id: dbAuthenticator.cred_id,
             publicKey: isoBase64URL.toBuffer(dbAuthenticator.cred_public_key),
