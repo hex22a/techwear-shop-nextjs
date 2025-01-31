@@ -39,6 +39,8 @@ export const generateWebAuthnRegistrationOptions = async (username: string) => {
         excludeCredentials: [],
         authenticatorSelection: {
             residentKey: 'discouraged',
+            // authenticatorAttachment: 'cross-platform',
+            // userVerification: 'discouraged'
         },
         /**
          * Ed25519, ES256, and RS256
@@ -134,6 +136,7 @@ export const generateWebAuthnLoginOptions = async (username: string) => {
             publicKey: value.cred_public_key,
         })),
         userVerification: 'required',
+        // userVerification: 'discouraged',
         rpID: process.env.RP_ID || 'localhost',
     };
     const options = await generateAuthenticationOptions(opts);
@@ -187,6 +190,7 @@ export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
             counter: dbAuthenticator.counter
         },
         requireUserVerification: true,
+        // requireUserVerification: false,
     };
     const verification = await verifyAuthenticationResponse(opts);
 

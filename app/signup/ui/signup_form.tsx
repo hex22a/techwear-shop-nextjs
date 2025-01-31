@@ -5,6 +5,7 @@ import {
     generateWebAuthnRegistrationOptions,
     verifyWebAuthnRegistration,
 } from '@/app/lib/webauthn';
+import Link from "next/link";
 
 export default function SignupForm() {
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -44,6 +45,7 @@ export default function SignupForm() {
             <input className="block border w-full rounded-full py-3.5 px-14 mb-3" name="username" id="username" type="text"/>
             <hr className="my-4"/>
             <button type="submit" className="block border w-full rounded-full py-3.5 px-14 mb-3 bg-black text-white">Sign Up</button>
+            <div>Already have an account? <Link href="/signin">Sign In</Link></div>
         </form>
     )
 }
