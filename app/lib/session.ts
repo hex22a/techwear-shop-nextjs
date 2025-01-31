@@ -41,6 +41,11 @@ export async function getCurrentSession(): Promise< { sessionId: string, data: S
     return { sessionId: newSessionId, data: newSession };
 }
 
+export async function deleteCurrentSession(): Promise<void> {
+    const { sessionId } = await getCurrentSession();
+    await redis.del(sessionId)
+}
+
 export async function updateCurrentSession(data: SessionData): Promise<void> {
     const { sessionId, data: oldData } = await getCurrentSession();
 

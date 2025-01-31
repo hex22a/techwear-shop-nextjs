@@ -12,7 +12,7 @@ import {
     verifyRegistrationResponse,
     VerifyRegistrationResponseOpts,
 } from '@simplewebauthn/server';
-import {getCurrentSession, updateCurrentSession} from './session';
+import {deleteCurrentSession, getCurrentSession, updateCurrentSession} from './session';
 import {isoBase64URL} from '@simplewebauthn/server/helpers';
 import {createUser, findUser, findUserWithPasskeys, getPasskeyWithUserId} from "@/app/lib/data";
 import {PasskeySerialized} from "@/app/lib/definitions";
@@ -101,7 +101,7 @@ export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON)
         transports: data.response.transports || [],
     };
 
-    await updateCurrentSession({});
+    await deleteCurrentSession();
 
     try {
         await createUser(username, newDevice);
@@ -194,7 +194,7 @@ export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
     };
     const verification = await verifyAuthenticationResponse(opts);
 
-    await updateCurrentSession({});
+    await deleteCurrentSession();
 
     return {
         success: verification.verified,
