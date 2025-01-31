@@ -1,5 +1,7 @@
 'use client';
 
+import form_style from "@/app/ui/form.module.css";
+
 import { startRegistration } from '@simplewebauthn/browser';
 import {
     generateWebAuthnRegistrationOptions,
@@ -41,7 +43,7 @@ export default function SignupForm() {
 
     return (
         <form onSubmit={handleSubmit}>
-            <label className="block text-center" htmlFor="username">Username</label>
+            <label className={`${form_style.username} block text-center`} htmlFor="username">Username</label>
             <input className="block border w-full rounded-full py-3.5 px-14 mb-3" name="username" id="username" type="text"/>
             <hr className="my-4"/>
             <button type="submit" className="block border w-full rounded-full py-3.5 px-14 mb-3 bg-black text-white">Sign Up</button>

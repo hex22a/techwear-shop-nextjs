@@ -1,0 +1,16 @@
+.username {
+    position: relative;
+}
+
+.username::before {
+    content: '';
+    position: absolute;
+    top: 1.5rem;
+    left: 1rem;
+    height: 24px;
+    width: 24px;
+    opacity: .6;
+    pointer-events: none;
+    transform: translateY(50%);
+    background: url('/userpic.svg');
+}
