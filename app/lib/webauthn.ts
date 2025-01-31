@@ -41,9 +41,9 @@ export const generateWebAuthnRegistrationOptions = async (username: string) => {
             residentKey: 'discouraged',
         },
         /**
-         * Support the two most common algorithms: ES256, and RS256
+         * Ed25519, ES256, and RS256
          */
-        supportedAlgorithmIDs: [-7, -257],
+        supportedAlgorithmIDs: [6, -7, -257],
     };
 
     const options = await generateRegistrationOptions(opts);
@@ -90,9 +90,6 @@ export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON)
 
     console.log(credential);
 
-    /**
-     * Add the returned device to the user's list of devices
-     */
     const newDevice: PasskeySerialized = {
         cred_public_key: isoBase64URL.fromBuffer(credential.publicKey),
         cred_id: credential.id,
