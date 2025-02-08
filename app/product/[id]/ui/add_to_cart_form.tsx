@@ -1,8 +1,6 @@
-'use client';
-
 import colors_style from "@/app/ui/colors.module.css";
-import { useState } from "react";
 import { Color, Size } from "@/app/lib/definitions";
+import Quantity from "@/app/ui/quantity";
 
 export type AddToCartFormProps = {
     colors: Color[],
@@ -11,19 +9,6 @@ export type AddToCartFormProps = {
 
 export default function AddToCartForm(props: AddToCartFormProps) {
     const { colors, sizes } = props;
-
-    const min = 1;
-    const max = 100;
-
-    const [quantity, setQuantity] = useState(1);
-
-    function addQuantity() {
-        setQuantity(quantity + 1);
-    }
-
-    function subtractQuantity() {
-        setQuantity(quantity - 1);
-    }
 
     return (
         <form>
@@ -62,29 +47,8 @@ export default function AddToCartForm(props: AddToCartFormProps) {
             </fieldset>
             <hr className="my-6"/>
             <div className="flex flex-row justify-between items-stretch text-sm md:text-base w-full gap-3 md:gap-5">
-                <span className="bg-gray-200 rounded-full flex items-center justify-around py-3 md:py-3.5 px-3 w-44">
-                    <button
-                        type="button"
-                        className="text-2xl"
-                        onClick={subtractQuantity}
-                        disabled={quantity === min}
-                    >
-                        -
-                    </button>
-                    <input className="bg-gray-200 text-center"
-                           type="number"
-                           readOnly={true}
-                           value={quantity}
-                           min={min}
-                           max={max}
-                    />
-                    <button
-                        className="text-2xl"
-                        type="button"
-                        onClick={addQuantity}
-                        disabled={quantity === max}>
-                        +
-                    </button>
+                <span className="bg-gray-200 rounded-full py-3 md:py-3.5 px-3 w-44">
+                    <Quantity />
                 </span>
                 <button className="bg-black text-white rounded-full py-3 md:py-3.5 w-full" type="submit">Add to Cart</button>
             </div>

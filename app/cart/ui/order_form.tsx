@@ -1,28 +1,14 @@
-'use client';
-
 import Image from "next/image";
-import {useState} from "react";
 
 import TrashBinIcon from "@/app/ui/vector/trash-bin.svg";
 import ArrowIcon from "@/app/ui/vector/arrow.svg";
 import styles from "./order_form.module.css";
+import Quantity from "@/app/ui/quantity";
 
 export default function OrderForm() {
-    const min = 1;
-    const max = 100;
-
-    const [quantity, setQuantity] = useState(1);
-
-    function addQuantity() {
-        setQuantity(quantity + 1);
-    }
-
-    function subtractQuantity() {
-        setQuantity(quantity - 1);
-    }
 
     return (
-        <div className="grid grid-rows-[auto_auto] md:grid-cols-12 gap-5">
+        <form className="grid grid-rows-[auto_auto] md:grid-cols-12 gap-5">
             <div className="md:col-start-1 md:col-end-8 p-3.5 md:py-5 md:px-6 border rounded-xl">
                 <div className="flex flex-row justify-between items-stretch">
                     <div className="flex flex-row justify-start items-stretch gap-3.5">
@@ -55,30 +41,9 @@ export default function OrderForm() {
                         <button>
                             <TrashBinIcon />
                         </button>
-                        <span className="bg-gray-200 rounded-full flex items-center justify-around py-3 md:py-3.5 px-3 w-32">
-                            <button
-                                type="button"
-                                className="text-2xl"
-                                onClick={subtractQuantity}
-                                disabled={quantity === min}
-                            >
-                                -
-                            </button>
-                            <input className="bg-gray-200 text-center"
-                                   type="number"
-                                   readOnly={true}
-                                   value={quantity}
-                                   min={min}
-                                   max={max}
-                            />
-                            <button
-                                className="text-2xl"
-                                type="button"
-                                onClick={addQuantity}
-                                disabled={quantity === max}>
-                                +
-                            </button>
-                        </span>
+                        <div className="bg-gray-200 rounded-full py-2 md:py-2.5 px-3 w-32">
+                            <Quantity />
+                        </div>
                     </div>
                 </div>
                 <hr className="my-6"/>
@@ -111,30 +76,9 @@ export default function OrderForm() {
                     </div>
                     <div className="flex flex-col justify-between items-end">
                         <button><TrashBinIcon /></button>
-                        <span className="bg-gray-200 rounded-full flex items-center justify-around py-3 md:py-3.5 px-3 w-32">
-                        <button
-                            type="button"
-                            className="text-2xl"
-                            onClick={subtractQuantity}
-                            disabled={quantity === min}
-                        >
-                            -
-                        </button>
-                        <input className="bg-gray-200 text-center"
-                               type="number"
-                               readOnly={true}
-                               value={quantity}
-                               min={min}
-                               max={max}
-                        />
-                        <button
-                            className="text-2xl"
-                            type="button"
-                            onClick={addQuantity}
-                            disabled={quantity === max}>
-                            +
-                        </button>
-                    </span>
+                        <div className="bg-gray-200 rounded-full py-2 md:py-2.5 px-3 w-32">
+                            <Quantity />
+                        </div>
                     </div>
                 </div>
                 <hr className="my-6"/>
@@ -167,30 +111,9 @@ export default function OrderForm() {
                     </div>
                     <div className="flex flex-col justify-between items-end">
                         <button><TrashBinIcon /></button>
-                        <span className="bg-gray-200 rounded-full flex items-center justify-around py-3 md:py-3.5 px-3 w-32">
-                        <button
-                            type="button"
-                            className="text-2xl"
-                            onClick={subtractQuantity}
-                            disabled={quantity === min}
-                        >
-                            -
-                        </button>
-                        <input className="bg-gray-200 text-center"
-                               type="number"
-                               readOnly={true}
-                               value={quantity}
-                               min={min}
-                               max={max}
-                        />
-                        <button
-                            className="text-2xl"
-                            type="button"
-                            onClick={addQuantity}
-                            disabled={quantity === max}>
-                            +
-                        </button>
-                    </span>
+                        <div className="bg-gray-200 rounded-full py-2 md:py-2.5 px-3 w-32">
+                            <Quantity />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -222,6 +145,6 @@ export default function OrderForm() {
                 </div>
                 <button className="bg-black text-white rounded-full py-4 w-full">Go to Checkout <ArrowIcon className="fill-white inline-block ml-1" width={24} height={24}/></button>
             </div>
-        </div>
+        </form>
     )
 }
