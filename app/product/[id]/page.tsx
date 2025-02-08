@@ -11,7 +11,7 @@ import Filters from "@/app/ui/vector/filters.svg";
 import Review from "@/app/ui/review";
 
 import Tabs, {Tab} from "./ui/tabs";
-import OrderForm from "./ui/order_form";
+import AddToCartForm from "./ui/add_to_cart_form";
 import {Color, Product, Size} from "@/app/lib/definitions";
 import {fetchProduct} from "@/app/lib/data";
 
@@ -85,7 +85,7 @@ export default async function ProductPage (props: {params: Promise<{id: string}>
                         </div>
                         <p>{description}</p>
                         <hr className="my-6"/>
-                        <OrderForm sizes={sizesArray} colors={colorsArray}/>
+                        <AddToCartForm sizes={sizesArray} colors={colorsArray}/>
                     </div>
                 </main>
                 <div className="mt-20 mb-6">

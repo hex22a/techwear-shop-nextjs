@@ -4,12 +4,12 @@ import colors_style from "@/app/ui/colors.module.css";
 import { useState } from "react";
 import { Color, Size } from "@/app/lib/definitions";
 
-export type OrderFormProps = {
+export type AddToCartFormProps = {
     colors: Color[],
     sizes: Size[],
 }
 
-export default function OrderForm(props: OrderFormProps) {
+export default function AddToCartForm(props: AddToCartFormProps) {
     const { colors, sizes } = props;
 
     const min = 1;

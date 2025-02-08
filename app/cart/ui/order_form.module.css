@@ -1,0 +1,12 @@
+.discount::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    height: 24px;
+    width: 24px;
+    fill: black;
+    fill-opacity: 0.4;
+    pointer-events: none;
+    transform: translateY(50%);
+    background: url('/discount.svg');
+}
