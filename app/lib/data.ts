@@ -4,7 +4,7 @@ import {
     Color,
     PasskeySerialized,
     Product,
-    ProductRaw,
+    FullProductRaw,
     Size,
     Style,
     User, UserWithPasskeyRaw,
@@ -55,7 +55,7 @@ export async function fetchAllCategories(): Promise<Category[]> {
 
 export async function fetchProduct(id: string): Promise<Product> {
     try {
-        const queryResult = await sql<ProductRaw>`
+        const queryResult = await sql<FullProductRaw>`
             SELECT
                 product.id as id,
                 product.name as name,

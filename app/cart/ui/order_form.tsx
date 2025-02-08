@@ -4,137 +4,84 @@ import TrashBinIcon from "@/app/ui/vector/trash-bin.svg";
 import ArrowIcon from "@/app/ui/vector/arrow.svg";
 import styles from "./order_form.module.css";
 import Quantity from "@/app/ui/quantity";
+import {ProductRaw} from "@/app/lib/definitions";
 
-export default function OrderForm() {
+export type OrderFormProps = {
+    products: ProductRaw[];
+    summary: {
+        subtotal: number;
+        discount: number;
+        deliveryFee: number;
+        total: number;
+    }
+}
 
+
+export default function OrderForm(props: OrderFormProps) {
+    const { products, summary: { deliveryFee, total, subtotal, discount } } = props;
     return (
         <form className="grid grid-rows-[auto_auto] md:grid-cols-12 gap-5">
             <div className="md:col-start-1 md:col-end-8 p-3.5 md:py-5 md:px-6 border rounded-xl">
-                <div className="flex flex-row justify-between items-stretch">
-                    <div className="flex flex-row justify-start items-stretch gap-3.5">
-                        <div className="relative w-full md:w-[124px] md:h-[124px] bg-gray-300 rounded-xl overflow-hidden">
-                            <Image
-                                className="object-cover"
-                                src="/items/NA4I5F176-ALT1.webp"
-                                alt="cart item"
-                                fill
-                            />
-                        </div>
-                        <div className="flex flex-col justify-between">
-                            <div>
-                                <h2>MA.STRUM Skido Anorak 2.0</h2>
-                                <div>
-                                    <span>Size: </span>
-                                    <span className="text-[rgba(0,0,0,.6)]">Large</span>
+                {products.map((product, index) => (
+                    <div key={product.id}>
+                        {index !==0 && <hr className="my-6"/>}
+                        <div className="flex flex-row justify-between items-stretch">
+                            <div className="flex flex-row justify-start items-stretch gap-3.5">
+                                <div className="relative w-full md:w-[124px] md:h-[124px] bg-gray-300 rounded-xl overflow-hidden">
+                                    <Image
+                                        className="object-cover"
+                                        src={product.photo_url}
+                                        alt={`${product.name} cart photo`}
+                                        fill
+                                    />
                                 </div>
-                                <div>
-                                    <span>Color: </span>
-                                    <span className="text-[rgba(0,0,0,.6)]">White</span>
+                                <div className="flex flex-col justify-between">
+                                    <div>
+                                        <h2>{product.name}</h2>
+                                        <div>
+                                            <span>Size: </span>
+                                            <span className="text-[rgba(0,0,0,.6)]">{product.size}</span>
+                                        </div>
+                                        <div>
+                                            <span>Color: </span>
+                                            <span className="text-[rgba(0,0,0,.6)]">{product.color_hex_value}</span>
+                                        </div>
+                                    </div>
+                                    <div className="text-lg font-bold">
+                                        ${product.price}
+                                    </div>
                                 </div>
                             </div>
-                            <div className="text-lg font-bold">
-                                $400
+                            <div className="flex flex-col justify-between items-end">
+                                <button>
+                                    <TrashBinIcon />
+                                </button>
+                                <div className="bg-gray-200 rounded-full py-2 md:py-2.5 px-3 w-32">
+                                    <Quantity />
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col justify-between items-end">
-                        <button>
-                            <TrashBinIcon />
-                        </button>
-                        <div className="bg-gray-200 rounded-full py-2 md:py-2.5 px-3 w-32">
-                            <Quantity />
-                        </div>
-                    </div>
-                </div>
-                <hr className="my-6"/>
-                <div className="flex flex-row justify-between items-stretch">
-                    <div className="flex flex-row justify-start items-stretch gap-3.5">
-                        <div className="relative w-full md:w-[124px] md:h-[124px] bg-gray-300 rounded-xl overflow-hidden">
-                            <Image
-                                className="object-cover"
-                                src="/items/NA4I5F176-ALT2.webp"
-                                alt="cart item"
-                                fill
-                            />
-                        </div>
-                        <div className="flex flex-col justify-between">
-                            <div>
-                                <h2>MA.STRUM Skido Anorak 2.0</h2>
-                                <div>
-                                    <span>Size: </span>
-                                    <span className="text-[rgba(0,0,0,.6)]">Large</span>
-                                </div>
-                                <div>
-                                    <span>Color: </span>
-                                    <span className="text-[rgba(0,0,0,.6)]">White</span>
-                                </div>
-                            </div>
-                            <div className="text-lg font-bold">
-                                $400
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex flex-col justify-between items-end">
-                        <button><TrashBinIcon /></button>
-                        <div className="bg-gray-200 rounded-full py-2 md:py-2.5 px-3 w-32">
-                            <Quantity />
-                        </div>
-                    </div>
-                </div>
-                <hr className="my-6"/>
-                <div className="flex flex-row justify-between items-stretch">
-                    <div className="flex flex-row justify-start items-stretch gap-3.5">
-                        <div className="relative w-full md:w-[124px] md:h-[124px] bg-gray-300 rounded-xl overflow-hidden">
-                            <Image
-                                className="object-cover"
-                                src="/items/NA4I5F176-ALT3.webp"
-                                alt="cart item"
-                                fill
-                            />
-                        </div>
-                        <div className="flex flex-col justify-between">
-                            <div>
-                                <h2>MA.STRUM Skido Anorak 2.0</h2>
-                                <div>
-                                    <span>Size: </span>
-                                    <span className="text-[rgba(0,0,0,.6)]">Large</span>
-                                </div>
-                                <div>
-                                    <span>Color: </span>
-                                    <span className="text-[rgba(0,0,0,.6)]">White</span>
-                                </div>
-                            </div>
-                            <div className="text-lg font-bold">
-                                $400
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex flex-col justify-between items-end">
-                        <button><TrashBinIcon /></button>
-                        <div className="bg-gray-200 rounded-full py-2 md:py-2.5 px-3 w-32">
-                            <Quantity />
-                        </div>
-                    </div>
-                </div>
+                ))}
             </div>
             <div className="md:col-start-8 md:col-end-13 self-start p-3.5 md:py-5 md:px-6 border rounded-xl">
                 <h2 className="mb-6">Order Summary</h2>
                 <div className="flex flex-row justify-between items-center text-xl mb-5">
                     <div className="text-[rgba(0,0,0,.6)]">Subtotal:</div>
-                    <div>$1000</div>
+                    <div>${subtotal}</div>
                 </div>
                 <div className="flex flex-row justify-between items-center text-xl mb-5">
-                    <div className="text-[rgba(0,0,0,.6)]">Discount: (-20%)</div>
-                    <div>-$200</div>
+                    <div className="text-[rgba(1,0,0,.6)]">Discount: (-20%)</div>
+                    <div>-${discount}</div>
                 </div>
                 <div className="flex flex-row justify-between items-center text-xl">
                     <div className="text-[rgba(0,0,0,.6)]">Delivery Fee</div>
-                    <div>$20</div>
+                    <div>${deliveryFee}</div>
                 </div>
                 <hr className="my-6"/>
                 <div className="flex flex-row justify-between items-center text-xl">
                     <div>Total:</div>
-                    <div className="font-bold text-2xl">$800</div>
+                    <div className="font-bold text-2xl">${total}</div>
                 </div>
                 <div className="relative w-full my-6">
                     <label className={styles.discount} htmlFor="discount"></label>

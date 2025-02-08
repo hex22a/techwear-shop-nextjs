@@ -38,16 +38,19 @@ export type ProductRaw = {
     name: string,
     price: number,
     discount_percent: number,
-    description: string,
-    details: string,
     photo_url: string,
-    alt_photo_id: number,
-    alt_photo_url: string,
     color_id: number,
     color_hex_value: string,
     size_id: number,
     size: string,
     size_value: string,
+}
+
+export type FullProductRaw = ProductRaw & {
+    description: string,
+    details: string,
+    alt_photo_id: number,
+    alt_photo_url: string,
     review_id: number,
     review: string,
     review_rating: number,
@@ -55,7 +58,6 @@ export type ProductRaw = {
     review_author: string,
     review_created_at: Date,
 }
-
 
 export type Product = {
     id: number;

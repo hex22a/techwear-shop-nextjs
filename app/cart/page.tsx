@@ -1,7 +1,7 @@
 import Header from "@/app/ui/header";
 import Footer from "@/app/ui/footer";
 import Breadcrumbs from "@/app/ui/breadcrumbs";
-import OrderForm from "@/app/cart/ui/order_form";
+import OrderForm, {OrderFormProps} from "@/app/cart/ui/order_form";
 
 const sitePath = [
     {
@@ -14,6 +14,53 @@ const sitePath = [
     }
 ]
 
+const orderFormProps: OrderFormProps = {
+    products: [
+        {
+            id: 1,
+            name: 'MA.STRUM Skido Anorak 2.0',
+            color_id: 1,
+            color_hex_value: '#000',
+            price: 400,
+            discount_percent: 20,
+            photo_url: '/items/NA4I5F176-ALT1.webp',
+            size_id: 1,
+            size: 'Large',
+            size_value: 'l',
+        },
+        {
+            id: 2,
+            name: 'MA.STRUM Skido Anorak 2.0',
+            color_id: 1,
+            color_hex_value: '#000',
+            price: 400,
+            discount_percent: 20,
+            photo_url: '/items/NA4I5F176-ALT1.webp',
+            size_id: 1,
+            size: 'Large',
+            size_value: 'l',
+        },
+        {
+            id: 3,
+            name: 'MA.STRUM Skido Anorak 2.0',
+            color_id: 1,
+            color_hex_value: '#000',
+            price: 400,
+            discount_percent: 20,
+            photo_url: '/items/NA4I5F176-ALT1.webp',
+            size_id: 1,
+            size: 'Large',
+            size_value: 'l',
+        },
+    ],
+    summary: {
+        subtotal: 1000,
+        discount: 200,
+        deliveryFee: 20,
+        total: 820,
+    }
+}
+
 export default function CartPage() {
     return (
         <>
@@ -24,7 +71,7 @@ export default function CartPage() {
                 </div>
                 <main>
                     <h1 className="text-4xl mb-14 md:mb-6">Your cart</h1>
-                    <OrderForm />
+                    <OrderForm {...orderFormProps} />
                 </main>
             </div>
             <Footer />
