@@ -124,7 +124,7 @@ export default async function SearchPage() {
     return (
       <>
           <Header />
-          <div className="max-w-96 md:max-w-[78rem] my-0 mx-auto">
+          <div className="w-96 md:w-[78rem] mt-0 mb-20 mx-auto">
               <div className="py-6">
                   <Breadcrumbs sitePath={sitePath}/>
               </div>
