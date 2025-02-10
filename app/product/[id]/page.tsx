@@ -1,5 +1,3 @@
-import styles from "@/app/product/[id]/page.module.css"
-
 import Header from "@/app/ui/header";
 import Footer from "@/app/ui/footer";
 import Breadcrumbs from "@/app/ui/breadcrumbs";
@@ -7,13 +5,11 @@ import Image from "next/image";
 import Stars from "@/app/ui/stars";
 import Price from "@/app/ui/price";
 import Featured from "@/app/ui/featured";
-import Filters from "@/app/ui/vector/filters.svg";
-import Review from "@/app/ui/review";
 
-import Tabs, {Tab} from "./ui/tabs";
 import AddToCartForm from "./ui/add_to_cart_form";
 import {Color, Product, Size} from "@/app/lib/definitions";
 import {fetchProduct} from "@/app/lib/data";
+import Tabs from "./ui/tabs";
 
 const sitePath = [
     {
@@ -88,41 +84,7 @@ export default async function ProductPage (props: {params: Promise<{id: string}>
                         <AddToCartForm sizes={sizesArray} colors={colorsArray}/>
                     </div>
                 </main>
-                <div className="mt-20 mb-6">
-                    <Tabs activeTab={Tab.REVIEWS}/>
-                </div>
-                <div className="flex justify-between items-center">
-                    <div>
-                        <span className="font-bold mr-2">All reviews</span><span className="opacity-60">(451)</span>
-                    </div>
-                    <div className="flex flex-row items-center gap-2.5">
-                        <button className="bg-[rgba(240,240,240,1)] rounded-full md:p-3 p-2">
-                            <Filters className="fill-black" width={24} height={24}/>
-                        </button>
-                        <form className="hidden md:block">
-                            <select className={`${styles.order_select} rounded-full appearance-none md:p-3 md:px-5 p-2`} name="order" id="order">
-                                <option value="1">Latest</option>
-                                <option value="2">Oldest</option>
-                                <option value="3">Worst to best</option>
-                                <option value="4">Best to worst</option>
-                            </select>
-                        </form>
-                        <button className="bg-black text-white text-sm md:text-base rounded-full py-3 md:py-3.5 px-3 md:px-5" type="button">Write a review</button>
-                    </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 mt-10">
-                    <Review id={1} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
-                    <Review id={2} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
-                    <Review id={3} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
-                    <Review id={4} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
-                    <Review id={5} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
-                    <Review id={6} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
-                    <Review id={7} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
-                    <Review id={8} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
-                </div>
-                <div className="text-center mt-5 md:mt-9">
-                    <button className="border border-gray-500 rounded-full px-16 py-4">Load More Reviews</button>
-                </div>
+                <Tabs />
                 <Featured title="You might also like"/>
             </div>
             <Footer/>
