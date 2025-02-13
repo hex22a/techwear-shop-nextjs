@@ -10,6 +10,7 @@ import AddToCartForm from "./ui/add_to_cart_form";
 import {Color, Product, Size} from "@/app/lib/definitions";
 import {fetchProduct} from "@/app/lib/data";
 import Tabs from "./ui/tabs";
+import {Tab} from "@/app/product/[id]/ui/tabs_header";
 
 const sitePath = [
     {
@@ -33,7 +34,7 @@ const sitePath = [
 export default async function ProductPage(props: {params: Promise<{id: string}>}) {
     const params = await props.params;
     const id = parseInt(params.id, 10);
-    const { name, price, description, photo_url, photos, sizes, colors, discount, reviews }: Product = await fetchProduct(id);
+    const { name, price, description, photo_url, photos, sizes, colors, discount, reviews, details }: Product = await fetchProduct(id);
     const sizesArray: Size[] = Array.from(sizes.entries()).map(([, value]) => ({...value}));
     const colorsArray: Color[] = Array.from(colors.entries()).map(([, value]) => ({...value}));
 
@@ -84,7 +85,7 @@ export default async function ProductPage(props: {params: Promise<{id: string}>}
                         <AddToCartForm sizes={sizesArray} colors={colorsArray}/>
                     </div>
                 </main>
-                <Tabs product_id={id} reviews={reviews}/>
+                <Tabs defaultTab={Tab.REVIEWS} product_id={id} reviews={reviews} details={details}/>
                 <Featured title="You might also like"/>
             </div>
             <Footer/>
