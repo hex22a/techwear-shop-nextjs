@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Brands from "@/app/ui/brands";
+import Link from "next/link";
 import Featured from "@/app/ui/featured";
 import Carousel from "@/app/ui/carousel";
 import Footer from "@/app/ui/footer";
@@ -21,9 +22,9 @@ export default async function Home() {
                             <p className="text-sm md:text-base mb-8">Browse through our diverse range of meticulously
                                 crafted garments, designed to bring out your
                                 individuality and cater to your sense of style.</p>
-                            <button className="bg-black text-white w-full md:w-auto rounded-full px-16 py-4 mb-12">Shop
+                            <Link href="/search" className="bg-black text-white w-full md:w-auto rounded-full px-16 py-4 mb-12">Shop
                                 Now
-                            </button>
+                            </Link>
                             <div className="flex flex-row flex-wrap justify-center items-stretch">
                                 <div className="inline-block border-r pr-4">
                                     <h2 className="text-3xl md:text-4xl">200+</h2>
