@@ -4,64 +4,17 @@ import styles from "@/app/ui/reviews.module.css";
 import Arrow from "@/app/ui/vector/arrow.svg";
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
-import Review from "@/app/ui/review";
+import ReviewComponent from "@/app/ui/review";
+import {Review} from "@/app/lib/definitions";
 
-export type CarouselItem = {
-    id: number;
-    title: string;
-    rating: number;
-    comment: string;
+export type CarouselProps = {
+    items: Review[]
 }
 
-const carouselItems: CarouselItem[] = [
-    {
-        id: 1,
-        title: "Tim S.",
-        rating: 1,
-        comment: "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations."
-    },
-    {
-        id: 2,
-        title: "Vald T.",
-        rating: 2,
-        comment: "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations."
-    },
-    {
-        id: 3,
-        title: "Raush A.",
-        rating: 3,
-        comment: "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations."
-    },
-    {
-        id: 4,
-        title: "Pavel S.",
-        rating: 4,
-        comment: "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations."
-    },
-    {
-        id: 5,
-        title: "Alex K.",
-        rating: 5,
-        comment: "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations."
-    },
-    {
-        id: 6,
-        title: "Gosha A.",
-        rating: 5,
-        comment: "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations."
-    },
-    {
-        id: 7,
-        title: "Daniel N.",
-        rating: 5,
-        comment: "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations."
-    },
-];
-
-export default function Carousel() {
+export default function Carousel(props: CarouselProps) {
+    const { items } = props;
     const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [items] = useState(carouselItems);
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [direction, setDirection] = useState(-1);
     const [orderMap, setOrderMap] = useState(new Array(items.length).fill(0).map((_, i) => i + 1));
@@ -132,7 +85,7 @@ export default function Carousel() {
                                      order: orderMap[i],
                                  }}
                             >
-                                <Review {...item}/>
+                                <ReviewComponent {...item}/>
                             </div>
                         )}
                     </div>

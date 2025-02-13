@@ -84,10 +84,10 @@ export default function Header() {
                                    placeholder="Search for products..."
                             />
                         </form>
-                        <a href="#">
+                        <a href="/cart">
                             <Cart />
                         </a>
-                        <a href="#">
+                        <a href="/signin">
                             <UserPic />
                         </a>
                     </div>

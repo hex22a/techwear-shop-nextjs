@@ -4,9 +4,10 @@ import {useState} from "react";
 import z from 'zod';
 import Filters from "@/app/ui/vector/filters.svg";
 import styles from "@/app/product/[id]/page.module.css";
-import Review from "@/app/ui/review";
+import ReviewComponent from "@/app/ui/review";
 import InteractiveStars from "./interactive_stars";
 import {addReview} from "@/app/lib/data";
+import {Review} from "@/app/lib/definitions";
 
 const ReviewFormSchema = z.object({
     review_title: z.string().nonempty(),
@@ -16,9 +17,11 @@ const ReviewFormSchema = z.object({
 
 export type ReviewProps = {
     product_id: number,
+    reviews: Map<number, Review>,
 }
 
 export default function Reviews(props: ReviewProps) {
+    const { reviews } = props;
     const [isReviewFormVisible, setIsReviewFormVisible] = useState(false);
     const [rating, setRating] = useState(1);
 
@@ -79,14 +82,7 @@ export default function Reviews(props: ReviewProps) {
                 </form>
             }
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 mt-10">
-                <Review id={1} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
-                <Review id={2} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
-                <Review id={3} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
-                <Review id={4} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
-                <Review id={5} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
-                <Review id={6} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
-                <Review id={7} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
-                <Review id={8} title="Great product" rating={4.5} comment="I love this product. It is very comfortable and durable."/>
+                {Array.from(reviews.values()).map((review) => <ReviewComponent key={review.id} {...review}/>)}
             </div>
             <div className="text-center mt-5 md:mt-9">
                 <button className="border border-gray-500 rounded-full px-16 py-4">Load More Reviews</button>

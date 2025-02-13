@@ -1,14 +1,8 @@
 import Stars from "@/app/ui/stars";
 import Image from "next/image";
+import {ReviewRaw} from "@/app/lib/definitions";
 
-type ReviewProps = {
-    id: number;
-    title: string;
-    rating: number;
-    comment: string;
-}
-
-export default function Review(props: ReviewProps) {
+export default function Review(props: ReviewRaw) {
     return (
         <div className="border border-gray-500 rounded-xl px-8 py-7">
             <div className="mb-5">
@@ -24,7 +18,7 @@ export default function Review(props: ReviewProps) {
                     height={24}
                 />
             </article>
-            <p className="text-wrap">{props.comment}</p>
+            <p className="text-wrap">{props.review_text}</p>
         </div>
     )
 }

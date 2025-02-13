@@ -30,10 +30,10 @@ const sitePath = [
     },
 ]
 
-export default async function ProductPage (props: {params: Promise<{id: string}>}) {
+export default async function ProductPage(props: {params: Promise<{id: string}>}) {
     const params = await props.params;
-    const id = params.id;
-    const { name, price, description, photo_url, photos, sizes, colors, discount }: Product = await fetchProduct(id);
+    const id = parseInt(params.id, 10);
+    const { name, price, description, photo_url, photos, sizes, colors, discount, reviews }: Product = await fetchProduct(id);
     const sizesArray: Size[] = Array.from(sizes.entries()).map(([, value]) => ({...value}));
     const colorsArray: Color[] = Array.from(colors.entries()).map(([, value]) => ({...value}));
 
@@ -84,7 +84,7 @@ export default async function ProductPage (props: {params: Promise<{id: string}>
                         <AddToCartForm sizes={sizesArray} colors={colorsArray}/>
                     </div>
                 </main>
-                <Tabs product_id={id} />
+                <Tabs product_id={id} reviews={reviews}/>
                 <Featured title="You might also like"/>
             </div>
             <Footer/>

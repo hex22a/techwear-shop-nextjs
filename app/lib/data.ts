@@ -1,5 +1,7 @@
 'use server';
 
+const MAIN_PAGE_REVIEWS = 7;
+
 import { sql } from '@vercel/postgres'
 import {
     Category,
@@ -56,7 +58,7 @@ export async function fetchAllCategories(): Promise<Category[]> {
     }
 }
 
-export async function fetchProduct(id: string): Promise<Product> {
+export async function fetchProduct(id: number): Promise<Product> {
     try {
         const queryResult = await sql<FullProductRaw>`
             SELECT
@@ -239,5 +241,27 @@ export async function addReview(review: ReviewRaw): Promise<Review> {
     } catch (error) {
         console.error(`Database error: ${error}`)
         throw new Error(`Failed to add review: ${review}`)
+    }
+}
+
+export async function getTopReviews(): Promise<Review[]> {
+    try {
+        const queryResult = await sql<Review>`
+            SELECT
+                r.id as id,
+                r.author_id as author_id,
+                r.product_id as product_id,
+                r.rating as rating,
+                r.title as title,
+                r.review as review_text,
+                u.username as author
+            FROM review r
+            LEFT JOIN public.user u on r.author_id = u.id
+            LIMIT ${MAIN_PAGE_REVIEWS}
+        `
+        return queryResult.rows.map(row => ({...row}))
+    } catch (error) {
+        console.error(`Database error: ${error}`)
+        throw new Error('Failed to fetch reviews')
     }
 }
