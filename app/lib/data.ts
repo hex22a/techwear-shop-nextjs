@@ -1,3 +1,5 @@
+'use server';
+
 import { sql } from '@vercel/postgres'
 import {
     Category,
@@ -8,10 +10,11 @@ import {
     Size,
     Style,
     User, UserWithPasskeyRaw,
-    UserWithPasskeysSerialized
+    UserWithPasskeysSerialized, ReviewRaw, Review
 } from "@/app/lib/definitions";
 
 import { isoBase64URL } from '@simplewebauthn/server/helpers';
+import {getCurrentUserSession} from "@/app/lib/session";
 
 export async function fetchAllColors(): Promise<Color[]> {
     try {
@@ -72,7 +75,8 @@ export async function fetchProduct(id: string): Promise<Product> {
                 s.size as size,
                 s.value as size_value,
                 r.id as review_id,
-                r.review as review,
+                r.title as review_title,
+                r.review as review_text,
                 r.rating as review_rating,
                 r.verified as review_verified
                         FROM product
@@ -100,11 +104,13 @@ export async function fetchProduct(id: string): Promise<Product> {
             })
             product.reviews.set(row.review_id, {
                 id: row.review_id,
+                product_id: row.id,
+                title: row.review_title,
                 rating: row.review_rating,
-                review: row.review,
+                review_text: row.review_text,
                 verified: row.review_verified,
                 created_at: row.review_created_at,
-                author: row.review,
+                author: row.review_text,
             })
         })
         const discount = queryResult.rows[0].discount_percent;
@@ -201,5 +207,37 @@ export async function getPasskeyWithUserId(cred_id: string, internal_user_id: st
     } catch (error) {
         console.error(`Database error: ${error}`)
         throw new Error(`Failed to fetch passkey: ${cred_id}`)
+    }
+}
+
+export async function addReview(review: ReviewRaw): Promise<Review> {
+    const user_session = await getCurrentUserSession();
+    if (!user_session) {
+        throw new Error('User not logged in.')
+    }
+    const { data: { user_id } } = user_session;
+    const { product_id, title, rating, review_text } = review;
+    try {
+        const queryResult = await sql<Review>`
+            INSERT INTO review (
+                author_id,
+                product_id,
+                rating,
+                title,
+                review
+            )
+            VALUES (
+                ${user_id},
+                ${product_id},
+                ${rating},
+                ${title},
+                ${review_text}
+            )
+            RETURNING id
+        `
+        return queryResult.rows[0];
+    } catch (error) {
+        console.error(`Database error: ${error}`)
+        throw new Error(`Failed to add review: ${review}`)
     }
 }

@@ -19,10 +19,15 @@ export type Category = {
     name: string;
 }
 
-export type Review = {
-    id: number;
+export type ReviewRaw = {
+    title: string;
     rating: number;
-    review: string;
+    review_text: string;
+    product_id: number;
+}
+
+export type Review = ReviewRaw & {
+    id: number;
     verified: boolean;
     author: string;
     created_at: Date;
@@ -52,8 +57,9 @@ export type FullProductRaw = ProductRaw & {
     alt_photo_id: number,
     alt_photo_url: string,
     review_id: number,
-    review: string,
+    review_text: string,
     review_rating: number,
+    review_title: string,
     review_verified: boolean,
     review_author: string,
     review_created_at: Date,

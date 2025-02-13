@@ -84,7 +84,7 @@ export default async function ProductPage (props: {params: Promise<{id: string}>
                         <AddToCartForm sizes={sizesArray} colors={colorsArray}/>
                     </div>
                 </main>
-                <Tabs />
+                <Tabs product_id={id} />
                 <Featured title="You might also like"/>
             </div>
             <Footer/>

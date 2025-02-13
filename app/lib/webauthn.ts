@@ -12,7 +12,12 @@ import {
     verifyRegistrationResponse,
     VerifyRegistrationResponseOpts,
 } from '@simplewebauthn/server';
-import {deleteCurrentSession, getCurrentSession, updateCurrentSession} from './session';
+import {
+    deleteCurrentWebauthnSession,
+    getCurrentWebauthnSession,
+    updateCurrentUserSession,
+    updateCurrentWebauthnSession
+} from './session';
 import {isoBase64URL} from '@simplewebauthn/server/helpers';
 import {createUser, findUser, findUserWithPasskeys, getPasskeyWithUserId} from "@/app/lib/data";
 import {PasskeySerialized} from "@/app/lib/definitions";
@@ -50,7 +55,7 @@ export const generateWebAuthnRegistrationOptions = async (username: string) => {
 
     const options = await generateRegistrationOptions(opts);
 
-    await updateCurrentSession({ currentChallenge: options.challenge, username });
+    await updateCurrentWebauthnSession({ currentChallenge: options.challenge, username });
 
     return {
         success: true,
@@ -61,7 +66,7 @@ export const generateWebAuthnRegistrationOptions = async (username: string) => {
 export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON) => {
     const {
         data: { username, currentChallenge },
-    } = await getCurrentSession();
+    } = await getCurrentWebauthnSession();
 
     if (!username || !currentChallenge) {
         return {
@@ -101,7 +106,7 @@ export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON)
         transports: data.response.transports || [],
     };
 
-    await deleteCurrentSession();
+    await deleteCurrentWebauthnSession();
 
     try {
         await createUser(username, newDevice);
@@ -141,7 +146,7 @@ export const generateWebAuthnLoginOptions = async (username: string) => {
     };
     const options = await generateAuthenticationOptions(opts);
 
-    await updateCurrentSession({ currentChallenge: options.challenge, username });
+    await updateCurrentWebauthnSession({ currentChallenge: options.challenge, username });
 
     return {
         success: true,
@@ -152,7 +157,7 @@ export const generateWebAuthnLoginOptions = async (username: string) => {
 export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
     const {
         data: { username, currentChallenge },
-    } = await getCurrentSession();
+    } = await getCurrentWebauthnSession();
 
     if (!username || !currentChallenge) {
         return {
@@ -194,7 +199,10 @@ export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
     };
     const verification = await verifyAuthenticationResponse(opts);
 
-    await deleteCurrentSession();
+    await Promise.all([
+        deleteCurrentWebauthnSession(),
+        updateCurrentUserSession({ user_id: user.id }),
+    ])
 
     return {
         success: verification.verified,

@@ -6,6 +6,7 @@ import Filters from "@/app/ui/vector/filters.svg";
 import styles from "@/app/product/[id]/page.module.css";
 import Review from "@/app/ui/review";
 import InteractiveStars from "./interactive_stars";
+import {addReview} from "@/app/lib/data";
 
 const ReviewFormSchema = z.object({
     review_title: z.string().nonempty(),
@@ -13,18 +14,24 @@ const ReviewFormSchema = z.object({
     rating: z.number(),
 });
 
-export default function Reviews() {
+export type ReviewProps = {
+    product_id: number,
+}
+
+export default function Reviews(props: ReviewProps) {
     const [isReviewFormVisible, setIsReviewFormVisible] = useState(false);
     const [rating, setRating] = useState(1);
 
     const openReviewForm = () => setIsReviewFormVisible(true);
     const closeReviewForm = () => setIsReviewFormVisible(false);
 
-    const handleReviewSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleReviewSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const validationResult = ReviewFormSchema.safeParse({ rating, ...Object.fromEntries(formData.entries())});
-        console.log(validationResult);
+        if (validationResult.success) {
+            await addReview({ product_id: props.product_id, title: validationResult.data.review_title, review_text: validationResult.data.review_text, rating: validationResult.data.rating });
+        }
     }
 
     return (
