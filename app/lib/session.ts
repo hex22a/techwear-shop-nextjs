@@ -4,8 +4,10 @@ import redis from './redis';
 
 const USER_SESSION_ID_COOKIE_NAME = 'user-session-id';
 const USER_SESSION_PREFIX = 'techwear-shop-user-session-';
+const USER_SESSION_TTL = 30 * 60;
 const WEBAUTHN_SESSION_ID_COOKIE_NAME = 'w-session-id';
 const WEBAUTHN_SESSION_PREFIX = 'techwear-shop-webauthn-session-';
+const WEBAUTHN_SESSION_TTL = 5 * 60;
 
 type WebauthnSessionData = {
     currentChallenge?: string;
@@ -29,16 +31,16 @@ export async function getUserSession(sessionId: string): Promise<UserSessionData
     return getSessionData<UserSessionData>(USER_SESSION_PREFIX, sessionId);
 }
 
-export async function setSession<T>(prefix: string, sessionId: string, sessionData: T): Promise<void> {
-    await redis.set(prefix + sessionId, JSON.stringify(sessionData))
+export async function setSession<T>(prefix: string, sessionId: string, sessionData: T, ttl: number): Promise<void> {
+    await redis.set(prefix + sessionId, JSON.stringify(sessionData), 'EX', ttl);
 }
 
 export async function setWebauthnSession(sessionId: string, sessionData: WebauthnSessionData): Promise<void> {
-    await setSession(WEBAUTHN_SESSION_PREFIX, sessionId, sessionData);
+    await setSession(WEBAUTHN_SESSION_PREFIX, sessionId, sessionData, WEBAUTHN_SESSION_TTL);
 }
 
 export async function setUserSession(sessionId: string, sessionData: UserSessionData): Promise<void> {
-    await setSession(USER_SESSION_PREFIX, sessionId, sessionData);
+    await setSession(USER_SESSION_PREFIX, sessionId, sessionData, USER_SESSION_TTL);
 }
 
 async function fetchOrCreateSession<T>(
