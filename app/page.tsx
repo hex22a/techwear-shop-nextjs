@@ -4,7 +4,7 @@ import Link from "next/link";
 import Featured from "@/app/ui/featured";
 import Carousel from "@/app/ui/carousel";
 import Footer from "@/app/ui/footer";
-import Header from "@/app/ui/header";
+import Header from "@/app/ui/header/header";
 import {getTopReviews} from "@/app/lib/data";
 
 export default async function Home() {

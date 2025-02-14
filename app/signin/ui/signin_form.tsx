@@ -41,7 +41,7 @@ export default function SignInForm() {
     return (
         <form onSubmit={handleSubmit}>
             <label className={`${form_style.username} block text-center`} htmlFor="username">Username</label>
-            <input className={`block border w-full rounded-full py-3.5 px-14 mb-3`} id="username" name="username" type="text"/>
+            <input className="text-black block border w-full rounded-full py-3.5 px-14 mb-3" id="username" name="username" type="text"/>
             <hr className="my-4"/>
             <button type="submit" className="block border w-full rounded-full py-3.5 px-14 mb-3 bg-black text-white">Sign In</button>
         </form>

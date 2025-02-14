@@ -3,11 +3,11 @@
 import Cross from "@/app/ui/vector/cross.svg";
 import SlimArrow from "@/app/ui/vector/slim-arrow.svg";
 import Cart from "@/app/ui/vector/cart.svg";
-import UserPic from "@/app/ui/vector/userpic.svg";
 import Burger from "@/app/ui/vector/burger.svg";
 import Search from "@/app/ui/vector/search.svg";
 import { useState } from "react";
 import Link from "next/link";
+import UserButton from '@/app/ui/header/user_button';
 
 export default function Header() {
     const [isDiscountVisible, setIsDiscountVisible] = useState(true);
@@ -84,12 +84,10 @@ export default function Header() {
                                    placeholder="Search for products..."
                             />
                         </form>
-                        <a href="/cart">
+                        <Link href="/cart">
                             <Cart />
-                        </a>
-                        <a href="/signin">
-                            <UserPic />
-                        </a>
+                        </Link>
+                        <UserButton />
                     </div>
                 </div>
             </nav>

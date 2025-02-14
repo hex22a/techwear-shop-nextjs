@@ -1,4 +1,4 @@
-import Header from "@/app/ui/header";
+import Header from "@/app/ui/header/header";
 import Footer from "@/app/ui/footer";
 import Breadcrumbs from "@/app/ui/breadcrumbs";
 import OrderForm, {OrderFormProps} from "@/app/cart/ui/order_form";

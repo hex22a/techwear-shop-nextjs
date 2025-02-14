@@ -1,4 +1,4 @@
-import Header from "@/app/ui/header";
+import Header from "@/app/ui/header/header";
 import Footer from "@/app/ui/footer";
 import SignInForm from "@/app/signin/ui/signin_form";
 
