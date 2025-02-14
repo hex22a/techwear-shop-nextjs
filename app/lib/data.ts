@@ -91,29 +91,37 @@ export async function fetchProduct(id: number): Promise<Product> {
                 WHERE product.id = ${id}`;
         const product: Product = { photos: new Map(), colors: new Map(), sizes: new Map(), reviews: new Map(), ...queryResult.rows[0] }
         queryResult.rows.forEach(row => {
-            product.photos.set(row.alt_photo_id, {
-                id: row.alt_photo_id,
-                url: row.alt_photo_url,
-            });
-            product.colors.set(row.color_id, {
-                id: row.color_id,
-                hex_value: row.color_hex_value,
-            })
-            product.sizes.set(row.size_id, {
-                id: row.size_id,
-                size: row.size,
-                value: row.size_value,
-            })
-            product.reviews.set(row.review_id, {
-                id: row.review_id,
-                product_id: row.id,
-                title: row.review_title,
-                rating: row.review_rating,
-                review_text: row.review_text,
-                verified: row.review_verified,
-                created_at: row.review_created_at,
-                author: row.review_text,
-            })
+            if (row.alt_photo_id !== null) {
+                product.photos.set(row.alt_photo_id, {
+                    id: row.alt_photo_id,
+                    url: row.alt_photo_url,
+                });
+            }
+            if (row.color_id !== null) {
+                product.colors.set(row.color_id, {
+                    id: row.color_id,
+                    hex_value: row.color_hex_value,
+                })
+            }
+            if (row.size_id !== null) {
+                product.sizes.set(row.size_id, {
+                    id: row.size_id,
+                    size: row.size,
+                    value: row.size_value,
+                })
+            }
+            if (row.review_id !== null) {
+                product.reviews.set(row.review_id, {
+                    id: row.review_id,
+                    product_id: row.id,
+                    title: row.review_title,
+                    rating: row.review_rating,
+                    review_text: row.review_text,
+                    verified: row.review_verified,
+                    created_at: row.review_created_at,
+                    author: row.review_text,
+                })
+            }
         })
         const discount = queryResult.rows[0].discount_percent;
         if (queryResult.rows[0].discount_percent) {
@@ -122,7 +130,6 @@ export async function fetchProduct(id: number): Promise<Product> {
                 percent: discount,
             }
         }
-        console.log(product)
         return product
     } catch (error) {
         console.error(`Database error: ${error}`)
