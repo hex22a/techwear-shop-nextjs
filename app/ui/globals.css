@@ -3,16 +3,21 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #fff;
   --foreground: #171717;
 }
 
-/*@media (prefers-color-scheme: dark) {*/
-/*  :root {*/
-/*    --background: #0a0a0a;*/
-/*    --foreground: #ededed;*/
-/*  }*/
-/*}*/
+/* @media (prefers-color-scheme: dark) { */
+
+/*  :root { */
+
+/*    --background: #0a0a0a; */
+
+/*    --foreground: #ededed; */
+
+/*  } */
+
+/* } */
 
 /* Tailwind-custom styles to remove spinner controls */
 input[type="number"]::-webkit-inner-spin-button,
@@ -50,11 +55,12 @@ body {
   padding-top: 8rem;
   color: var(--foreground);
   background: var(--background);
-  /*noinspection CssUnresolvedCustomProperty*/
+
+  /* noinspection CssUnresolvedCustomProperty */
   font-family: var(--font-satoshi);
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (width >= 768px) {
   body {
     padding-top: 10rem;
   }
@@ -65,7 +71,7 @@ body, html {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  /*noinspection CssUnresolvedCustomProperty*/
+  /* noinspection CssUnresolvedCustomProperty */
   font-family: var(--font-integral);
 }
 

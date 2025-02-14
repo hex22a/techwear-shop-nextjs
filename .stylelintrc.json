@@ -1,0 +1,14 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "declaration-block-no-duplicate-properties": true,
+    "declaration-block-no-redundant-longhand-properties": null,
+    "declaration-block-no-shorthand-property-overrides": null,
+    "property-no-vendor-prefix": null,
+    "at-rule-no-unknown": null,
+    "max-nesting-depth": 1,
+    "selector-class-pattern": ["^[a-z][a-z0-9-_]+$"],
+    "no-invalid-double-slash-comments": null,
+    "no-unknown-animations": true
+  }
+}
