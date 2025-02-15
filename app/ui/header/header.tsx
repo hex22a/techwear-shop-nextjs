@@ -8,6 +8,7 @@ import Search from "@/app/ui/vector/search.svg";
 import { useState } from "react";
 import Link from "next/link";
 import UserButton from '@/app/ui/header/user_button';
+import { SessionProvider } from 'next-auth/react';
 
 export default function Header() {
     const [isDiscountVisible, setIsDiscountVisible] = useState(true);
@@ -87,7 +88,9 @@ export default function Header() {
                         <Link href="/cart">
                             <Cart />
                         </Link>
-                        <UserButton />
+                        <SessionProvider>
+                            <UserButton />
+                        </SessionProvider>
                     </div>
                 </div>
             </nav>
