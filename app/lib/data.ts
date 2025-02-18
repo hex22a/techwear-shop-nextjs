@@ -1,29 +1,29 @@
 'use server';
 
 import { auth } from '@/auth';
-
-const MAIN_PAGE_REVIEWS = 7;
-
 import { sql } from '@vercel/postgres';
 import {
+  Cart,
+  CartRow,
   Category,
   Color,
+  FullCartRow,
+  FullProductRaw,
   PasskeySerialized,
   Product,
-  FullProductRaw,
+  Review,
+  ReviewRaw,
   Size,
   Style,
   User,
   UserWithPasskeyRaw,
   UserWithPasskeysSerialized,
-  ReviewRaw,
-  Review,
-  CartRow,
-  Cart,
-  FullCartRow,
 } from '@/app/lib/definitions';
 
 import { isoBase64URL } from '@simplewebauthn/server/helpers';
+
+const MAIN_PAGE_REVIEWS = 7;
+const DELIVERY_FEE = 15;
 
 export async function fetchAllColors(): Promise<Color[]> {
   try {
@@ -113,7 +113,7 @@ export async function fetchProduct(id: number): Promise<Product> {
       if (row.color_id !== null) {
         product.colors.set(row.color_id, {
           id: row.color_id,
-          color: 'TBD SOME COLOR',
+          human_readable_value: 'TBD SOME COLOR',
           hex_value: row.color_hex_value,
         });
       }
@@ -311,50 +311,51 @@ export async function createCart(cart: CartRow) {
 export async function getCart(user_id: string): Promise<Cart> {
   try {
     const queryResult = await sql<FullCartRow>`
-            SELECT
-                user_id,
-                product_id,
-                color_id,
-                size_id,
-                quantity,
-                p.name as product_name,
-                p.price as product_price,
-                p.discount as product_discount_percent,
-                p.photo_url as product_photo_url,
-                s.size as size,
-                s.value as size_value,
-                hex_value,
-                color
-            FROM cart
-                LEFT JOIN product p on product_id = p.id
-                INNER JOIN color on color.id = color_id
-                INNER JOIN size s on s.id = size_id
-            WHERE cart.user_id = ${user_id}
+        SELECT
+            user_id,
+            product_id,
+            color_id,
+            size_id,
+            quantity,
+            p.name as product_name,
+            p.price as product_price,
+            p.discount as product_discount_percent,
+            p.photo_url as product_photo_url,
+            s.size as size,
+            s.value as size_value,
+            co.hex_value as hex_value,
+            co.human_readable_value as human_readable_value,
+            ROUND(SUM((p.price * (1 - COALESCE(p.discount, 0) / 100.0)) * cart.quantity)
+                OVER (PARTITION BY cart.user_id), 2) AS total
+        FROM cart
+            LEFT JOIN product p on product_id = p.id
+            INNER JOIN color co on co.id = color_id
+            INNER JOIN size s on s.id = size_id
+        WHERE cart.user_id = ${user_id}
         `;
 
-    const cart: Cart = {
-      summary: { deliveryFee: 0, discount: 0, subtotal: 0, total: 0 },
+    const { total } = queryResult.rows[0];
+    const numericTotal = parseFloat(total);
+    return {
+      summary: {
+        deliveryFee: DELIVERY_FEE,
+        discount: 0,
+        subtotal: numericTotal,
+        total: numericTotal + DELIVERY_FEE,
+      },
       user_id: user_id,
-      products: []
-    }
-    queryResult.rows.forEach((row) => {
-        if (row.product_id) {
-            cart.products.push({
-              id: row.product_id,
-              name: row.product_name,
-              photo_url: row.product_photo_url,
-              price: row.product_price,
-              discount_percent: row.product_discount_percent,
-              color_id: row.color_id,
-              color_hex_value: row.hex_value,
-              size: row.size,
-              size_value: row.size,
-              size_id: row.size_id,
-              quantity: row.quantity,
-            })
-        }
-    })
-    return cart
+      products: queryResult.rows.map((row) => ({
+        id: row.product_id,
+        name: row.product_name,
+        photo_url: row.product_photo_url,
+        price: row.product_price,
+        discount_percent: row.product_discount_percent,
+        color_hex_value: row.hex_value,
+        color_human_readable_value: row.human_readable_value,
+        size_value: row.value,
+        ...row,
+      })),
+    };
   } catch (error) {
     console.error(`Database error: ${error}`);
     throw new Error('Failed to fetch cart');

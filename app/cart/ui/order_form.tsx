@@ -1,3 +1,5 @@
+'use client';
+
 import Image from "next/image";
 
 import TrashBinIcon from "@/app/ui/vector/trash-bin.svg";
@@ -5,15 +7,25 @@ import ArrowIcon from "@/app/ui/vector/arrow.svg";
 import styles from "./order_form.module.css";
 import Quantity from "@/app/ui/quantity";
 import { Cart } from '@/app/lib/definitions';
+import { useActionState } from 'react';
+import { orderProducts, OrderProductsFormState } from '@/app/lib/actions';
 
 export default function OrderForm(props: Cart) {
     const { products, summary: { deliveryFee, total, subtotal, discount } } = props;
+
+    const initialState: OrderProductsFormState = {
+        message: null,
+    }
+
+    const [error, formAction] = useActionState(orderProducts, initialState)
+
     return (
-        <form className="grid grid-rows-[auto_auto] md:grid-cols-12 gap-5">
+        <form action={formAction} className="grid grid-rows-[auto_auto] md:grid-cols-12 gap-5">
             <div className="md:col-start-1 md:col-end-8 p-3.5 md:py-5 md:px-6 border rounded-xl">
                 {products.map((product, index) => (
                     <div key={product.id+product.size+product.color_hex_value+product.quantity}>
                         {index !==0 && <hr className="my-6"/>}
+                        <input type="hidden" name={`products[${index}][product_id]`} value={product.id}/>
                         <div className="flex flex-row justify-between items-stretch">
                             <div className="flex flex-row justify-start items-stretch gap-3.5">
                                 <div className="relative w-full md:w-[124px] md:h-[124px] bg-gray-300 rounded-xl overflow-hidden">
@@ -33,7 +45,7 @@ export default function OrderForm(props: Cart) {
                                         </div>
                                         <div>
                                             <span>Color: </span>
-                                            <span className="text-[rgba(0,0,0,.6)]">{product.color_hex_value}</span>
+                                            <span className="text-[rgba(0,0,0,.6)]">{product.color_human_readable_value}</span>
                                         </div>
                                     </div>
                                     <div className="text-lg font-bold">
@@ -46,7 +58,7 @@ export default function OrderForm(props: Cart) {
                                     <TrashBinIcon />
                                 </button>
                                 <div className="bg-gray-200 rounded-full py-2 md:py-2.5 px-3 w-32">
-                                    <Quantity initialQuantity={product.quantity} />
+                                    <Quantity name={`products[${index}][quantity]`} initialQuantity={product.quantity} />
                                 </div>
                             </div>
                         </div>
@@ -81,6 +93,7 @@ export default function OrderForm(props: Cart) {
                 </div>
                 <button className="bg-black text-white rounded-full py-4 w-full">Go to Checkout <ArrowIcon className="fill-white inline-block ml-1" width={24} height={24}/></button>
             </div>
+            {error && <div className="text-red-500">{error.message}</div>}
         </form>
     )
 }

@@ -11,6 +11,13 @@ const AddToCartFormSchema = z.object({
   quantity: z.coerce.number().min(1).max(100),
 });
 
+const OrderProductsFormSchema = z.object({
+  products: z.array(z.object({
+    product_id: z.number(),
+    quantity: z.number(),
+  })),
+});
+
 export type AddToCartFormState = {
   errors?: {
     product_id?: string[];
@@ -36,7 +43,6 @@ export async function addToCart(prevState: AddToCartFormState | undefined, formD
     }
   }
   const validated = AddToCartFormSchema.safeParse(Object.fromEntries(formData.entries()));
-  console.log(validated);
   if (!validated.success) {
     return {
       errors: validated.error.flatten().fieldErrors,
@@ -53,4 +59,28 @@ export async function addToCart(prevState: AddToCartFormState | undefined, formD
       }
     }
   }
+}
+
+
+export type OrderProductsFormState = {
+  errors?: {
+    products?: string[];
+  };
+  message?: string | null;
+}
+
+export async function orderProducts(
+  prevState: OrderProductsFormState | undefined,
+  formData: FormData,
+) {
+  console.log(Object.fromEntries(formData.entries()));
+  const validated = OrderProductsFormSchema.safeParse(Object.fromEntries(formData.entries()));
+  if (!validated.success) {
+    console.log(validated.error);
+    return {
+      errors: validated.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to order products.',
+    };
+  }
+  console.log(validated.data);
 }

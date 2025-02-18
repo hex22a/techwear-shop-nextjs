@@ -3,10 +3,11 @@
 import {useState} from "react";
 
 export type QuantityProps = {
+  name: string,
   initialQuantity: number,
 }
 
-export default function Quantity({ initialQuantity }: QuantityProps) {
+export default function Quantity({ initialQuantity, name }: QuantityProps) {
     const min = 1;
     const max = 100;
 
@@ -32,7 +33,7 @@ export default function Quantity({ initialQuantity }: QuantityProps) {
             </button>
             <input className="bg-gray-200 text-center"
                    type="number"
-                   name="quantity"
+                   name={name}
                    readOnly={true}
                    value={quantity}
                    min={min}

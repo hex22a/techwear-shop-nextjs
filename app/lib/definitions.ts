@@ -1,7 +1,7 @@
 export type Color = {
     id: number;
-    color: string;
     hex_value: string;
+    human_readable_value: string;
 }
 
 export type Size = {
@@ -47,6 +47,7 @@ export type ProductRaw = {
     photo_url: string,
     color_id: number,
     color_hex_value: string,
+    color_human_readable_value: string,
     size_id: number,
     size: string,
     size_value: string,
@@ -125,6 +126,7 @@ export type FullCartRow = CartRow & Omit<Color, 'id'> & Omit<Size, 'id'> & {
     product_price: number;
     product_discount_percent: number;
     product_photo_url: string;
+    total: string;
 }
 
 export type Cart = {
