@@ -1,5 +1,6 @@
 export type Color = {
     id: number;
+    color: string;
     hex_value: string;
 }
 
@@ -117,4 +118,22 @@ export type CartRow = {
     color_id: number;
     size_id: number;
     quantity: number;
+}
+
+export type FullCartRow = CartRow & Omit<Color, 'id'> & Omit<Size, 'id'> & {
+    product_name: string;
+    product_price: number;
+    product_discount_percent: number;
+    product_photo_url: string;
+}
+
+export type Cart = {
+    user_id: string;
+    products: (ProductRaw & { quantity: number })[];
+    summary: {
+        subtotal: number;
+        total: number;
+        discount: number;
+        deliveryFee: number;
+    }
 }

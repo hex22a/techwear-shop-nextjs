@@ -4,26 +4,15 @@ import TrashBinIcon from "@/app/ui/vector/trash-bin.svg";
 import ArrowIcon from "@/app/ui/vector/arrow.svg";
 import styles from "./order_form.module.css";
 import Quantity from "@/app/ui/quantity";
-import {ProductRaw} from "@/app/lib/definitions";
+import { Cart } from '@/app/lib/definitions';
 
-export type OrderFormProps = {
-    products: ProductRaw[];
-    summary: {
-        subtotal: number;
-        discount: number;
-        deliveryFee: number;
-        total: number;
-    }
-}
-
-
-export default function OrderForm(props: OrderFormProps) {
+export default function OrderForm(props: Cart) {
     const { products, summary: { deliveryFee, total, subtotal, discount } } = props;
     return (
         <form className="grid grid-rows-[auto_auto] md:grid-cols-12 gap-5">
             <div className="md:col-start-1 md:col-end-8 p-3.5 md:py-5 md:px-6 border rounded-xl">
                 {products.map((product, index) => (
-                    <div key={product.id}>
+                    <div key={product.id+product.size+product.color_hex_value+product.quantity}>
                         {index !==0 && <hr className="my-6"/>}
                         <div className="flex flex-row justify-between items-stretch">
                             <div className="flex flex-row justify-start items-stretch gap-3.5">
@@ -57,7 +46,7 @@ export default function OrderForm(props: OrderFormProps) {
                                     <TrashBinIcon />
                                 </button>
                                 <div className="bg-gray-200 rounded-full py-2 md:py-2.5 px-3 w-32">
-                                    <Quantity />
+                                    <Quantity initialQuantity={product.quantity} />
                                 </div>
                             </div>
                         </div>

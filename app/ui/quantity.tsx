@@ -3,15 +3,14 @@
 import {useState} from "react";
 
 export type QuantityProps = {
-  quantity: number,
-  onQuantityChange: (quantity: number) => void,
+  initialQuantity: number,
 }
 
-export default function Quantity() {
+export default function Quantity({ initialQuantity }: QuantityProps) {
     const min = 1;
     const max = 100;
 
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(initialQuantity);
 
     function addQuantity() {
         setQuantity(quantity + 1);

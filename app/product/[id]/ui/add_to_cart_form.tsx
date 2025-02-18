@@ -86,7 +86,7 @@ export default function AddToCartForm(props: AddToCartFormProps) {
       <hr className="my-6" />
       <div className="flex flex-row justify-between items-stretch text-sm md:text-base w-full gap-3 md:gap-5">
         <span className="bg-gray-200 rounded-full py-3 md:py-3.5 px-3 w-44">
-          <Quantity />
+          <Quantity initialQuantity={1} />
         </span>
         <button className="bg-black text-white rounded-full py-3 md:py-3.5 w-full" type="submit">
           Add to Cart
