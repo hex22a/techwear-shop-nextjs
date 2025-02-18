@@ -10,7 +10,6 @@ import {
 
 export default function SignupForm() {
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        console.log('submitting');
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);

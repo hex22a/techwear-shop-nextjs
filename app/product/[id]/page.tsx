@@ -33,8 +33,8 @@ const sitePath = [
 
 export default async function ProductPage(props: {params: Promise<{id: string}>}) {
     const params = await props.params;
-    const id = parseInt(params.id, 10);
-    const { name, price, description, photo_url, photos, sizes, colors, discount, reviews, details }: Product = await fetchProduct(id);
+    const product_id = parseInt(params.id, 10);
+    const { name, price, description, photo_url, photos, sizes, colors, discount, reviews, details }: Product = await fetchProduct(product_id);
     const sizesArray: Size[] = Array.from(sizes.entries()).map(([, value]) => ({...value}));
     const colorsArray: Color[] = Array.from(colors.entries()).map(([, value]) => ({...value}));
 
@@ -82,10 +82,10 @@ export default async function ProductPage(props: {params: Promise<{id: string}>}
                         </div>
                         <p>{description}</p>
                         <hr className="my-6"/>
-                        <AddToCartForm sizes={sizesArray} colors={colorsArray}/>
+                        <AddToCartForm product_id={product_id} sizes={sizesArray} colors={colorsArray}/>
                     </div>
                 </main>
-                <Tabs defaultTab={Tab.REVIEWS} product_id={id} reviews={reviews} details={details}/>
+                <Tabs defaultTab={Tab.REVIEWS} product_id={product_id} reviews={reviews} details={details}/>
                 <Featured title="You might also like"/>
             </div>
             <Footer/>

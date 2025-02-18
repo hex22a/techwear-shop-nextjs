@@ -110,3 +110,11 @@ export type Passkey = {
 export type PasskeySerialized = Omit<Passkey, 'cred_public_key'> & {
     cred_public_key: string;
 }
+
+export type CartRow = {
+    user_id: string;
+    product_id: number;
+    color_id: number;
+    size_id: number;
+    quantity: number;
+}

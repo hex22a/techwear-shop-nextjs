@@ -14,8 +14,8 @@ import {
     Size,
     Style,
     User, UserWithPasskeyRaw,
-    UserWithPasskeysSerialized, ReviewRaw, Review
-} from "@/app/lib/definitions";
+    UserWithPasskeysSerialized, ReviewRaw, Review, CartRow,
+} from '@/app/lib/definitions';
 
 import { isoBase64URL } from '@simplewebauthn/server/helpers';
 
@@ -271,5 +271,30 @@ export async function getTopReviews(): Promise<Review[]> {
     } catch (error) {
         console.error(`Database error: ${error}`)
         throw new Error('Failed to fetch reviews')
+    }
+}
+
+export async function createCart(cart: CartRow) {
+    const { user_id, product_id, color_id, size_id, quantity } = cart;
+    try {
+        await sql<CartRow>`
+            INSERT INTO cart (
+                user_id,
+                product_id,
+                color_id,
+                size_id,
+                quantity
+            )
+            VALUES (
+                    ${user_id},
+                    ${product_id},
+                    ${color_id},
+                    ${size_id},
+                    ${quantity}
+                   )
+        `
+    } catch (error) {
+        console.error(`Database error: ${error}`)
+        throw new Error('Failed to create cart')
     }
 }
