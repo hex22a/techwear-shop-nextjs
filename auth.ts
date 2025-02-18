@@ -19,7 +19,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         if (!verifyResponse.success) {
           throw new Error(verifyResponse.message);
         }
-        return { username: credentials.username } as User;
+        return { id: verifyResponse.userId, username: credentials.username } as User;
       },
     }),
   ],

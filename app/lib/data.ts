@@ -1,5 +1,7 @@
 'use server';
 
+import { auth } from '@/auth';
+
 const MAIN_PAGE_REVIEWS = 7;
 
 import { sql } from '@vercel/postgres'
@@ -16,7 +18,6 @@ import {
 } from "@/app/lib/definitions";
 
 import { isoBase64URL } from '@simplewebauthn/server/helpers';
-import {getCurrentUserSession} from "@/app/lib/session";
 
 export async function fetchAllColors(): Promise<Color[]> {
     try {
@@ -220,11 +221,11 @@ export async function getPasskeyWithUserId(cred_id: string, internal_user_id: st
 }
 
 export async function addReview(review: ReviewRaw): Promise<Review> {
-    const user_session = await getCurrentUserSession();
+    const user_session = await auth();
     if (!user_session) {
         throw new Error('User not logged in.')
     }
-    const { data: { user_id } } = user_session;
+    const { user } = user_session;
     const { product_id, title, rating, review_text } = review;
     try {
         const queryResult = await sql<Review>`
@@ -236,7 +237,7 @@ export async function addReview(review: ReviewRaw): Promise<Review> {
                 review
             )
             VALUES (
-                ${user_id},
+                ${user?.id},
                 ${product_id},
                 ${rating},
                 ${title},

@@ -15,7 +15,6 @@ import {
 import {
     deleteCurrentWebauthnSession,
     getCurrentWebauthnSession,
-    updateCurrentUserSession,
     updateCurrentWebauthnSession
 } from './session';
 import {isoBase64URL} from '@simplewebauthn/server/helpers';
@@ -199,12 +198,10 @@ export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
     };
     const verification = await verifyAuthenticationResponse(opts);
 
-    await Promise.all([
-        deleteCurrentWebauthnSession(),
-        updateCurrentUserSession({ user_id: user.id }),
-    ])
+    await deleteCurrentWebauthnSession();
 
     return {
         success: verification.verified,
+        userId: user.id,
     };
 };

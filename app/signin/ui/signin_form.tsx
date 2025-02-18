@@ -35,6 +35,7 @@ export default function SignInForm() {
         const localResponse = await startAuthentication({ optionsJSON: response.data });
         const result = await signIn('credentials', {
             redirect: false,
+            username: parsedCredentials.data.username,
             webauthnResponse: JSON.stringify(localResponse),
         });
         console.log(result);

@@ -2,9 +2,6 @@ import { cookies } from 'next/headers'
 
 import redis from './redis';
 
-const USER_SESSION_ID_COOKIE_NAME = 'user-session-id';
-const USER_SESSION_PREFIX = 'techwear-shop-user-session-';
-const USER_SESSION_TTL = 30 * 60;
 const WEBAUTHN_SESSION_ID_COOKIE_NAME = 'w-session-id';
 const WEBAUTHN_SESSION_PREFIX = 'techwear-shop-webauthn-session-';
 const WEBAUTHN_SESSION_TTL = 5 * 60;
@@ -12,10 +9,6 @@ const WEBAUTHN_SESSION_TTL = 5 * 60;
 type WebauthnSessionData = {
     currentChallenge?: string;
     username?: string;
-};
-
-type UserSessionData = {
-    user_id?: string;
 };
 
 async function getSessionData<T>(prefix: string, sessionId: string): Promise<T> {
@@ -27,20 +20,12 @@ export async function getWebauthnSession(sessionId: string): Promise<WebauthnSes
     return getSessionData<WebauthnSessionData>(WEBAUTHN_SESSION_PREFIX, sessionId);
 }
 
-export async function getUserSession(sessionId: string): Promise<UserSessionData> {
-    return getSessionData<UserSessionData>(USER_SESSION_PREFIX, sessionId);
-}
-
 export async function setSession<T>(prefix: string, sessionId: string, sessionData: T, ttl: number): Promise<void> {
     await redis.set(prefix + sessionId, JSON.stringify(sessionData), 'EX', ttl);
 }
 
 export async function setWebauthnSession(sessionId: string, sessionData: WebauthnSessionData): Promise<void> {
     await setSession(WEBAUTHN_SESSION_PREFIX, sessionId, sessionData, WEBAUTHN_SESSION_TTL);
-}
-
-export async function setUserSession(sessionId: string, sessionData: UserSessionData): Promise<void> {
-    await setSession(USER_SESSION_PREFIX, sessionId, sessionData, USER_SESSION_TTL);
 }
 
 async function fetchOrCreateSession<T>(
@@ -74,14 +59,6 @@ export async function getCurrentWebauthnSession(): Promise<{ sessionId: string; 
     );
 }
 
-export async function getCurrentUserSession(): Promise<{ sessionId: string; data: UserSessionData }> {
-    return await fetchOrCreateSession<UserSessionData>(
-        USER_SESSION_ID_COOKIE_NAME,
-        getUserSession,
-        {},
-        setUserSession
-    );
-}
 export async function deleteSession(
     getSession: () => Promise<{ sessionId: string }>
 ): Promise<void> {
@@ -91,10 +68,6 @@ export async function deleteSession(
 
 export async function deleteCurrentWebauthnSession(): Promise<void> {
     await deleteSession(getCurrentWebauthnSession);
-}
-
-export async function deleteCurrentUserSession(): Promise<void> {
-    await deleteSession(getCurrentUserSession);
 }
 
 async function updateSession<T>(
@@ -108,8 +81,4 @@ async function updateSession<T>(
 
 export async function updateCurrentWebauthnSession(data: WebauthnSessionData): Promise<void> {
     await updateSession(getCurrentWebauthnSession, setWebauthnSession, data);
-}
-
-export async function updateCurrentUserSession(data: UserSessionData): Promise<void> {
-    await updateSession(getCurrentUserSession, setUserSession, data);
 }

@@ -11,6 +11,16 @@ export const authConfig = {
       const isOnCart = nextUrl.pathname.startsWith('/cart');
       return !isOnCart || isLoggedIn;
     },
+    jwt: async ({ token, user }) => {
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
+    session: async ({ session, token }) => {
+      session.user = token.user as typeof session.user;
+      return session;
+    }
   },
   providers: [],
   session: {
