@@ -4,16 +4,17 @@ import PrintObject from '@/app/ui/print_object';
 
 type ResultPageProps = {
   params: Promise<Record<string, string>>;
-  searchParams: { session_id: string };
+  searchParams: Promise<{ session_id: string }>;
 };
 
 
 export default async function ResultPage({ searchParams }: ResultPageProps) {
-  if (!searchParams.session_id)
+  const params = await searchParams;
+  if (!params.session_id)
     throw new Error("Please provide a valid session_id (`cs_test_...`)");
 
   const checkoutSession =
-    await stripe.checkout.sessions.retrieve(searchParams.session_id, {
+    await stripe.checkout.sessions.retrieve(params.session_id, {
       expand: ["line_items", "payment_intent"],
     });
   const paymentIntent = checkoutSession.payment_intent as Stripe.PaymentIntent;
