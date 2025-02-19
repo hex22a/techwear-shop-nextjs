@@ -2,7 +2,13 @@ import { stripe  } from '@/app/lib/stripe';
 import Stripe from 'stripe';
 import PrintObject from '@/app/ui/print_object';
 
-export default async function ResultPage({ searchParams }: { searchParams: { session_id: string } }) {
+type ResultPageProps = {
+  params: Record<string, string>;
+  searchParams: { session_id: string };
+};
+
+
+export default async function ResultPage({ searchParams }: ResultPageProps) {
   if (!searchParams.session_id)
     throw new Error("Please provide a valid session_id (`cs_test_...`)");
 
