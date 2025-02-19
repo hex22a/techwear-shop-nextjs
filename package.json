@@ -12,6 +12,7 @@
   "dependencies": {
     "@simplewebauthn/browser": "^13.1.0",
     "@simplewebauthn/server": "^13.1.1",
+    "@stripe/stripe-js": "^5.6.0",
     "@vercel/postgres": "^0.10.0",
     "ioredis": "^5.4.2",
     "next": "15.1.4",
@@ -19,6 +20,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-responsive": "^10.0.0",
+    "stripe": "^17.6.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {

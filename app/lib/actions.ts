@@ -3,6 +3,8 @@
 import { z } from 'zod';
 import { auth } from '@/auth';
 import { createCart } from '@/app/lib/data';
+import { stripe } from "./stripe";
+import { headers } from 'next/headers';
 
 const AddToCartFormSchema = z.object({
   product_id: z.coerce.number().nonnegative({ message: 'Product ID is required you filthy hacker 👺'}),
@@ -13,9 +15,10 @@ const AddToCartFormSchema = z.object({
 
 const OrderProductsFormSchema = z.object({
   products: z.array(z.object({
-    product_id: z.number(),
-    quantity: z.number(),
+    product_id: z.coerce.number(),
+    quantity: z.coerce.number(),
   })),
+  total: z.coerce.number().min(0),
 });
 
 export type AddToCartFormState = {
@@ -62,19 +65,47 @@ export async function addToCart(prevState: AddToCartFormState | undefined, formD
 }
 
 
+function transformProductsData(data: Record<string, unknown>): Record<string, unknown> {
+  const products: Record<string, unknown>[] = [];
+
+  Object.keys(data).forEach((key) => {
+    const match = key.match(/^products\[(\d+)\]\[(.+)\]$/);
+    if (match) {
+      const index = parseInt(match[1], 10);
+      const field = match[2];
+
+      if (!products[index]) {
+        products[index] = {};
+      }
+      products[index][field] = data[key];
+
+      delete data[key];
+    }
+  });
+
+  if (products.length) {
+    data.products = products;
+  }
+  return data;
+}
+
 export type OrderProductsFormState = {
   errors?: {
     products?: string[];
+    total?: string[];
   };
   message?: string | null;
+  url?: string | null;
 }
 
 export async function orderProducts(
   prevState: OrderProductsFormState | undefined,
   formData: FormData,
 ) {
-  console.log(Object.fromEntries(formData.entries()));
-  const validated = OrderProductsFormSchema.safeParse(Object.fromEntries(formData.entries()));
+  const origin: string = (await headers()).get("origin") as string;
+
+  const data = transformProductsData(Object.fromEntries(formData.entries()));
+  const validated = OrderProductsFormSchema.safeParse(data);
   if (!validated.success) {
     console.log(validated.error);
     return {
@@ -82,5 +113,29 @@ export async function orderProducts(
       message: 'Missing Fields. Failed to order products.',
     };
   }
+
+  const checkoutSession = await stripe.checkout.sessions.create({
+    mode: "payment",
+    submit_type: "donate",
+    payment_method_types: ["card"],
+    line_items: [
+      {
+        quantity: 1,
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: "Total for clothes: ",
+          },
+          unit_amount: validated.data.total * 100
+        },
+      },
+    ],
+    success_url: `${origin}/cart/result?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${origin}/cart`,
+    ui_mode: "hosted",
+  });
   console.log(validated.data);
+  return {
+    url: checkoutSession.url,
+  }
 }

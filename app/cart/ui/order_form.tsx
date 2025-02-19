@@ -15,9 +15,14 @@ export default function OrderForm(props: Cart) {
 
     const initialState: OrderProductsFormState = {
         message: null,
+        url: null,
     }
 
-    const [error, formAction] = useActionState(orderProducts, initialState)
+    const [state, formAction] = useActionState(orderProducts, initialState)
+
+    if (state && state.url) {
+        window.location.assign(state.url as string);
+    }
 
     return (
         <form action={formAction} className="grid grid-rows-[auto_auto] md:grid-cols-12 gap-5">
@@ -91,9 +96,10 @@ export default function OrderForm(props: Cart) {
                         <button type="button" className="bg-black text-white rounded-full py-3 px-9">Apply</button>
                     </div>
                 </div>
+                <input type="hidden" name="total" value={total}/>
                 <button className="bg-black text-white rounded-full py-4 w-full">Go to Checkout <ArrowIcon className="fill-white inline-block ml-1" width={24} height={24}/></button>
             </div>
-            {error && <div className="text-red-500">{error.message}</div>}
+            {state && <div className="text-red-500">{state.message}</div>}
         </form>
     )
 }
