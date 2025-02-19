@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 import PrintObject from '@/app/ui/print_object';
 
 type ResultPageProps = {
-  params: Record<string, string>;
+  params: Promise<Record<string, string>>;
   searchParams: { session_id: string };
 };
 
