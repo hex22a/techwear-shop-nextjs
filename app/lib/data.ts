@@ -161,7 +161,19 @@ export async function findUserWithPasskeys(username: string): Promise<UserWithPa
   try {
     const queryResult = await sql<UserWithPasskeyRaw>`
                     SELECT
-                        *
+                        id,
+                        username,
+                        public.user.created_at as created_at,
+                        passkey.cred_id as cred_id,
+                        passkey.cred_public_key as cred_public_key,
+                        passkey.webauthn_user_id as webauthn_user_id,
+                        passkey.backup_eligible as backup_eligible,
+                        passkey.backup_status as backup_status,
+                        passkey.created_at as created_at,
+                        passkey.transports as transports,
+                        passkey.counter as counter,
+                        passkey.internal_user_id as internal_user_id,
+                        passkey.last_used as last_used
                     FROM
                         public.user
                     LEFT JOIN passkey ON public.user.id = passkey.internal_user_id
@@ -182,8 +194,14 @@ export async function findUserWithPasskeys(username: string): Promise<UserWithPa
   }
 }
 
+function formatPgArray(arr: string[]): string {
+  return `{${arr.join(',')}}`;
+}
+
 export async function createUser(username: string, passkey: PasskeySerialized): Promise<User> {
   const { cred_id, counter, cred_public_key, backup_eligible, backup_status, webauthn_user_id, transports } = passkey;
+  const formattedTransports = formatPgArray(transports);
+
   try {
     const queryResult = await sql<User>`
             WITH new_user AS (
@@ -207,7 +225,7 @@ export async function createUser(username: string, passkey: PasskeySerialized): 
                 ${backup_eligible},
                 ${backup_status},
                 ${webauthn_user_id},
-                ARRAY[${JSON.stringify(transports)}]
+                ${formattedTransports}::text[]
             )
             RETURNING *;
         `;

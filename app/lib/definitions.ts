@@ -1,4 +1,4 @@
-import { Base64URLString } from '@simplewebauthn/server';
+import { Base64URLString, AuthenticatorTransportFuture } from '@simplewebauthn/server';
 
 export type Color = {
     id: number;
@@ -106,7 +106,7 @@ export type Passkey = {
     counter: number;
     backup_eligible: boolean;
     backup_status: boolean;
-    transports: string[];
+    transports: AuthenticatorTransportFuture[];
     created_at?: Date;
     last_used?: Date;
 }
