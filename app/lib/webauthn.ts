@@ -139,7 +139,7 @@ export const generateWebAuthnLoginOptions = async (username: string) => {
             type: 'public-key',
             publicKey: value.cred_public_key,
         })),
-        userVerification: 'required',
+        userVerification: 'preferred',
         // userVerification: 'discouraged',
         rpID: process.env.ORIGIN || 'http://localhost',
     };
@@ -193,8 +193,8 @@ export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
             publicKey: isoBase64URL.toBuffer(dbAuthenticator.cred_public_key),
             counter: dbAuthenticator.counter
         },
-        requireUserVerification: true,
-        // requireUserVerification: false,
+        // requireUserVerification: true,
+        requireUserVerification: false,
     };
     const verification = await verifyAuthenticationResponse(opts);
 
