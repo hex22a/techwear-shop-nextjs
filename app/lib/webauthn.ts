@@ -22,6 +22,7 @@ import {createUser, findUser, findUserWithPasskeys, getPasskeyWithUserId} from "
 import {PasskeySerialized} from "@/app/lib/definitions";
 
 const RP_NAME = 'Techwear Shop';
+const USER_VERIFICATION_MODE = 'preferred';
 
 export const generateWebAuthnRegistrationOptions = async (username: string) => {
     const user = await findUser(username);
@@ -35,7 +36,7 @@ export const generateWebAuthnRegistrationOptions = async (username: string) => {
 
     const opts: GenerateRegistrationOptionsOpts = {
         rpName: RP_NAME,
-        rpID: process.env.ORIGIN || 'http://localhost',
+        rpID: process.env.RP_ID || 'localhost',
         userID: new TextEncoder().encode(username),
         userName: username,
         timeout: 60000,
@@ -44,7 +45,7 @@ export const generateWebAuthnRegistrationOptions = async (username: string) => {
         authenticatorSelection: {
             residentKey: 'discouraged',
             authenticatorAttachment: 'platform',
-            userVerification: 'preferred'
+            userVerification: USER_VERIFICATION_MODE
         },
         /**
          * Ed25519, ES256, and RS256
@@ -78,7 +79,7 @@ export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON)
         response: data,
         expectedChallenge: `${currentChallenge}`,
         expectedOrigin: process.env.ORIGIN || `http://localhost:3000`,
-        expectedRPID: process.env.ORIGIN || 'http://localhost',
+        expectedRPID: process.env.RP_ID || 'localhost',
         requireUserVerification: false,
     };
     const verification = await verifyRegistrationResponse(opts);
@@ -139,9 +140,8 @@ export const generateWebAuthnLoginOptions = async (username: string) => {
             type: 'public-key',
             publicKey: value.cred_public_key,
         })),
-        userVerification: 'preferred',
-        // userVerification: 'discouraged',
-        rpID: process.env.ORIGIN || 'http://localhost',
+        userVerification: USER_VERIFICATION_MODE,
+        rpID: process.env.RP_ID || 'localhost',
     };
     const options = await generateAuthenticationOptions(opts);
 
@@ -187,7 +187,7 @@ export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
         response: data,
         expectedChallenge: `${currentChallenge}`,
         expectedOrigin: process.env.ORIGIN || `http://localhost:3000`,
-        expectedRPID: process.env.ORIGIN || 'http://localhost',
+        expectedRPID: process.env.RP_ID || 'localhost',
         credential: {
             id: dbAuthenticator.cred_id,
             publicKey: isoBase64URL.toBuffer(dbAuthenticator.cred_public_key),
