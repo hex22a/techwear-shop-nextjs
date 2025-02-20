@@ -33,10 +33,10 @@ export default function SignInForm() {
         }
 
         try {
-            console.log(response.data, typeof response.data.allowCredentials, response.data.allowCredentials?.length);
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            const localResponse = await startAuthentication({ optionsJSON: response.data });
+            console.log(response.data);
+            const parsedOptions = JSON.parse(response.data);
+            console.log(parsedOptions);
+            const localResponse = await startAuthentication({ optionsJSON: parsedOptions });
             const result = await signIn('credentials', {
                 redirect: false,
                 username: parsedCredentials.data.username,
