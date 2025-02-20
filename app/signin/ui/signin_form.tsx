@@ -45,7 +45,9 @@ export default function SignInForm() {
                 setError('Authentication failed.');
             }
         } catch (error) {
-            console.log(error);
+            if (error instanceof Error) {
+                console.log(error.message);
+            }
         }
         // const result = await signIn('credentials', {
         //     redirect: false,
