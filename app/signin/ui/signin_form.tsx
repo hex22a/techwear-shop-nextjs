@@ -33,6 +33,7 @@ export default function SignInForm() {
         }
 
         try {
+            console.log(response.data);
             const localResponse = await startAuthentication({ optionsJSON: response.data });
             const result = await signIn('credentials', {
                 redirect: false,
