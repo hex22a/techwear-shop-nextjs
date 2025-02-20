@@ -43,8 +43,8 @@ export const generateWebAuthnRegistrationOptions = async (username: string) => {
         excludeCredentials: [],
         authenticatorSelection: {
             residentKey: 'discouraged',
-            // authenticatorAttachment: 'cross-platform',
-            // userVerification: 'discouraged'
+            authenticatorAttachment: 'platform',
+            userVerification: 'preferred'
         },
         /**
          * Ed25519, ES256, and RS256
