@@ -11,7 +11,9 @@ import z from 'zod';
 import { useState } from 'react';
 import ErrorComponent from '@/app/ui/error';
 
-
+import {
+    PublicKeyCredentialRequestOptionsJSON as SWBRequestOptionsJSON
+} from '@simplewebauthn/browser';
 
 export default function SignInForm() {
     const [error, setError] = useState('');
@@ -34,7 +36,7 @@ export default function SignInForm() {
 
         try {
             console.log(response.data);
-            const parsedOptions = JSON.parse(response.data);
+            const parsedOptions = JSON.parse(response.data) as SWBRequestOptionsJSON;
             console.log(parsedOptions);
             const localResponse = await startAuthentication({ optionsJSON: parsedOptions });
             const result = await signIn('credentials', {
