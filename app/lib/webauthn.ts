@@ -142,12 +142,10 @@ export const generateWebAuthnLoginOptions = async (username: string): Promise<We
 
     const opts: GenerateAuthenticationOptionsOpts = {
         timeout: 60000,
-        // allowCredentials: Array.from(user.passkeys.entries()).map(([, value]) => ({
-        //     id: value.cred_id,
-        //     transports: value.transports.map((t) => t.toString() as 'usb' | 'nfc' | 'ble' | 'internal'),
-        //     type: 'public-key' as const,
-        //     publicKey: value.cred_public_key,
-        // })),
+        allowCredentials: Array.from(user.passkeys.entries()).map(([, value]) => ({
+            id: value.cred_id,
+            transports: value.transports.map((t) => t.toString() as 'usb' | 'nfc' | 'ble' | 'internal'),
+        })),
         userVerification: USER_VERIFICATION_MODE,
         rpID: RP_ID,
     };
