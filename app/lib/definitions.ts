@@ -1,3 +1,5 @@
+import { Base64URLString } from '@simplewebauthn/server';
+
 export type Color = {
     id: number;
     hex_value: string;
@@ -97,7 +99,7 @@ export type UserWithPasskeysSerialized = User & {
 }
 
 export type Passkey = {
-    cred_id: string;
+    cred_id: Base64URLString;
     cred_public_key: Uint8Array;
     internal_user_id?: string;
     webauthn_user_id?: string;

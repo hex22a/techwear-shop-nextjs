@@ -35,9 +35,7 @@ export default function SignInForm() {
         }
 
         try {
-            console.log(response.data);
-            const parsedOptions = JSON.parse(response.data) as SWBRequestOptionsJSON;
-            console.log(parsedOptions);
+            const parsedOptions = response.data as SWBRequestOptionsJSON;
             const localResponse = await startAuthentication({ optionsJSON: parsedOptions });
             const result = await signIn('credentials', {
                 redirect: false,

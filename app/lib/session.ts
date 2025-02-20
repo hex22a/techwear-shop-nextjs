@@ -1,13 +1,14 @@
 import { cookies } from 'next/headers'
 
 import redis from './redis';
+import { Base64URLString } from '@simplewebauthn/server';
 
 const WEBAUTHN_SESSION_ID_COOKIE_NAME = 'w-session-id';
 const WEBAUTHN_SESSION_PREFIX = 'techwear-shop-webauthn-session-';
 const WEBAUTHN_SESSION_TTL = 5 * 60;
 
 type WebauthnSessionData = {
-    currentChallenge?: string;
+    currentChallenge?: Base64URLString;
     username?: string;
 };
 

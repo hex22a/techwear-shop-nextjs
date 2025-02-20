@@ -127,7 +127,7 @@ export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON)
 export type WebAuthnResponse = {
     success: boolean;
     message?: string;
-    data?: string
+    data?: PublicKeyCredentialRequestOptionsJSON
 }
 
 export const generateWebAuthnLoginOptions = async (username: string): Promise<WebAuthnResponse> => {
@@ -155,7 +155,7 @@ export const generateWebAuthnLoginOptions = async (username: string): Promise<We
 
     return {
         success: true,
-        data: JSON.stringify(options),
+        data: options,
     };
 };
 
