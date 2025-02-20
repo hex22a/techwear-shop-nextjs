@@ -32,17 +32,31 @@ export default function SignInForm() {
             return;
         }
 
-        const localResponse = await startAuthentication({ optionsJSON: response.data });
-        const result = await signIn('credentials', {
-            redirect: false,
-            username: parsedCredentials.data.username,
-            webauthnResponse: JSON.stringify(localResponse),
-        });
-        console.log(result);
+        try {
+            const localResponse = await startAuthentication({ optionsJSON: response.data });
+            const result = await signIn('credentials', {
+                redirect: false,
+                username: parsedCredentials.data.username,
+                webauthnResponse: JSON.stringify(localResponse),
+            });
+            console.log(result);
 
-        if (result?.error) {
-            setError('Authentication failed.');
+            if (result?.error) {
+                setError('Authentication failed.');
+            }
+        } catch (error) {
+            console.log(error);
         }
+        // const result = await signIn('credentials', {
+        //     redirect: false,
+        //     username: parsedCredentials.data.username,
+        //     webauthnResponse: JSON.stringify(localResponse),
+        // });
+        // console.log(result);
+        //
+        // if (result?.error) {
+        //     setError('Authentication failed.');
+        // }
     };
 
     return (
