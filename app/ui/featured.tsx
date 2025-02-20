@@ -1,4 +1,5 @@
 import Item, {ItemProps} from "@/app/ui/item";
+import Link from 'next/link';
 
 const items: ItemProps[] = [
     {
@@ -45,9 +46,9 @@ export default function Featured(props: {title: string}) {
             <h1 className="text-center text-5xl font-bold pt-16 pb-14">{props.title}</h1>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-x-5">
                 {items.map((item, i) => (
-                    <div key={item.id} className={i > 1 ? 'hidden md:block' : 'block'}>
+                    <Link href={`/product/${item.id}`} key={item.id} className={i > 1 ? 'hidden md:block' : 'block'}>
                         <Item {...item}/>
-                    </div>
+                    </Link>
                 ))}
             </div>
             <div className="text-center mt-10">
