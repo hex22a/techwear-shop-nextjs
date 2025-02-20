@@ -36,7 +36,12 @@ export default function SignInForm() {
 
         try {
             const parsedOptions = response.data as SWBRequestOptionsJSON;
-            console.log(parsedOptions);
+            if (parsedOptions.allowCredentials) {
+                console.log(parsedOptions.allowCredentials.length);
+                console.log(parsedOptions.allowCredentials[0].id);
+                console.log(parsedOptions.allowCredentials[0].transports);
+                console.log(parsedOptions.allowCredentials[0].type);
+            }
             const localResponse = await startAuthentication({ optionsJSON: parsedOptions });
             const result = await signIn('credentials', {
                 redirect: false,

@@ -1,7 +1,7 @@
 'use server';
 
 import {
-    AuthenticationResponseJSON,
+    AuthenticationResponseJSON, AuthenticatorTransportFuture,
     generateAuthenticationOptions,
     GenerateAuthenticationOptionsOpts,
     generateRegistrationOptions,
@@ -144,7 +144,7 @@ export const generateWebAuthnLoginOptions = async (username: string): Promise<We
         timeout: 60000,
         allowCredentials: Array.from(user.passkeys.entries()).map(([, value]) => ({
             id: value.cred_id,
-            transports: value.transports.map((t) => t.toString() as 'usb' | 'nfc' | 'ble' | 'internal'),
+            transports: value.transports.map((t): AuthenticatorTransportFuture => t.toString() as 'usb' | 'nfc' | 'ble' | 'internal'),
         })),
         userVerification: USER_VERIFICATION_MODE,
         rpID: RP_ID,
