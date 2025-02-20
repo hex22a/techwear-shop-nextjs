@@ -51,7 +51,7 @@ export default function SignInForm() {
             }
         } catch (error) {
             if (error instanceof Error) {
-                console.log(error.message);
+                console.log(error, error.message);
             }
         }
         // const result = await signIn('credentials', {
