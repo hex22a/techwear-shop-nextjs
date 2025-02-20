@@ -35,7 +35,7 @@ export const generateWebAuthnRegistrationOptions = async (username: string) => {
 
     const opts: GenerateRegistrationOptionsOpts = {
         rpName: RP_NAME,
-        rpID: process.env.RP_ID || 'localhost',
+        rpID: process.env.ORIGIN || 'http://localhost',
         userID: new TextEncoder().encode(username),
         userName: username,
         timeout: 60000,
@@ -78,7 +78,7 @@ export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON)
         response: data,
         expectedChallenge: `${currentChallenge}`,
         expectedOrigin: process.env.ORIGIN || `http://localhost:3000`,
-        expectedRPID: process.env.RP_ID || 'localhost',
+        expectedRPID: process.env.ORIGIN || 'http://localhost',
         requireUserVerification: false,
     };
     const verification = await verifyRegistrationResponse(opts);
@@ -141,7 +141,7 @@ export const generateWebAuthnLoginOptions = async (username: string) => {
         })),
         userVerification: 'required',
         // userVerification: 'discouraged',
-        rpID: process.env.RP_ID || 'localhost',
+        rpID: process.env.ORIGIN || 'http://localhost',
     };
     const options = await generateAuthenticationOptions(opts);
 
@@ -187,7 +187,7 @@ export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
         response: data,
         expectedChallenge: `${currentChallenge}`,
         expectedOrigin: process.env.ORIGIN || `http://localhost:3000`,
-        expectedRPID: process.env.RP_ID || 'localhost',
+        expectedRPID: process.env.ORIGIN || 'http://localhost',
         credential: {
             id: dbAuthenticator.cred_id,
             publicKey: isoBase64URL.toBuffer(dbAuthenticator.cred_public_key),
