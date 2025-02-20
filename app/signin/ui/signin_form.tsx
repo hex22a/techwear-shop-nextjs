@@ -5,7 +5,7 @@ import form_style from "@/app/ui/form.module.css";
 import { signIn } from 'next-auth/react';
 import { startAuthentication } from '@simplewebauthn/browser';
 import {
-    generateWebAuthnLoginOptions,
+    generateWebAuthnLoginOptions, WebAuthnResponse,
 } from '@/app/lib/webauthn';
 import z from 'zod';
 import { useState } from 'react';
@@ -25,7 +25,7 @@ export default function SignInForm() {
             return;
         }
 
-        const response = await generateWebAuthnLoginOptions(parsedCredentials.data.username);
+        const response: WebAuthnResponse = await generateWebAuthnLoginOptions(parsedCredentials.data.username);
 
         if (!response.success || !response.data) {
             setError(response.message ?? 'Something went wrong!');
@@ -34,6 +34,8 @@ export default function SignInForm() {
 
         try {
             console.log(response.data, typeof response.data.allowCredentials, response.data.allowCredentials?.length);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             const localResponse = await startAuthentication({ optionsJSON: response.data });
             const result = await signIn('credentials', {
                 redirect: false,

@@ -124,7 +124,13 @@ export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON)
     };
 };
 
-export const generateWebAuthnLoginOptions = async (username: string) => {
+export type WebAuthnResponse = {
+    success: boolean;
+    message?: string;
+    data?: PublicKeyCredentialRequestOptionsJSON
+}
+
+export const generateWebAuthnLoginOptions = async (username: string): Promise<WebAuthnResponse> => {
     const user = await findUserWithPasskeys(username);
 
     if (!user) {
@@ -139,13 +145,13 @@ export const generateWebAuthnLoginOptions = async (username: string) => {
         allowCredentials: Array.from(user.passkeys.entries()).map(([, value]) => ({
             id: value.cred_id,
             transports: value.transports.map((t) => t.toString() as 'usb' | 'nfc' | 'ble' | 'internal'),
-            type: 'public-key',
+            type: 'public-key' as const,
             publicKey: value.cred_public_key,
         })),
         userVerification: USER_VERIFICATION_MODE,
         rpID: RP_ID,
     };
-    const options = await generateAuthenticationOptions(opts);
+    const options: PublicKeyCredentialRequestOptionsJSON = await generateAuthenticationOptions(opts);
 
     await updateCurrentWebauthnSession({ currentChallenge: options.challenge, username });
 
