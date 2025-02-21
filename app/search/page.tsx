@@ -1,12 +1,13 @@
 import Header from "@/app/ui/header/header";
 import Footer from "@/app/ui/footer";
 import Breadcrumbs from "@/app/ui/breadcrumbs";
-import Item, {ItemProps} from "@/app/ui/item";
+import Item from "@/app/ui/item";
 import Arrow from "@/app/ui/vector/arrow.svg";
 
 import Filters from "./ui/filters";
 import SearchResultsHeader, { SearchResultsHeaderProps } from "@/app/search/ui/search_results_header";
 import {fetchAllCategories, fetchAllColors, fetchAllSizes, fetchAllStyles} from "@/app/lib/data";
+import { Product } from '@/app/lib/definitions';
 
 const sitePath = [
     {
@@ -25,86 +26,77 @@ const searchResultsHeaderProps: SearchResultsHeaderProps = {
     totalCount: 100
 }
 
-const items: ItemProps[] = [
+const items: Product[] = [
     {
-        id: '1',
+        id: 1,
         name: "Napapijri Anorak",
-        rating: 5,
+        average_rating: 5,
         price: 1000,
         photo_url: "/items/napa-anor.webp",
-        imageAlt: "anorak",
         discount: {
             newPrice: 800,
             percent: 20
         }
     },
     {
-        id: '2',
+        id: 2,
         name: "Riot Division Pants",
-        rating: 4.8,
+        average_rating: 4.8,
         price: 500,
         photo_url: "/items/riot-pants.webp",
-        imageAlt: "pants",
     },
     {
-        id: '3',
+        id: 3,
         name: "MA.STRUM Jacket",
-        rating: 3.9,
+        average_rating: 3.9,
         price: 600,
         photo_url: "/items/mastrum-jacket.jpg",
-        imageAlt: "jacket",
     },
     {
-        id: '4',
+        id: 4,
         name: "MA.STRUM Jacket",
-        rating: 4.5,
+        average_rating: 4.5,
         price: 2000,
         photo_url: "/items/mastrum.jpg",
-        imageAlt: "mastrum",
     },
     {
-        id: '5',
+        id: 5,
         name: "Napapijri Anorak",
-        rating: 5,
+        average_rating: 5,
         price: 2000,
         photo_url: "/items/napa-anor.webp",
-        imageAlt: "anorak",
         discount: {
             newPrice: 800,
             percent: 20
         }
     },
     {
-        id: '6',
+        id: 6,
         name: "Riot Division Pants",
-        rating: 4.8,
+        average_rating: 4.8,
         price: 500,
         photo_url: "/items/riot-pants.webp",
-        imageAlt: "pants",
     },
     {
-        id: '7',
+        id: 7,
         name: "MA.STRUM Jacket",
-        rating: 3.9,
+        average_rating: 3.9,
         price: 600,
         photo_url: "/items/mastrum-jacket.jpg",
-        imageAlt: "jacket",
     },
     {
-        id: '8',
+        id: 8,
         name: "MA.STRUM Jacket",
-        rating: 4.5,
+        average_rating: 4.5,
         price: 2000,
         photo_url: "/items/mastrum.jpg",
-        imageAlt: "mastrum",
     },
     {
-        id: '9',
+        id: 9,
         name: "Riot Division Pants",
-        rating: 4.8,
+        average_rating: 4.8,
         price: 500,
         photo_url: "/items/riot-pants.webp",
-        imageAlt: "pants",
     },
 ]
 

@@ -8,9 +8,11 @@ import Header from "@/app/ui/header/header";
 import { fetchNewArrivals, fetchTopSelling, getTopReviews } from '@/app/lib/data';
 
 export default async function Home() {
-    const reviews = await getTopReviews();
-    const newArrivals = await fetchNewArrivals();
-    const topSelling = await fetchTopSelling();
+    const [reviews, newArrivals, topSelling] = await Promise.all([
+        getTopReviews(),
+        fetchNewArrivals(),
+        fetchTopSelling(),
+    ]);
 
     return (
         <>
