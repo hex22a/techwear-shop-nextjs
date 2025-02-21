@@ -9,9 +9,9 @@ export default function Item(props: Product) {
 
     return (
         <Link href={`/product/${id}`}>
-            <div className="relative bg-gray-100 rounded-xl h-72 mb-4">
+            <div className="relative bg-gray-100 rounded-xl h-72 mb-4 overflow-hidden">
                 <Image
-                    className="object-contain"
+                    className="object-cover"
                     src={photo_url}
                     alt={`${name} photo`}
                     fill

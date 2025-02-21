@@ -67,44 +67,40 @@ export default async function Home() {
                             className="bg-white rounded-3xl md:flex-grow-0 md:basis-[calc(33.33%-10px)] min-h-48 md:min-h-72 overflow-hidden relative">
                             <div className="relative top-6 left-9 z-10 font-bold text-3xl">Casual</div>
                             <Image
-                                className="absolute bottom-0 right-0"
+                                className="object-cover"
                                 src="/dress-style/casual.webp"
                                 alt="casual"
-                                width={400}
-                                height={400}
+                                fill
                             />
                         </div>
                         <div
                             className="bg-white rounded-3xl md:flex-grow-1 md:basis-[calc(66.66%-10px)] min-h-48 md:min-h-72 overflow-hidden relative">
                             <div className="relative top-6 left-9 z-10 font-bold text-3xl">Formal</div>
                             <Image
-                                className="absolute bottom-0 right-0"
+                                className="object-cover"
                                 src="/dress-style/formal.webp"
                                 alt="formal"
-                                width={600}
-                                height={600}
+                                fill
                             />
                         </div>
                         <div
                             className="bg-white rounded-3xl md:flex-grow-1 md:basis-[calc(66.66%-10px)] min-h-48 md:min-h-72 overflow-hidden relative">
                             <div className="relative top-6 left-9 z-10 font-bold text-3xl">Outdoor</div>
                             <Image
-                                className="absolute bottom-0 right-0"
+                                className="object-cover"
                                 src="/dress-style/outdoor.webp"
                                 alt="outdoor"
-                                width={600}
-                                height={600}
+                                fill
                             />
                         </div>
                         <div
                             className="bg-white rounded-3xl md:flex-grow-0 md:basis-[calc(33.33%-10px)] min-h-48 md:min-h-72 overflow-hidden relative">
                             <div className="relative top-6 left-9 z-10 font-bold text-3xl">Party</div>
                             <Image
-                                className="absolute bottom-0 right-0"
+                                className="object-cover"
                                 src="/dress-style/party.jpg"
                                 alt="party"
-                                width={400}
-                                height={400}
+                                fill
                             />
                         </div>
                     </div>
