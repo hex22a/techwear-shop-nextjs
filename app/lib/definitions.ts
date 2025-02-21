@@ -27,7 +27,7 @@ export type ReviewRaw = {
     rating: number;
     review_text: string;
     product_id: number;
-    verified: boolean;
+    verified?: boolean;
 }
 
 export type Review = ReviewRaw & {
