@@ -1,54 +1,21 @@
-import Item, {ItemProps} from "@/app/ui/item";
-import Link from 'next/link';
+import Item from "@/app/ui/item";
+import { Product } from '@/app/lib/definitions';
 
-const items: ItemProps[] = [
-    {
-        id: '1',
-        title: "Napapijri Anorak",
-        rating: 5,
-        price: 1000,
-        imageUrl: "/items/napa-anor.webp",
-        imageAlt: "anorak",
-        discount: {
-            newPrice: 800,
-            percent: 20
-        }
-    },
-    {
-        id: '2',
-        title: "Riot Division Pants",
-        rating: 4.8,
-        price: 500,
-        imageUrl: "/items/riot-pants.webp",
-        imageAlt: "pants",
-    },
-    {
-        id: '3',
-        title: "MA.STRUM Jacket",
-        rating: 3.9,
-        price: 600,
-        imageUrl: "/items/mastrum-jacket.jpg",
-        imageAlt: "jacket",
-    },
-    {
-        id: '4',
-        title: "MA.STRUM Jacket",
-        rating: 4.5,
-        price: 2000,
-        imageUrl: "/items/mastrum.jpg",
-        imageAlt: "mastrum",
-    }
-]
+export type FeaturedProps = {
+    title: string,
+    items: Product[]
+}
 
-export default function Featured(props: {title: string}) {
+export default function Featured(props: FeaturedProps) {
+    const { items } = props;
     return (
         <div className="max-w-96 md:max-w-[78rem] my-0 mx-auto pb-16">
             <h1 className="text-center text-5xl font-bold pt-16 pb-14">{props.title}</h1>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-x-5">
                 {items.map((item, i) => (
-                    <Link href={`/product/${item.id}`} key={item.id} className={i > 1 ? 'hidden md:block' : 'block'}>
+                    <div key={item.id} className={i > 1 ? 'hidden md:block' : 'block'}>
                         <Item {...item}/>
-                    </Link>
+                    </div>
                 ))}
             </div>
             <div className="text-center mt-10">

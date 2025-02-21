@@ -45,8 +45,12 @@ export type ProductRaw = {
     id: number,
     name: string,
     price: number,
-    discount_percent: number,
+    discount_percent: string,
     photo_url: string,
+    average_rating: number;
+}
+
+export type FullProductRaw = ProductRaw & {
     color_id: number,
     color_hex_value: string,
     color_human_readable_value: string,
@@ -55,7 +59,7 @@ export type ProductRaw = {
     size_value: string,
 }
 
-export type FullProductRaw = ProductRaw & {
+export type ExtraProductRaw = FullProductRaw & {
     description: string,
     details: string,
     alt_photo_id: number,
@@ -69,21 +73,21 @@ export type FullProductRaw = ProductRaw & {
     review_created_at: Date,
 }
 
-export type Product = {
-    id: number;
-    name: string;
+export type Product = Omit<ProductRaw, 'discount_percent'> & {
+    discount?: {
+        newPrice: number;
+        percent: number;
+    };
+}
+
+
+export type ProductFull = Product & {
     description: string;
     details: string;
     photos: Map<number, Photo>
     reviews: Map<number, Review>;
     colors: Map<number, Color>;
     sizes: Map<number, Size>;
-    price: number;
-    discount?: {
-        newPrice: number;
-        percent: number;
-    };
-    photo_url: string;
 }
 
 export type User = {
@@ -126,14 +130,14 @@ export type CartRow = {
 export type FullCartRow = CartRow & Omit<Color, 'id'> & Omit<Size, 'id'> & {
     product_name: string;
     product_price: number;
-    product_discount_percent: number;
+    product_discount_percent: string;
     product_photo_url: string;
     total: string;
 }
 
 export type Cart = {
     user_id: string;
-    products: (ProductRaw & { quantity: number })[];
+    products: (Omit<FullProductRaw, 'average_rating'> & { quantity: number })[];
     summary: {
         subtotal: number;
         total: number;

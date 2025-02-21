@@ -8,9 +8,9 @@ import {
   Category,
   Color,
   FullCartRow,
-  FullProductRaw,
+  ExtraProductRaw,
   PasskeySerialized,
-  Product,
+  ProductFull,
   Review,
   ReviewRaw,
   Size,
@@ -18,11 +18,14 @@ import {
   User,
   UserWithPasskeyRaw,
   UserWithPasskeysSerialized,
+  Product,
+  ProductRaw,
 } from '@/app/lib/definitions';
 
 import { isoBase64URL } from '@simplewebauthn/server/helpers';
 
 const MAIN_PAGE_REVIEWS = 7;
+const MAIN_PAGE_PRODUCTS = 4;
 const DELIVERY_FEE = 15;
 
 export async function fetchAllColors(): Promise<Color[]> {
@@ -65,38 +68,119 @@ export async function fetchAllCategories(): Promise<Category[]> {
   }
 }
 
-export async function fetchProduct(id: number): Promise<Product> {
+export async function fetchNewArrivals(): Promise<Product[]> {
   try {
-    const queryResult = await sql<FullProductRaw>`
-            SELECT
-                product.id as id,
-                product.name as name,
-                product.price as price,
-                product.discount as discount_percent,
-                product.description as description,
-                product.details as details,
-                product.photo_url as photo_url,
-                product_photo.id as alt_photo_id,
-                product_photo.url as alt_photo_url,
-                c.id as color_id,
-                c.hex_value as color_hex_value,
-                s.id as size_id,
-                s.size as size,
-                s.value as size_value,
-                r.id as review_id,
-                r.title as review_title,
-                r.review as review_text,
-                r.rating as review_rating,
-                r.verified as review_verified
-                        FROM product
-                            LEFT JOIN product_photo on product.id = product_photo.product_id
-                            LEFT JOIN product_color pc on product.id = pc.product_id
-                            INNER JOIN color c on c.id = pc.color_id
-                            LEFT JOIN product_size ps on product.id = ps.product_id
-                            INNER JOIN size s on s.id = ps.size_id
-                            LEFT JOIN public.review r on product.id = r.product_id
-                WHERE product.id = ${id}`;
-    const product: Product = {
+    const queryResult = await sql<ProductRaw>`
+      SELECT
+          product.id as id,
+          product.name as name,
+          product.price as price,
+          product.discount as discount_percent,
+          product.details as details,
+          product.photo_url as photo_url,
+          COALESCE(ROUND(AVG(r.rating)::numeric, 1), 0) AS average_rating
+      FROM product
+               LEFT JOIN public.review r on product.id = r.product_id
+      GROUP BY
+          product.id,
+          product.name,
+          product.price,
+          product.discount,
+          product.details,
+          product.photo_url,
+          product.created_at
+      ORDER BY product.created_at DESC
+      LIMIT ${MAIN_PAGE_PRODUCTS}
+      `;
+    return queryResult.rows.map((row: ProductRaw): Product => ({
+      ...row,
+      discount: row.discount_percent ? {
+        percent: parseInt(row.discount_percent, 10),
+        newPrice: row.price * (100 - parseInt(row.discount_percent, 10)) / 100,
+      } : undefined
+    }));
+  } catch (error) {
+    console.error(`Database error: ${error}`);
+    throw new Error('Failed to fetch new arrivals.');
+  }
+}
+
+export async function fetchTopSelling(): Promise<Product[]> {
+  try {
+    const queryResult = await sql<ProductRaw>`
+      SELECT
+          product.id as id,
+          product.name as name,
+          product.price as price,
+          product.discount as discount_percent,
+          product.details as details,
+          product.photo_url as photo_url,
+          COALESCE(ROUND(AVG(r.rating)::numeric, 1), 0) AS average_rating
+      FROM product
+               LEFT JOIN public.review r on product.id = r.product_id
+      GROUP BY
+          product.id,
+          product.name,
+          product.price,
+          product.discount,
+          product.details,
+          product.photo_url,
+          product.created_at
+      ORDER BY average_rating DESC
+      LIMIT ${MAIN_PAGE_PRODUCTS}
+    `;
+    return queryResult.rows.map((row: ProductRaw): Product => ({
+      ...row,
+      discount: row.discount_percent ? {
+        percent: parseInt(row.discount_percent, 10),
+        newPrice: row.price * (100 - parseInt(row.discount_percent, 10)) / 100,
+      } : undefined
+    }));
+  } catch (error) {
+    console.error(`Database error: ${error}`);
+    throw new Error('Failed to fetch new arrivals.');
+  }
+}
+
+export async function fetchProduct(id: number): Promise<ProductFull> {
+  try {
+    const queryResult = await sql<ExtraProductRaw>`
+      SELECT
+          product.id as id,
+          product.name as name,
+          product.price as price,
+          product.discount as discount_percent,
+          product.description as description,
+          product.details as details,
+          product.photo_url as photo_url,
+          product_photo.id as alt_photo_id,
+          product_photo.url as alt_photo_url,
+          c.id as color_id,
+          c.hex_value as color_hex_value,
+          s.id as size_id,
+          s.size as size,
+          s.value as size_value,
+          r.id as review_id,
+          r.title as review_title,
+          r.review as review_text,
+          r.rating as review_rating,
+          r.verified as review_verified,
+          COALESCE(ROUND(avg_reviews.average_rating::numeric, 1), 0) AS average_rating
+      FROM product
+      LEFT JOIN (
+        SELECT product_id, AVG(rating) AS average_rating
+        FROM public.review
+        GROUP BY product_id
+      ) avg_reviews ON avg_reviews.product_id = product.id
+      LEFT JOIN product_photo ON product.id = product_photo.product_id
+      LEFT JOIN product_color pc ON product.id = pc.product_id
+      INNER JOIN color c ON c.id = pc.color_id
+      LEFT JOIN product_size ps ON product.id = ps.product_id
+      INNER JOIN size s ON s.id = ps.size_id
+      LEFT JOIN public.review r ON product.id = r.product_id
+      WHERE product.id = ${id}
+    `;
+    const product: ProductFull = {
       photos: new Map(),
       colors: new Map(),
       sizes: new Map(),
@@ -140,8 +224,8 @@ export async function fetchProduct(id: number): Promise<Product> {
     const discount = queryResult.rows[0].discount_percent;
     if (queryResult.rows[0].discount_percent) {
       product.discount = {
-        newPrice: product.price - (product.price * discount) / 100,
-        percent: discount,
+        newPrice: product.price - (product.price * parseInt(discount, 10)) / 100,
+        percent: parseInt(discount, 10),
       };
     }
     return product;

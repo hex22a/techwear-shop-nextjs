@@ -5,10 +5,12 @@ import Featured from "@/app/ui/featured";
 import Carousel from "@/app/ui/carousel";
 import Footer from "@/app/ui/footer";
 import Header from "@/app/ui/header/header";
-import {getTopReviews} from "@/app/lib/data";
+import { fetchNewArrivals, fetchTopSelling, getTopReviews } from '@/app/lib/data';
 
 export default async function Home() {
     const reviews = await getTopReviews();
+    const newArrivals = await fetchNewArrivals();
+    const topSelling = await fetchTopSelling();
 
     return (
         <>
@@ -51,9 +53,9 @@ export default async function Home() {
                     </div>
                 </div>
                 <Brands/>
-                <Featured title="New Arrivals"/>
+                <Featured title="New Arrivals" items={newArrivals}/>
                 <hr className="max-w-96 md:max-w-[78rem] my-0 mx-auto"/>
-                <Featured title="Top Selling"/>
+                <Featured title="Top Selling" items={topSelling}/>
                 <div
                     className="bg-gray-100 rounded-3xl px-6 pb-7 md:px-16 md:pb-20 max-w-96 md:max-w-[78rem] my-0 mx-auto">
                     <h1 className="text-center text-5xl font-bold pt-16 pb-14">Browse by dress style</h1>
