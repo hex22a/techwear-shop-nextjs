@@ -368,6 +368,7 @@ export async function getTopReviews(): Promise<Review[]> {
     const queryResult = await sql<Review>`
             SELECT
                 r.id as id,
+                r.verified as verified,
                 r.author_id as author_id,
                 r.product_id as product_id,
                 r.rating as rating,
@@ -435,7 +436,18 @@ export async function getCart(user_id: string): Promise<Cart> {
             INNER JOIN size s on s.id = size_id
         WHERE cart.user_id = ${user_id}
         `;
-
+    if (queryResult.rows.length === 0) {
+      return {
+        summary: {
+          deliveryFee: DELIVERY_FEE,
+          discount: 0,
+          subtotal: 0,
+          total: 0,
+        },
+        user_id: user_id,
+        products: [],
+      }
+    }
     const { total } = queryResult.rows[0];
     const numericTotal = parseFloat(total);
     return {

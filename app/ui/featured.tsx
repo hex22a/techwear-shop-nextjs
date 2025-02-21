@@ -1,5 +1,6 @@
 import Item from "@/app/ui/item";
 import { Product } from '@/app/lib/definitions';
+import Link from 'next/link';
 
 export type FeaturedProps = {
     title: string,
@@ -19,7 +20,7 @@ export default function Featured(props: FeaturedProps) {
                 ))}
             </div>
             <div className="text-center mt-10">
-                <button className="border border-black rounded-full w-full md:w-auto px-20 py-4">View All</button>
+                <Link href="/search" className="border border-black rounded-full w-full md:w-auto px-20 py-4">View All</Link>
             </div>
         </div>
     );

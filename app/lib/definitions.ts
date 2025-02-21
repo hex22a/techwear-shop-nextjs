@@ -27,11 +27,11 @@ export type ReviewRaw = {
     rating: number;
     review_text: string;
     product_id: number;
+    verified: boolean;
 }
 
 export type Review = ReviewRaw & {
     id: number;
-    verified: boolean;
     author: string;
     created_at: Date;
 }
