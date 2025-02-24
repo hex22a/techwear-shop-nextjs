@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "@/app/ui/globals.css";
 import { satoshi, integral } from "@/app/ui/fonts"
+import { SpeedInsights } from '@vercel/speed-insights/next';
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,6 +20,7 @@ export default function RootLayout({
         className={`${satoshi.variable} ${integral.variable}`}
       >
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );
