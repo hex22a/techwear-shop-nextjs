@@ -2,9 +2,10 @@
 
 import { z } from 'zod';
 import { auth } from '@/auth';
-import { createCart } from '@/app/lib/data';
+import { createCart } from './data';
 import { stripe } from "./stripe";
 import { headers } from 'next/headers';
+import { USER_NOT_LOGGED_IN_MESSAGE } from './constants';
 
 const AddToCartFormSchema = z.object({
   product_id: z.coerce.number().nonnegative({ message: 'Product ID is required you filthy hacker 👺'}),
@@ -35,14 +36,14 @@ export async function addToCart(prevState: AddToCartFormState | undefined, formD
   const user_session = await auth()
   if (!user_session) {
     return {
-      message: 'User not logged in.',
+      message: USER_NOT_LOGGED_IN_MESSAGE,
     }
   }
   console.log(formData);
   const { user } = user_session;
   if (!user || !user.id) {
     return {
-      message: 'User not logged in.',
+      message: USER_NOT_LOGGED_IN_MESSAGE,
     }
   }
   const validated = AddToCartFormSchema.safeParse(Object.fromEntries(formData.entries()));
