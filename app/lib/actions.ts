@@ -1,26 +1,11 @@
 'use server';
 
-import { z } from 'zod';
 import { auth } from '@/auth';
 import { createCart } from './data';
 import { stripe } from "./stripe";
 import { headers } from 'next/headers';
-import { USER_NOT_LOGGED_IN_MESSAGE } from './constants';
-
-const AddToCartFormSchema = z.object({
-  product_id: z.coerce.number().nonnegative({ message: 'Product ID is required you filthy hacker 👺'}),
-  color_id: z.coerce.number({ message: 'Please select a color'}).nonnegative(),
-  size_id: z.coerce.number({ message: 'Please select a size' }).nonnegative(),
-  quantity: z.coerce.number().min(1).max(100),
-});
-
-const OrderProductsFormSchema = z.object({
-  products: z.array(z.object({
-    product_id: z.coerce.number(),
-    quantity: z.coerce.number(),
-  })),
-  total: z.coerce.number().min(0),
-});
+import { USER_NOT_LOGGED_IN_MESSAGE, VALIDATION_FAILED_ERROR_MESSAGE } from './constants';
+import { AddToCartFormSchema, OrderProductsFormSchema } from './form_schemas';
 
 export type AddToCartFormState = {
   errors?: {
@@ -39,7 +24,6 @@ export async function addToCart(prevState: AddToCartFormState | undefined, formD
       message: USER_NOT_LOGGED_IN_MESSAGE,
     }
   }
-  console.log(formData);
   const { user } = user_session;
   if (!user || !user.id) {
     return {
@@ -50,7 +34,7 @@ export async function addToCart(prevState: AddToCartFormState | undefined, formD
   if (!validated.success) {
     return {
       errors: validated.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create Invoice.',
+      message: VALIDATION_FAILED_ERROR_MESSAGE,
     };
   }
 
