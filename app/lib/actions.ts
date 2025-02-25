@@ -70,7 +70,6 @@ export async function orderProducts(
   formData: FormData,
 ) {
   const origin: string = (await headers()).get("origin") as string;
-  console.info((await headers()));
 
   const data = transformProductsData(Object.fromEntries(formData.entries()));
   const validated = OrderProductsFormSchema.safeParse(data);
