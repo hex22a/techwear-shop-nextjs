@@ -15,6 +15,8 @@ jobs:
         uses: pnpm/action-setup@v2
       - name: Install Dependencies
         run: pnpm install
+      - name: Run ESLint
+        run: pnpm lint
       - name: Run Jest Tests
         run: pnpm test
       - name: Install Vercel CLI

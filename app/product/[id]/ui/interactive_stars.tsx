@@ -38,5 +38,5 @@ export default function InteractiveStars(props: InteractiveStarsProps) {
             ))}
             <span>{rating}/5</span>
         </>
-    )
+    );
 }

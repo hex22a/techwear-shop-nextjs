@@ -15,7 +15,7 @@ const sitePath = [
         name: "Cart",
         url: "/cart"
     }
-]
+];
 
 export default async function CartPage() {
     const user_session = await auth();
@@ -39,5 +39,5 @@ export default async function CartPage() {
             </div>
             <Footer />
         </>
-    )
+    );
 }

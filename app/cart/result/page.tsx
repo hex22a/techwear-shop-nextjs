@@ -19,7 +19,7 @@ export default async function ResultPage({ searchParams }: ResultPageProps) {
     });
   const paymentIntent = checkoutSession.payment_intent as Stripe.PaymentIntent;
   if (!paymentIntent) {
-    return <div>No payment intent found</div>
+    return <div>No payment intent found</div>;
   }
   return (
     <>

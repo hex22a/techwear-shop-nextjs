@@ -46,5 +46,5 @@ export default function SignupForm() {
             <hr className="my-4"/>
             <button type="submit" className="block border w-full rounded-full py-3.5 px-14 mb-3 bg-black text-white">Sign Up</button>
         </form>
-    )
+    );
 }

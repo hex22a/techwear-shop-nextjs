@@ -16,9 +16,9 @@ export default function OrderForm(props: Cart) {
     const initialState: OrderProductsFormState = {
         message: null,
         url: null,
-    }
+    };
 
-    const [state, formAction] = useActionState(orderProducts, initialState)
+    const [state, formAction] = useActionState(orderProducts, initialState);
 
     if (state && state.url) {
         window.location.assign(state.url as string);
@@ -101,5 +101,5 @@ export default function OrderForm(props: Cart) {
             </div>
             {state && <div className="text-red-500">{state.message}</div>}
         </form>
-    )
+    );
 }

@@ -1,4 +1,4 @@
-import localFont from 'next/font/local'
+import localFont from 'next/font/local';
 
 export const satoshi = localFont({
     variable: '--font-satoshi',
@@ -49,7 +49,7 @@ export const satoshi = localFont({
             weight: '600',
         },
     ]
-})
+});
 export const integral = localFont({
     variable: '--font-integral',
     src: [
@@ -69,4 +69,4 @@ export const integral = localFont({
             weight: '500',
         }
     ]
-})
+});

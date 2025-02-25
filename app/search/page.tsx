@@ -18,13 +18,13 @@ const sitePath = [
         name: 'Casual',
         url: '#',
     },
-]
+];
 
 const searchResultsHeaderProps: SearchResultsHeaderProps = {
     indexFirst: 1,
     indexLast: 10,
     totalCount: 100
-}
+};
 
 const items: Product[] = [
     {
@@ -98,7 +98,7 @@ const items: Product[] = [
         price: 500,
         photo_url: "/items/riot-pants.webp",
     },
-]
+];
 
 export default async function SearchPage() {
     const [
@@ -111,7 +111,7 @@ export default async function SearchPage() {
         fetchAllSizes(),
         fetchAllStyles(),
         fetchAllCategories(),
-    ])
+    ]);
 
     return (
       <>

@@ -20,7 +20,7 @@ const searchResultsHeaderProps: SearchResultsHeaderProps = {
     indexFirst: 1,
     indexLast: 10,
     totalCount: 100
-}
+};
 
 export type FilterProps = {
     categories: Category[],
@@ -57,7 +57,7 @@ export default function Filters(props: FilterProps) {
 
     const openFilters = () => {
         setIsFiltersVisible(true);
-    }
+    };
 
     const closeFilters = () => {
         setIsFiltersVisible(false);

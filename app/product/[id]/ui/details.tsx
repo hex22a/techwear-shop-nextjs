@@ -5,5 +5,5 @@ export type DetailsProps = {
 export default function Details(props: DetailsProps) {
     return (
         <div>{props.details}</div>
-    )
+    );
 }

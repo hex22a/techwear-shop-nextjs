@@ -237,7 +237,6 @@ export async function fetchProduct(id: number): Promise<ProductFull> {
 
 export async function findUser(username: string): Promise<User> {
   const queryResult = await sql<User>`SELECT * FROM public.user WHERE username = ${username}`;
-  console.log(queryResult.rows);
   return queryResult.rows[0] || null;
 }
 
@@ -270,7 +269,6 @@ export async function findUserWithPasskeys(username: string): Promise<UserWithPa
       };
       user.passkeys.set(row.cred_id, passkey);
     });
-    console.log(user);
     return user;
   } catch (error) {
     console.error(`Database error: ${error}`);
@@ -446,7 +444,7 @@ export async function getCart(user_id: string): Promise<Cart> {
         },
         user_id: user_id,
         products: [],
-      }
+      };
     }
     const { total } = queryResult.rows[0];
     const numericTotal = parseFloat(total);

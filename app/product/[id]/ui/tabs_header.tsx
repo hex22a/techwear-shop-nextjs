@@ -20,5 +20,5 @@ export default function TabsHeader(props: TabsProps) {
             <button onClick={handleReviewsClick} className={`${activeTab === Tab.REVIEWS && 'border-b-2 border-b-black'} flex-grow text-center`}>Rating & Reviews</button>
             <button onClick={handleFaqsClick} className={`${activeTab === Tab.FAQS && 'border-b-2 border-b-black'} flex-grow text-center`}>FAQs</button>
         </div>
-    )
+    );
 }

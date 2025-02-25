@@ -1,4 +1,4 @@
-import { cookies } from 'next/headers'
+import { cookies } from 'next/headers';
 
 import redis from './redis';
 import { Base64URLString } from '@simplewebauthn/server';

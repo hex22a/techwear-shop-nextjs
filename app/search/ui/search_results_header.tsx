@@ -33,5 +33,5 @@ export default function SearchResultsHeader(props: SearchResultsHeaderProps) {
                 </button>
             </span>
         </div>
-    )
+    );
 }

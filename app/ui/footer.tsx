@@ -1,8 +1,8 @@
 import styles from "./footer.module.css";
-import Facebook from "@/app/ui/vector/facebook.svg"
-import Twitter from "@/app/ui/vector/twitter.svg"
-import Instagram from "@/app/ui/vector/instagram.svg"
-import Github from "@/app/ui/vector/github.svg"
+import Facebook from "@/app/ui/vector/facebook.svg";
+import Twitter from "@/app/ui/vector/twitter.svg";
+import Instagram from "@/app/ui/vector/instagram.svg";
+import Github from "@/app/ui/vector/github.svg";
 import Image from "next/image";
 
 export default function Footer() {
@@ -118,5 +118,5 @@ export default function Footer() {
                 <div className="absolute bottom-0 left-0 right-0 bg-[rgba(240,240,240,1)] -z-10 h-5/6"></div>
             </div>
         </footer>
-    )
+    );
 }

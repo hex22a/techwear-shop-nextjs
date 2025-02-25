@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "@/app/ui/globals.css";
-import { satoshi, integral } from "@/app/ui/fonts"
+import { satoshi, integral } from "@/app/ui/fonts";
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
 

@@ -25,5 +25,5 @@ export default function Item(props: Product) {
                 <Price price={price} discount={discount}/>
             </div>
         </Link>
-    )
+    );
 }

@@ -97,8 +97,6 @@ export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON)
 
     const { credential } = registrationInfo;
 
-    console.log(credential);
-
     const newDevice: PasskeySerialized = {
         cred_public_key: isoBase64URL.fromBuffer(credential.publicKey),
         cred_id: credential.id,
@@ -180,7 +178,7 @@ export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
         };
     }
 
-    const dbAuthenticator = await getPasskeyWithUserId(data.rawId, user.id)
+    const dbAuthenticator = await getPasskeyWithUserId(data.rawId, user.id);
 
     if (!dbAuthenticator) {
         return {

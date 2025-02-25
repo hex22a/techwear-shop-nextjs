@@ -3,15 +3,14 @@
 import UserPic from '@/app/ui/vector/userpic.svg';
 import Link from 'next/link';
 import { useState } from 'react';
-import { useSession } from "next-auth/react"
+import { useSession } from "next-auth/react";
 import WebauthnForm from './webauthn_form';
-import { signOut } from "next-auth/react"
+import { signOut } from "next-auth/react";
 
 export default function UserButton() {
   const [isMiniSignInVisible, setIsMiniSignInVisible] = useState(false);
   const toggleMiniSignIn = () => setIsMiniSignInVisible(!isMiniSignInVisible);
   const { data: session } = useSession();
-  console.log(session);
   return (
     <div className="relative">
       <Link className="block md:hidden" href="/signin">

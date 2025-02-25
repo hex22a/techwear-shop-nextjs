@@ -17,5 +17,5 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
                 </span>
             ))}
         </>
-    )
+    );
 }

@@ -35,7 +35,7 @@ export default function Reviews(props: ReviewProps) {
         if (validationResult.success) {
             await addReview({ product_id: props.product_id, title: validationResult.data.review_title, review_text: validationResult.data.review_text, rating: validationResult.data.rating });
         }
-    }
+    };
 
     return (
         <>
@@ -88,5 +88,5 @@ export default function Reviews(props: ReviewProps) {
                 <button className="border border-gray-500 rounded-full px-16 py-4">Load More Reviews</button>
             </div>
         </>
-    )
+    );
 }

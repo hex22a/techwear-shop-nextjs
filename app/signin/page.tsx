@@ -13,5 +13,5 @@ export default function SignInPage() {
             </main>
             <Footer />
         </>
-    )
+    );
 }

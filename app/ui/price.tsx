@@ -10,5 +10,5 @@ export default function Price(props: {discount?: { newPrice: number, percent: nu
                 <span className="font-bold">${props.price}</span>
             }
         </>
-    )
+    );
 }

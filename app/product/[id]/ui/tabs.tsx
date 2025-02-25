@@ -21,5 +21,5 @@ export default function Tabs(props: TabsProps) {
             {activeTab === Tab.DETAILS && <Details {...props}/>}
             {activeTab === Tab.FAQS && <FAQs/>}
         </>
-    )
+    );
 }

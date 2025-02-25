@@ -42,17 +42,17 @@ export default function Carousel(props: CarouselProps) {
     const handleTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
         setIsTransitioning(false);
         setOrderMap((prevOrderMap) => {
-            console.log(prevOrderMap, currentIndex);
+            console.info(prevOrderMap, currentIndex);
             const newOrder = [...prevOrderMap];
             if (direction === -1) {
                 newOrder.unshift(newOrder.pop()!);
             } else if (direction === 1) {
                 newOrder.push(newOrder.shift()!);
             }
-            console.log(newOrder);
+            console.info(newOrder);
             return newOrder;
         });
-        console.log(`Transition ended for: ${e.propertyName}`);
+        console.info(`Transition ended for: ${e.propertyName}`);
     };
 
     return (
@@ -92,5 +92,5 @@ export default function Carousel(props: CarouselProps) {
                 </div>
             </div>
         </div>
-    )
+    );
 }

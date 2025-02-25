@@ -17,8 +17,8 @@ export default function AddToCartForm(props: AddToCartFormProps) {
   const initialState: AddToCartFormState = {
     errors: {},
     message: null,
-  }
-  const [formState, formAction] = useActionState(addToCart, initialState)
+  };
+  const [formState, formAction] = useActionState(addToCart, initialState);
 
   return (
     <form action={formAction}>

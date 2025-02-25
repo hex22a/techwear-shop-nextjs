@@ -36,38 +36,21 @@ export default function SignInForm() {
 
         try {
             const parsedOptions = response.data as SWBRequestOptionsJSON;
-            if (parsedOptions.allowCredentials) {
-                console.log(parsedOptions.allowCredentials.length);
-                console.log(parsedOptions.allowCredentials[0].id);
-                console.log(parsedOptions.allowCredentials[0].transports);
-                console.log(parsedOptions.allowCredentials[0].type);
-            }
             const localResponse = await startAuthentication({ optionsJSON: parsedOptions });
             const result = await signIn('credentials', {
                 redirect: false,
                 username: parsedCredentials.data.username,
                 webauthnResponse: JSON.stringify(localResponse),
             });
-            console.log(result);
 
             if (result?.error) {
                 setError('Authentication failed.');
             }
         } catch (error) {
             if (error instanceof Error) {
-                console.log(error, error.message);
+                console.error(error, error.message);
             }
         }
-        // const result = await signIn('credentials', {
-        //     redirect: false,
-        //     username: parsedCredentials.data.username,
-        //     webauthnResponse: JSON.stringify(localResponse),
-        // });
-        // console.log(result);
-        //
-        // if (result?.error) {
-        //     setError('Authentication failed.');
-        // }
     };
 
     return (
@@ -78,6 +61,5 @@ export default function SignInForm() {
             <button type="submit" className="block border w-full rounded-full py-3.5 px-14 mb-3 bg-black text-white">Sign In</button>
             {error !== '' && <ErrorComponent message={error} onClose={() => setError('')} />}
         </form>
-
-    )
+    );
 }

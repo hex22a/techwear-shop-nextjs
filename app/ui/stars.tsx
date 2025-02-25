@@ -6,5 +6,5 @@ export default function Stars(props: {rating: number}) {
             <i className={`${styles.star} mr-3`} style={{"--rating": props.rating} as React.CSSProperties}></i>
             <span>{props.rating}/5</span>
         </>
-    )
+    );
 }

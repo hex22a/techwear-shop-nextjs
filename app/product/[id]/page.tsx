@@ -29,7 +29,7 @@ const sitePath = [
         name: 'Jackets',
         url: '#',
     },
-]
+];
 
 export default async function ProductPage(props: {params: Promise<{id: string}>}) {
     const params = await props.params;
@@ -90,5 +90,5 @@ export default async function ProductPage(props: {params: Promise<{id: string}>}
             </div>
             <Footer/>
         </>
-    )
+    );
 }

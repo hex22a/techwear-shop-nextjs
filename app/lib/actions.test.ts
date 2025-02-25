@@ -18,19 +18,19 @@ jest.mock('./form_schemas', () => ({
   AddToCartFormSchema: {
     safeParse: jest.fn(),
   },
-}))
+}));
 
 describe('actions', () => {
   describe('addToCart', () => {
     test('user_session is not present', async () => {
       // Arrange
-      const expectedUserSession = undefined
+      const expectedUserSession = undefined;
       const expectedPrevState = undefined;
       const expectedFormData = new FormData();
       const expectedNewState: AddToCartFormState = {
         message: USER_NOT_LOGGED_IN_MESSAGE,
       };
-      (mockAuth as jest.Mock).mockReturnValue(expectedUserSession)
+      (mockAuth as jest.Mock).mockReturnValue(expectedUserSession);
       // Act
       const actualNewState = await addToCart(expectedPrevState, expectedFormData);
       // Assert
@@ -38,13 +38,13 @@ describe('actions', () => {
     });
     test('user is not logged in', async () => {
       // Arrange
-      const expectedUserSession = {}
+      const expectedUserSession = {};
       const expectedPrevState = undefined;
       const expectedFormData = new FormData();
       const expectedNewState: AddToCartFormState = {
         message: USER_NOT_LOGGED_IN_MESSAGE,
       };
-      (mockAuth as jest.Mock).mockReturnValue(expectedUserSession)
+      (mockAuth as jest.Mock).mockReturnValue(expectedUserSession);
       // Act
       const actualNewState = await addToCart(expectedPrevState, expectedFormData);
       // Assert
@@ -52,13 +52,13 @@ describe('actions', () => {
     });
     test('user id is not presented', async () => {
       // Arrange
-      const expectedUserSession = { user: {} }
+      const expectedUserSession = { user: {} };
       const expectedPrevState = undefined;
       const expectedFormData = new FormData();
       const expectedNewState: AddToCartFormState = {
         message: USER_NOT_LOGGED_IN_MESSAGE,
       };
-      (mockAuth as jest.Mock).mockReturnValue(expectedUserSession)
+      (mockAuth as jest.Mock).mockReturnValue(expectedUserSession);
       // Act
       const actualNewState = await addToCart(expectedPrevState, expectedFormData);
       // Assert
@@ -67,14 +67,14 @@ describe('actions', () => {
     test('form data validation failed', async () => {
       // Arrange
       const expectedUserId = 'uuid-uuid-uuid';
-      const expectedUserSession = { user: { id: expectedUserId } }
+      const expectedUserSession = { user: { id: expectedUserId } };
       const expectedPrevState = undefined;
       const expectedFormData = new FormData();
       const expectedProductId = '-1';
       expectedFormData.append('product_id', expectedProductId);
       const expectedData = {
         product_id: expectedProductId,
-      }
+      };
       const expectedFieldErrors = { product_id: ['Wrong product id'] };
       const expectedValidationErrors: Partial<ZodError> = {
         flatten<U>(): typeToFlattenedError<U> {
@@ -100,7 +100,7 @@ describe('actions', () => {
     test('error creating cart', async () => {
       // Arrange
       const expectedUserId = 'uuid-uuid-uuid';
-      const expectedUserSession = { user: { id: expectedUserId } }
+      const expectedUserSession = { user: { id: expectedUserId } };
       const expectedPrevState = undefined;
       const expectedFormData = new FormData();
       const expectedProductId = '1';
@@ -108,10 +108,10 @@ describe('actions', () => {
       expectedFormData.append('product_id', expectedProductId);
       const expectedData = {
         product_id: expectedProductId,
-      }
+      };
       const expectedParsedData = {
         product_id: expectedProductId,
-      }
+      };
       const expectedNewState: AddToCartFormState = {
         message: expectedDbErrorMessage,
       };
@@ -121,13 +121,14 @@ describe('actions', () => {
         data: expectedParsedData,
       });
       (mockCreateCart as jest.Mock).mockImplementation(() => {
-        throw new Error(expectedDbErrorMessage) })
+        throw new Error(expectedDbErrorMessage); });
       // Act
       const actualNewState = await addToCart(expectedPrevState, expectedFormData);
       // Assert
       expect(actualNewState).toEqual(expectedNewState);
       expect(MockAddToCartFormSchema.safeParse).toHaveBeenCalledWith(expectedData);
       expect(mockCreateCart).toHaveBeenCalledWith({ user_id: expectedUserId, ...expectedParsedData });
-    })
+    });
   });
+
 });

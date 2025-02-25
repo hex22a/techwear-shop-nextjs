@@ -47,5 +47,5 @@ export default function Quantity({ initialQuantity, name }: QuantityProps) {
                 +
             </button>
         </div>
-    )
+    );
 }
