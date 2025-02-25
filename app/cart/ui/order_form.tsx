@@ -7,18 +7,23 @@ import ArrowIcon from "@/app/ui/vector/arrow.svg";
 import styles from "./order_form.module.css";
 import Quantity from "@/app/ui/quantity";
 import { Cart } from '@/app/lib/definitions';
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import { orderProducts, OrderProductsFormState } from '@/app/lib/actions';
 
 export default function OrderForm(props: Cart) {
     const { products, summary: { deliveryFee, total, subtotal, discount } } = props;
 
-    const initialState: OrderProductsFormState = {
+    const initialFormState: OrderProductsFormState = {
         message: null,
         url: null,
     };
 
-    const [state, formAction] = useActionState(orderProducts, initialState);
+    const [localProducts, setLocalProducts] = useState(products);
+    const deleteProduct = (id: number) => {
+        setLocalProducts(localProducts.filter(product => product.id !== id));
+    };
+
+    const [state, formAction] = useActionState(orderProducts, initialFormState);
 
     if (state && state.url) {
         window.location.assign(state.url as string);
@@ -27,7 +32,7 @@ export default function OrderForm(props: Cart) {
     return (
         <form action={formAction} className="grid grid-rows-[auto_auto] md:grid-cols-12 gap-5">
             <div className="md:col-start-1 md:col-end-8 p-3.5 md:py-5 md:px-6 border rounded-xl">
-                {products.map((product, index) => (
+                {localProducts.map((product, index) => (
                     <div key={product.id+product.size+product.color_hex_value+product.quantity}>
                         {index !==0 && <hr className="my-6"/>}
                         <input type="hidden" name={`products[${index}][product_id]`} value={product.id}/>
@@ -59,7 +64,7 @@ export default function OrderForm(props: Cart) {
                                 </div>
                             </div>
                             <div className="flex flex-col justify-between items-end">
-                                <button>
+                                <button onClick={() => deleteProduct(product.id)}>
                                     <TrashBinIcon />
                                 </button>
                                 <div className="bg-gray-200 rounded-full py-2 md:py-2.5 px-3 w-32">
