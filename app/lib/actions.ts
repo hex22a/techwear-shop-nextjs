@@ -4,9 +4,13 @@ import { auth } from '@/auth';
 import { createCart } from './data';
 import { stripe } from "./stripe";
 import { headers } from 'next/headers';
-import { USER_NOT_LOGGED_IN_MESSAGE, VALIDATION_FAILED_ERROR_MESSAGE } from './constants';
+import {
+  USER_NOT_LOGGED_IN_MESSAGE,
+  ADD_TO_CART_MISSING_FIELDS_ERROR_MESSAGE,
+  ORDER_PRODUCTS_MISSING_FIELDS_ERROR_MESSAGE,
+} from './constants';
 import { AddToCartFormSchema, OrderProductsFormSchema } from './form_schemas';
-import { transformProductsData } from './transfromers';
+import { transformProductsData } from './transformers';
 
 export type AddToCartFormState = {
   errors?: {
@@ -35,7 +39,7 @@ export async function addToCart(prevState: AddToCartFormState | undefined, formD
   if (!validated.success) {
     return {
       errors: validated.error.flatten().fieldErrors,
-      message: VALIDATION_FAILED_ERROR_MESSAGE,
+      message: ADD_TO_CART_MISSING_FIELDS_ERROR_MESSAGE,
     };
   }
 
@@ -69,10 +73,10 @@ export async function orderProducts(
   const data = transformProductsData(Object.fromEntries(formData.entries()));
   const validated = OrderProductsFormSchema.safeParse(data);
   if (!validated.success) {
-    console.error(validated.error);
+    // console.error(validated.error);
     return {
       errors: validated.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to order products.',
+      message: ORDER_PRODUCTS_MISSING_FIELDS_ERROR_MESSAGE,
     };
   }
 
