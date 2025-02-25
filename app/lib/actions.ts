@@ -9,6 +9,7 @@ import {
   ADD_TO_CART_MISSING_FIELDS_ERROR_MESSAGE,
   ORDER_PRODUCTS_MISSING_FIELDS_ERROR_MESSAGE,
 } from './constants';
+import { STRIPE_SESSION_CREATE_PARAMS } from './config';
 import { AddToCartFormSchema, OrderProductsFormSchema } from './form_schemas';
 import { transformProductsData } from './transformers';
 
@@ -69,11 +70,11 @@ export async function orderProducts(
   formData: FormData,
 ) {
   const origin: string = (await headers()).get("origin") as string;
+  console.info((await headers()));
 
   const data = transformProductsData(Object.fromEntries(formData.entries()));
   const validated = OrderProductsFormSchema.safeParse(data);
   if (!validated.success) {
-    // console.error(validated.error);
     return {
       errors: validated.error.flatten().fieldErrors,
       message: ORDER_PRODUCTS_MISSING_FIELDS_ERROR_MESSAGE,
@@ -81,9 +82,6 @@ export async function orderProducts(
   }
 
   const checkoutSession = await stripe.checkout.sessions.create({
-    mode: "payment",
-    submit_type: "donate",
-    payment_method_types: ["card"],
     line_items: [
       {
         quantity: 1,
@@ -98,9 +96,8 @@ export async function orderProducts(
     ],
     success_url: `${origin}/cart/result?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/cart`,
-    ui_mode: "hosted",
+    ...STRIPE_SESSION_CREATE_PARAMS,
   });
-  console.info(validated.data);
   return {
     url: checkoutSession.url,
   };
