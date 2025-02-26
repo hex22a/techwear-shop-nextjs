@@ -20,11 +20,13 @@ import {
 import {isoBase64URL} from '@simplewebauthn/server/helpers';
 import {createUser, findUser, findUserWithPasskeys, getPasskeyWithUserId} from "@/app/lib/data";
 import {PasskeySerialized} from "@/app/lib/definitions";
+import {
+    WEBAUTHN_GENERATE_AUTHENTICATION_OPTIONS,
+    WEBAUTHN_GENERATE_REGISTRATION_OPTIONS, WEBAUTHN_VERIFY_AUTHENTICATION_RESPONSE_OPTIONS,
+    WEBAUTHN_VERIFY_REGISTRATION_RESPONSE_OPTIONS,
+} from '@/app/lib/config';
 
-const RP_NAME = 'Techwear Shop';
-const RP_ID = process.env.RP_ID || 'localhost';
-const USER_VERIFICATION_MODE = 'preferred';
-const ORIGIN = process.env.ORIGIN || `http://localhost:3000`;
+
 
 export const generateWebAuthnRegistrationOptions = async (username: string) => {
     const user = await findUser(username);
@@ -37,22 +39,9 @@ export const generateWebAuthnRegistrationOptions = async (username: string) => {
     }
 
     const opts: GenerateRegistrationOptionsOpts = {
-        rpName: RP_NAME,
-        rpID: RP_ID,
         userID: new TextEncoder().encode(username),
         userName: username,
-        timeout: 60000,
-        attestationType: 'none',
-        excludeCredentials: [],
-        authenticatorSelection: {
-            residentKey: 'discouraged',
-            authenticatorAttachment: 'platform',
-            userVerification: USER_VERIFICATION_MODE
-        },
-        /**
-         * Ed25519, ES256, and RS256
-         */
-        supportedAlgorithmIDs: [6, -7, -257],
+        ...WEBAUTHN_GENERATE_REGISTRATION_OPTIONS,
     };
 
     const options = await generateRegistrationOptions(opts);
@@ -80,9 +69,7 @@ export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON)
     const opts: VerifyRegistrationResponseOpts = {
         response: data,
         expectedChallenge: `${currentChallenge}`,
-        expectedOrigin: ORIGIN,
-        expectedRPID: RP_ID,
-        requireUserVerification: false,
+        ...WEBAUTHN_VERIFY_REGISTRATION_RESPONSE_OPTIONS,
     };
     const verification = await verifyRegistrationResponse(opts);
 
@@ -139,13 +126,11 @@ export const generateWebAuthnLoginOptions = async (username: string): Promise<We
     }
 
     const opts: GenerateAuthenticationOptionsOpts = {
-        timeout: 60000,
         allowCredentials: Array.from(user.passkeys.entries()).map(([, value]) => ({
             id: value.cred_id,
             transports: value.transports.map((t): AuthenticatorTransportFuture => t.toString() as 'usb' | 'nfc' | 'ble' | 'internal'),
         })),
-        userVerification: USER_VERIFICATION_MODE,
-        rpID: RP_ID,
+        ...WEBAUTHN_GENERATE_AUTHENTICATION_OPTIONS,
     };
     const options: PublicKeyCredentialRequestOptionsJSON = await generateAuthenticationOptions(opts);
 
@@ -190,15 +175,12 @@ export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
     const opts: VerifyAuthenticationResponseOpts = {
         response: data,
         expectedChallenge: `${currentChallenge}`,
-        expectedOrigin: ORIGIN,
-        expectedRPID: RP_ID,
         credential: {
             id: dbAuthenticator.cred_id,
             publicKey: isoBase64URL.toBuffer(dbAuthenticator.cred_public_key),
             counter: dbAuthenticator.counter
         },
-        // requireUserVerification: true,
-        requireUserVerification: false,
+        ...WEBAUTHN_VERIFY_AUTHENTICATION_RESPONSE_OPTIONS,
     };
     const verification = await verifyAuthenticationResponse(opts);
 
