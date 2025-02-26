@@ -37,6 +37,13 @@ import {
   WEBAUTHN_VERIFY_REGISTRATION_RESPONSE_OPTIONS,
 } from '@/app/lib/config';
 import { isoBase64URL } from '@simplewebauthn/server/helpers';
+import {
+  PASSKEY_NOT_FOUND_ERROR_MESSAGE,
+  REGISTRATION_FAILED_ERROR_MESSAGE,
+  SESSION_EXPIRED_ERROR_MESSAGE,
+  USER_ALREADY_EXISTS_ERROR_MESSAGE,
+  USER_NOT_FOUND_ERROR_MESSAGE,
+} from '@/app/lib/constants';
 
 jest.mock('./data', () => ({
   findUser: jest.fn(),
@@ -58,7 +65,7 @@ jest.mock('@simplewebauthn/server', () => ({
 
 describe('webauthn', () => {
   describe('generateWebAuthnRegistrationOptions', () => {
-    test('user already exists', async () => {
+    test(USER_ALREADY_EXISTS_ERROR_MESSAGE, async () => {
       // Arrange
       const expectedUsername = 'test';
       const expectedUserId = 'uuid-uuid-uuid-uuid';
@@ -70,7 +77,7 @@ describe('webauthn', () => {
       };
       const expectedResponse = {
         success: false,
-        message: 'User already exists',
+        message: USER_ALREADY_EXISTS_ERROR_MESSAGE,
       };
       (mockFindUser as jest.Mock).mockResolvedValue(expectedUser);
 
@@ -131,7 +138,7 @@ describe('webauthn', () => {
         // Arrange
         const expectedResponse = {
           success: false,
-          message: 'Session expired',
+          message: SESSION_EXPIRED_ERROR_MESSAGE,
         };
         const expectedData: RegistrationResponseJSON = {
           clientExtensionResults: {},
@@ -156,7 +163,7 @@ describe('webauthn', () => {
         // Arrange
         const expectedResponse = {
           success: false,
-          message: 'Session expired',
+          message: SESSION_EXPIRED_ERROR_MESSAGE,
         };
         const expectedData: RegistrationResponseJSON = {
           clientExtensionResults: {},
@@ -183,7 +190,7 @@ describe('webauthn', () => {
         // Arrange
         const expectedResponse = {
           success: false,
-          message: 'Registration failed',
+          message: REGISTRATION_FAILED_ERROR_MESSAGE,
         };
         const expectedData: RegistrationResponseJSON = {
           clientExtensionResults: {},
@@ -235,7 +242,7 @@ describe('webauthn', () => {
         // Arrange
         const expectedResponse = {
           success: false,
-          message: 'Registration failed',
+          message: REGISTRATION_FAILED_ERROR_MESSAGE,
         };
         const expectedData: RegistrationResponseJSON = {
           clientExtensionResults: {},
@@ -270,7 +277,7 @@ describe('webauthn', () => {
       // Arrange
       const expectedResponse = {
         success: false,
-        message: 'User already exists',
+        message: USER_ALREADY_EXISTS_ERROR_MESSAGE,
       };
       const expectedData: RegistrationResponseJSON = {
         clientExtensionResults: {},
@@ -401,7 +408,7 @@ describe('webauthn', () => {
       // Arrange
       const expectedResponse: WebAuthnResponse = {
         success: false,
-        message: 'User does not exist',
+        message: USER_NOT_FOUND_ERROR_MESSAGE,
       };
       const expectedUsername = 'test';
       const expectedUser = null;
@@ -492,7 +499,7 @@ describe('webauthn', () => {
         };
         const expectedResponse = {
           success: false,
-          message: 'Session expired',
+          message: SESSION_EXPIRED_ERROR_MESSAGE,
         };
         (mockGetCurrentWebauthnSession as jest.Mock).mockResolvedValue({ sessionId: '', data: { currentChallenge: 'challenge' } });
 
@@ -520,7 +527,7 @@ describe('webauthn', () => {
         };
         const expectedResponse = {
           success: false,
-          message: 'Session expired',
+          message: SESSION_EXPIRED_ERROR_MESSAGE,
         };
         (mockGetCurrentWebauthnSession as jest.Mock).mockResolvedValue({ sessionId: '', data: { username: 'test' } });
 
@@ -549,7 +556,7 @@ describe('webauthn', () => {
       };
       const expectedResponse = {
         success: false,
-        message: 'User does not exist',
+        message: USER_NOT_FOUND_ERROR_MESSAGE,
       };
       const expectedUsername = 'test';
       const expectedChallenge = 'challenge';
@@ -581,7 +588,7 @@ describe('webauthn', () => {
       };
       const expectedResponse = {
         success: false,
-        message: 'Authenticator is not registered with this site',
+        message: PASSKEY_NOT_FOUND_ERROR_MESSAGE,
       };
       const expectedUserId = 'uuid-uuid-uuid-uuid';
       const expectedUsername = 'test';

@@ -21,11 +21,17 @@ import {isoBase64URL} from '@simplewebauthn/server/helpers';
 import {createUser, findUser, findUserWithPasskeys, getPasskeyWithUserId} from "@/app/lib/data";
 import {PasskeySerialized} from "@/app/lib/definitions";
 import {
+    PASSKEY_NOT_FOUND_ERROR_MESSAGE,
+    REGISTRATION_FAILED_ERROR_MESSAGE,
+    SESSION_EXPIRED_ERROR_MESSAGE,
+    USER_ALREADY_EXISTS_ERROR_MESSAGE,
+    USER_NOT_FOUND_ERROR_MESSAGE,
+} from '@/app/lib/constants';
+import {
     WEBAUTHN_GENERATE_AUTHENTICATION_OPTIONS,
     WEBAUTHN_GENERATE_REGISTRATION_OPTIONS, WEBAUTHN_VERIFY_AUTHENTICATION_RESPONSE_OPTIONS,
     WEBAUTHN_VERIFY_REGISTRATION_RESPONSE_OPTIONS,
 } from '@/app/lib/config';
-
 
 
 export const generateWebAuthnRegistrationOptions = async (username: string) => {
@@ -34,7 +40,7 @@ export const generateWebAuthnRegistrationOptions = async (username: string) => {
     if (user) {
         return {
             success: false,
-            message: 'User already exists',
+            message: USER_ALREADY_EXISTS_ERROR_MESSAGE,
         };
     }
 
@@ -62,7 +68,7 @@ export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON)
     if (!username || !currentChallenge) {
         return {
             success: false,
-            message: 'Session expired',
+            message: SESSION_EXPIRED_ERROR_MESSAGE,
         };
     }
 
@@ -78,7 +84,7 @@ export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON)
     if (!verified || !registrationInfo) {
         return {
             success: false,
-            message: 'Registration failed',
+            message: REGISTRATION_FAILED_ERROR_MESSAGE,
         };
     }
 
@@ -100,7 +106,7 @@ export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON)
     } catch {
         return {
             success: false,
-            message: 'User already exists',
+            message: USER_ALREADY_EXISTS_ERROR_MESSAGE,
         };
     }
 
@@ -121,7 +127,7 @@ export const generateWebAuthnLoginOptions = async (username: string): Promise<We
     if (!user) {
         return {
             success: false,
-            message: 'User does not exist',
+            message: USER_NOT_FOUND_ERROR_MESSAGE,
         };
     }
 
@@ -150,7 +156,7 @@ export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
     if (!username || !currentChallenge) {
         return {
             success: false,
-            message: 'Session expired',
+            message: SESSION_EXPIRED_ERROR_MESSAGE,
         };
     }
 
@@ -159,7 +165,7 @@ export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
     if (!user) {
         return {
             success: false,
-            message: 'User does not exist',
+            message: USER_NOT_FOUND_ERROR_MESSAGE,
         };
     }
 
@@ -168,7 +174,7 @@ export const verifyWebAuthnLogin = async (data: AuthenticationResponseJSON) => {
     if (!dbAuthenticator) {
         return {
             success: false,
-            message: 'Authenticator is not registered with this site',
+            message: PASSKEY_NOT_FOUND_ERROR_MESSAGE,
         };
     }
 
