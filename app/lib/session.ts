@@ -2,12 +2,9 @@ import { cookies } from 'next/headers';
 
 import redis from './redis';
 import { Base64URLString } from '@simplewebauthn/server';
+import { WEBAUTHN_SESSION_ID_COOKIE_NAME, WEBAUTHN_SESSION_PREFIX, WEBAUTHN_SESSION_TTL } from './constants';
 
-const WEBAUTHN_SESSION_ID_COOKIE_NAME = 'w-session-id';
-const WEBAUTHN_SESSION_PREFIX = 'techwear-shop-webauthn-session-';
-const WEBAUTHN_SESSION_TTL = 5 * 60;
-
-type WebauthnSessionData = {
+export type WebauthnSessionData = {
     currentChallenge?: Base64URLString;
     username?: string;
 };
@@ -21,7 +18,7 @@ export async function getWebauthnSession(sessionId: string): Promise<WebauthnSes
     return getSessionData<WebauthnSessionData>(WEBAUTHN_SESSION_PREFIX, sessionId);
 }
 
-export async function setSession<T>(prefix: string, sessionId: string, sessionData: T, ttl: number): Promise<void> {
+async function setSession<T>(prefix: string, sessionId: string, sessionData: T, ttl: number): Promise<void> {
     await redis.set(prefix + sessionId, JSON.stringify(sessionData), 'EX', ttl);
 }
 
