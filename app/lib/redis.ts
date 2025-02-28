@@ -1,13 +1,12 @@
 import Redis from 'ioredis';
+import { REDIS_LOCAL_URL } from '@/app/lib/constants';
 
-// Avoid multiple connections in development (Hot Reload issue)
 declare global {
-  // Prevent TypeScript error for redeclaration
   // eslint-disable-next-line no-var
   var redis: Redis | undefined;
 }
 
-const redis = global.redis || new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
+const redis = global.redis || new Redis(process.env.REDIS_URL || REDIS_LOCAL_URL);
 
 if (process.env.NODE_ENV !== 'production') {
   global.redis = redis;
