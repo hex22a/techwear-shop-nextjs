@@ -184,12 +184,6 @@ describe('session', () => {
   describe('deleteSession', () => {
     test('no cookie present', async () => {
       // Arrange
-      const expectedChallenge = undefined;
-      const expectedSessionId = 'lllllllllle';
-      const expectedSessionData: WebauthnSessionData = { currentChallenge: expectedChallenge };
-      const expectedSessionString = JSON.stringify(expectedSessionData);
-      const expectedRedisKey = WEBAUTHN_SESSION_PREFIX + expectedSessionId;
-      const expectedExpirationArgument = 'EX';
       const expectedCookieValue: RequestCookie | undefined = undefined;
       const mockCookieStore = {
         get: jest.fn().mockReturnValue(expectedCookieValue),
@@ -203,19 +197,15 @@ describe('session', () => {
       // Assert
       expect(mockCookies).toHaveBeenCalled();
       expect(mockCookieStore.get).toHaveBeenCalledWith(WEBAUTHN_SESSION_ID_COOKIE_NAME);
-      expect(mockCookieStore.set).toHaveBeenCalledWith(WEBAUTHN_SESSION_ID_COOKIE_NAME, expectedSessionId);
-      expect(mockRedis.set).toHaveBeenCalledWith(expectedRedisKey, expectedSessionString, expectedExpirationArgument, WEBAUTHN_SESSION_TTL);
-      expect(mockRedis.del).toHaveBeenCalledWith(expectedRedisKey);
+      expect(mockCookieStore.set).not.toHaveBeenCalled();
+      expect(mockRedis.set).not.toHaveBeenCalled();
+      expect(mockRedis.del).not.toHaveBeenCalled();
     });
 
     test('cookie exists but session is missing/expired on redis', async () => {
       // Arrange
-      const expectedChallenge = undefined;
       const expectedSessionId = 'lllllllllle';
-      const expectedSessionData: WebauthnSessionData = { currentChallenge: expectedChallenge };
-      const expectedSessionString = JSON.stringify(expectedSessionData);
       const expectedRedisKey = WEBAUTHN_SESSION_PREFIX + expectedSessionId;
-      const expectedExpirationArgument = 'EX';
       const expectedCookieValue: RequestCookie | undefined = {
         name: WEBAUTHN_SESSION_ID_COOKIE_NAME,
         value: expectedSessionId,
@@ -235,9 +225,9 @@ describe('session', () => {
       expect(mockCookies).toHaveBeenCalled();
       expect(mockCookieStore.get).toHaveBeenCalledWith(WEBAUTHN_SESSION_ID_COOKIE_NAME);
       expect(mockRedis.get).toHaveBeenCalledWith(expectedRedisKey);
-      expect(mockCookieStore.set).toHaveBeenCalledWith(WEBAUTHN_SESSION_ID_COOKIE_NAME, expectedSessionId);
-      expect(mockRedis.set).toHaveBeenCalledWith(expectedRedisKey, expectedSessionString, expectedExpirationArgument, WEBAUTHN_SESSION_TTL);
-      expect(mockRedis.del).toHaveBeenCalledWith(expectedRedisKey);
+      expect(mockCookieStore.set).not.toHaveBeenCalled();
+      expect(mockRedis.set).not.toHaveBeenCalled();
+      expect(mockRedis.del).not.toHaveBeenCalled();
     });
 
     test('cookie exists and session is present on redis', async () => {
@@ -274,14 +264,8 @@ describe('session', () => {
   describe('updateCurrentWebauthnSession', () => {
     test('no cookie present', async () => {
       // Arrange
-      const expectedChallenge = undefined;
-      const expectedSessionId = 'lllllllllle';
-      const expectedSessionData: WebauthnSessionData = { currentChallenge: expectedChallenge };
-      const expectedNewSessionData: WebauthnSessionData = { currentChallenge: '1' };
-      const expectedSessionString = JSON.stringify(expectedSessionData);
-      const expectedNewSessionString = JSON.stringify(expectedSessionData);
-      const expectedRedisKey = WEBAUTHN_SESSION_PREFIX + expectedSessionId;
-      const expectedExpirationArgument = 'EX';
+      const expectedChallenge = '1';
+      const expectedNewSessionData: WebauthnSessionData = { currentChallenge: expectedChallenge };
       const expectedCookieValue: RequestCookie | undefined = undefined;
       const mockCookieStore = {
         get: jest.fn().mockReturnValue(expectedCookieValue),
@@ -295,9 +279,9 @@ describe('session', () => {
       // Assert
       expect(mockCookies).toHaveBeenCalled();
       expect(mockCookieStore.get).toHaveBeenCalledWith(WEBAUTHN_SESSION_ID_COOKIE_NAME);
-      expect(mockCookieStore.set).toHaveBeenCalledWith(WEBAUTHN_SESSION_ID_COOKIE_NAME, expectedSessionId);
-      expect(mockRedis.set).toHaveBeenCalledWith(expectedRedisKey, expectedSessionString, expectedExpirationArgument, WEBAUTHN_SESSION_TTL);
-      expect(mockRedis.set).toHaveBeenCalledWith(expectedRedisKey, expectedNewSessionString, expectedExpirationArgument, WEBAUTHN_SESSION_TTL);
+      expect(mockCookieStore.set).not.toHaveBeenCalled();
+      expect(mockRedis.set).not.toHaveBeenCalled();
+      expect(mockRedis.set).not.toHaveBeenCalled();
     });
 
     test('cookie exists but session is missing/expired on redis', async () => {
@@ -307,7 +291,7 @@ describe('session', () => {
       const expectedSessionData: WebauthnSessionData = { currentChallenge: expectedChallenge };
       const expectedNewSessionData: WebauthnSessionData = { currentChallenge: '1' };
       const expectedSessionString = JSON.stringify(expectedSessionData);
-      const expectedNewSessionString = JSON.stringify(expectedSessionData);
+      const expectedNewSessionString = JSON.stringify(expectedNewSessionData);
       const expectedRedisKey = WEBAUTHN_SESSION_PREFIX + expectedSessionId;
       const expectedExpirationArgument = 'EX';
       const expectedCookieValue: RequestCookie | undefined = {
@@ -330,7 +314,7 @@ describe('session', () => {
       expect(mockCookieStore.get).toHaveBeenCalledWith(WEBAUTHN_SESSION_ID_COOKIE_NAME);
       expect(mockRedis.get).toHaveBeenCalledWith(expectedRedisKey);
       expect(mockCookieStore.set).toHaveBeenCalledWith(WEBAUTHN_SESSION_ID_COOKIE_NAME, expectedSessionId);
-      expect(mockRedis.set).toHaveBeenCalledWith(expectedRedisKey, expectedSessionString, expectedExpirationArgument, WEBAUTHN_SESSION_TTL);
+      expect(mockRedis.set).not.toHaveBeenCalledWith(expectedRedisKey, expectedSessionString, expectedExpirationArgument, WEBAUTHN_SESSION_TTL);
       expect(mockRedis.set).toHaveBeenCalledWith(expectedRedisKey, expectedNewSessionString, expectedExpirationArgument, WEBAUTHN_SESSION_TTL);
     });
 

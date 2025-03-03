@@ -65,7 +65,7 @@ jest.mock('@simplewebauthn/server', () => ({
 
 describe('webauthn', () => {
   describe('generateWebAuthnRegistrationOptions', () => {
-    test(USER_ALREADY_EXISTS_ERROR_MESSAGE, async () => {
+    test('user already exists', async () => {
       // Arrange
       const expectedUsername = 'test';
       const expectedUserId = 'uuid-uuid-uuid-uuid';
