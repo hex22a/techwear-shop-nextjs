@@ -11,7 +11,7 @@ export type WebauthnSessionData = {
 
 async function getSessionData<T>(prefix: string, sessionId: string): Promise<T> {
     const sessionData = await redis.get(prefix + sessionId);
-    return sessionData ? JSON.parse(sessionData) : {} as T;
+    return sessionData ? JSON.parse(sessionData) : null as T;
 }
 
 export async function getWebauthnSession(sessionId: string): Promise<WebauthnSessionData> {

@@ -22,7 +22,7 @@ describe('session', () => {
   describe('getWebauthnSession', () => {
     test('no session', async () => {
       // Arrange
-      const expectedSession: WebauthnSessionData = {};
+      const expectedSession = null;
       const expectedSessionString = null;
       const expectedSessionId = '1234567890';
       const expectedRedisKey = WEBAUTHN_SESSION_PREFIX + expectedSessionId;
