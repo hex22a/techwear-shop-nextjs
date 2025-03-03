@@ -57,11 +57,11 @@ export async function getCurrentWebauthnSession(): Promise<{ sessionId: string; 
     );
 }
 
-export async function deleteSession(
+async function deleteSession(
     getSession: () => Promise<{ sessionId: string }>
 ): Promise<void> {
     const { sessionId } = await getSession();
-    await redis.del(sessionId);
+    await redis.del(WEBAUTHN_SESSION_PREFIX + sessionId);
 }
 
 export async function deleteCurrentWebauthnSession(): Promise<void> {
