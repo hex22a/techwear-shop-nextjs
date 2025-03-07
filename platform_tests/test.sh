@@ -16,10 +16,7 @@ sleep 5
 
 # Always stop container, but exit with 1 when tests are failing
 if cd .. && jest -c jest.config.platform.ts; then
-  echo "SUPER"
-#  docker stop ${CONTAINER_NAME}
+  docker stop ${CONTAINER_NAME}
 else
-  echo "NO SUPER"
-#  docker stop ${CONTAINER_NAME} && exit 1
-  exit 1
+  docker stop ${CONTAINER_NAME} && exit 1
 fi
