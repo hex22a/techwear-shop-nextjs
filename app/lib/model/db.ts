@@ -1,20 +1,20 @@
 import { sql } from '@vercel/postgres';
-import { Pool } from 'pg';
+import { Pool, QueryResult, QueryResultRow } from 'pg';
 
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL
 });
 
-export type queryFunction = (strings: TemplateStringsArray, ...values: unknown[]) => Promise<unknown>;
+export type queryFunction = (strings: TemplateStringsArray, ...values: unknown[]) => Promise<QueryResult>;
 
 const testDb = {
-  query: (strings: TemplateStringsArray, ...values: unknown[]): Promise<unknown> => {
+  query: <T extends QueryResultRow = never>(strings: TemplateStringsArray, ...values: unknown[]): Promise<QueryResult<T>> => {
     // Reconstruct the query with proper pg placeholders
     let text = strings[0];
     for (let i = 1; i < strings.length; i++) {
       text += `$${i}${strings[i]}`;
     }
-    return pool.query(text, values);
+    return pool.query(text, values) as Promise<QueryResult<T>>;
   }
 };
 
