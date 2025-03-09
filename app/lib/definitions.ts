@@ -88,6 +88,8 @@ export type ProductFull = Product & {
     reviews: Map<number, Review>;
     colors: Map<number, Color>;
     sizes: Map<number, Size>;
+    category?: Category;
+    style?: Style;
 }
 
 export type User = {

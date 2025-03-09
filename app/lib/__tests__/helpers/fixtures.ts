@@ -204,10 +204,12 @@ export const expectedProductNapapijri: ProductFull = {
   name: 'Skidoo 2.0 Anorak Jacket',
   photo_url: '/items/napa-anor.webp',
   price: 500,
+  category: expectedCategoryJackets,
+  style: expectedStyleCasual,
 };
 
 export const expectedProductMastrumBomber: ProductFull = {
-  id: 1,
+  id: 2,
   colors: new Map([expectedColorRed, expectedColorPurple].map((color) => [color.id, color])),
   description: 'MA.STRUM Bomber Jacket',
   details: 'MA.STRUM Bomber Jacket',
@@ -218,6 +220,8 @@ export const expectedProductMastrumBomber: ProductFull = {
   name: 'MA.STRUM Bomber Jacket',
   photo_url: '/items/mastrum.jpg',
   price: 150,
+  category: expectedCategoryJackets,
+  style: expectedStyleCasual,
 };
 
 export const expectedProducts: ProductFull[] = [
