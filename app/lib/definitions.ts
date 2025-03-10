@@ -37,11 +37,12 @@ export type ReviewRow = {
     title: string;
 };
 
-export type ReviewRaw = Omit<ReviewRow, 'author_id' | 'review'> & {
+export type ReviewRaw = Omit<ReviewRow, 'author_id' | 'review' | 'id' | 'created_at'> & {
     review_text: string;
 }
 
 export type Review = ReviewRaw & {
+    id: number
     author: string;
     created_at: Date;
 }
