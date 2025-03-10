@@ -1,9 +1,15 @@
-import { Category, Color, Photo, ProductFull, Size, Style, User } from '@/app/lib/definitions';
+import { Category, Color, Photo, ProductFull, Review, ReviewRow, Size, Style, User } from '@/app/lib/definitions';
+
+const expectedUserId = '1d34ef0e-08cd-4439-9017-894d45074c0a';
+
+const expectedUserCreatedAt = new Date("2025-09-29T09:52:52.000Z");
+const expectedReviewCreatedAt = new Date("2025-10-20T09:52:52.000Z");
+const expectedUserUsername = 'crash';
 
 export const expectedUser: User = {
-  id: '1d34ef0e-08cd-4439-9017-894d45074c0a',
-  username: 'crash',
-  created_at: new Date("2025-09-29T09:52:52.000Z"),
+  id: expectedUserId,
+  username: expectedUserUsername,
+  created_at: expectedUserCreatedAt,
 };
 
 export const expectedUsers: User[] = [
@@ -191,8 +197,10 @@ const expectedPhotoMastrumBomber3: Photo = {
   url: '/items/mastrum.jpg',
 };
 
+const expectedProductIdNapapijri = 1;
+
 export const expectedProductNapapijri: ProductFull = {
-  id: 1,
+  id: expectedProductIdNapapijri,
   colors: new Map([expectedColorRed, expectedColorBlue, expectedColorPurple].map((color) => [color.id, color])),
   description: 'A contemporary take on the iconic Skidoo jacket, this is a loose-fit anorak for women made in stretch, water-resistant fabric. It features a faux- fur trim around the hood, Norwegian flag patch, and the iconic front flap pocket complete with our signature Napapijri Geographic graphic.',
   details: 'A contemporary take on the iconic Skidoo jacket, this is a loose-fit anorak for women made in stretch, water-resistant fabric. It features a faux- fur trim around the hood, Norwegian flag patch, and the iconic front flap pocket complete with our signature Napapijri Geographic graphic.',
@@ -228,3 +236,197 @@ export const expectedProducts: ProductFull[] = [
   expectedProductNapapijri,
   expectedProductMastrumBomber,
 ];
+
+
+const expectedNegativeReviewTitle = 'Awful Jacket';
+const expectedNegativeReviewText = 'Very bad product. 1/10';
+
+const expectedPositiveReviewTitle = 'Great Jacket';
+const expectedPositiveReviewText = 'Great Product! Simply the best jacket I have ever seen. 10/10';
+
+const expectedReviewIdNapapijri1 = 1;
+const expectedReviewIdNapapijri2 = 2;
+const expectedReviewIdNapapijri3 = 3;
+const expectedReviewIdNapapijri4 = 4;
+const expectedReviewIdNapapijri5 = 5;
+const expectedReviewIdNapapijri6 = 6;
+const expectedReviewIdNapapijri7 = 7;
+const expectedReviewIdNapapijri8 = 8;
+
+const expectedNegativeRating = 1;
+const expectedPositiveRating = 5;
+
+const expectedReviewRowNapapijri1: ReviewRow = {
+  author_id: expectedUserId,
+  created_at: expectedReviewCreatedAt,
+  id: expectedReviewIdNapapijri1,
+  product_id: expectedProductIdNapapijri,
+  rating: expectedNegativeRating,
+  title: expectedNegativeReviewTitle,
+  review: expectedNegativeReviewText,
+  verified: true,
+};
+
+const expectedReviewRowNapapijri2: ReviewRow = {
+  author_id: expectedUserId,
+  created_at: expectedReviewCreatedAt,
+  id: expectedReviewIdNapapijri2,
+  product_id: expectedProductIdNapapijri,
+  rating: expectedPositiveRating,
+  title: expectedPositiveReviewTitle,
+  review: expectedPositiveReviewText,
+  verified: true,
+};
+const expectedReviewNapapijri2: Review = {
+  id: expectedReviewIdNapapijri2,
+  product_id: expectedProductIdNapapijri,
+  rating: expectedPositiveRating,
+  title: expectedPositiveReviewTitle,
+  verified: true,
+  created_at: expectedReviewCreatedAt,
+  author: expectedUserUsername,
+  review_text: expectedPositiveReviewText
+};
+const expectedReviewRowNapapijri3: ReviewRow = {
+  author_id: expectedUserId,
+  created_at: expectedReviewCreatedAt,
+  id: expectedReviewIdNapapijri3,
+  product_id: expectedProductIdNapapijri,
+  rating: expectedPositiveRating,
+  title: expectedPositiveReviewTitle,
+  review: expectedPositiveReviewText,
+  verified: true,
+};
+const expectedReviewNapapijri3: Review = {
+  id: expectedReviewIdNapapijri3,
+  product_id: expectedProductIdNapapijri,
+  rating: expectedPositiveRating,
+  title: expectedPositiveReviewTitle,
+  verified: true,
+  created_at: expectedReviewCreatedAt,
+  author: expectedUserUsername,
+  review_text: expectedPositiveReviewText
+};
+const expectedReviewRowNapapijri4: ReviewRow = {
+  author_id: expectedUserId,
+  created_at: expectedReviewCreatedAt,
+  id: 4,
+  product_id: expectedProductIdNapapijri,
+  rating: 5,
+  title: expectedPositiveReviewTitle,
+  review: expectedPositiveReviewText,
+  verified: true,
+};
+const expectedReviewNapapijri4: Review = {
+  id: expectedReviewIdNapapijri4,
+  product_id: expectedProductIdNapapijri,
+  rating: expectedPositiveRating,
+  title: expectedPositiveReviewTitle,
+  verified: true,
+  created_at: expectedReviewCreatedAt,
+  author: expectedUserUsername,
+  review_text: expectedPositiveReviewText
+};
+const expectedReviewRowNapapijri5: ReviewRow = {
+  author_id: expectedUserId,
+  created_at: expectedReviewCreatedAt,
+  id: 5,
+  product_id: expectedProductIdNapapijri,
+  rating: 5,
+  title: expectedPositiveReviewTitle,
+  review: expectedPositiveReviewText,
+  verified: true,
+};
+const expectedReviewNapapijri5: Review = {
+  id: expectedReviewIdNapapijri5,
+  product_id: expectedProductIdNapapijri,
+  rating: expectedPositiveRating,
+  title: expectedPositiveReviewTitle,
+  verified: true,
+  created_at: expectedReviewCreatedAt,
+  author: expectedUserUsername,
+  review_text: expectedPositiveReviewText
+};
+
+const expectedReviewRowNapapijri6: ReviewRow = {
+  author_id: expectedUserId,
+  created_at: expectedReviewCreatedAt,
+  id: 6,
+  product_id: expectedProductIdNapapijri,
+  rating: 5,
+  title: expectedPositiveReviewTitle,
+  review: expectedPositiveReviewText,
+  verified: true,
+};
+const expectedReviewNapapijri6: Review = {
+  id: expectedReviewIdNapapijri6,
+  product_id: expectedProductIdNapapijri,
+  rating: expectedPositiveRating,
+  title: expectedPositiveReviewTitle,
+  verified: true,
+  created_at: expectedReviewCreatedAt,
+  author: expectedUserUsername,
+  review_text: expectedPositiveReviewText
+};
+const expectedReviewRowNapapijri7: ReviewRow = {
+  author_id: expectedUserId,
+  created_at: expectedReviewCreatedAt,
+  id: 7,
+  product_id: expectedProductIdNapapijri,
+  rating: 5,
+  title: expectedPositiveReviewTitle,
+  review: expectedPositiveReviewText,
+  verified: true,
+};
+const expectedReviewNapapijri7: Review = {
+  id: expectedReviewIdNapapijri7,
+  product_id: expectedProductIdNapapijri,
+  rating: expectedPositiveRating,
+  title: expectedPositiveReviewTitle,
+  verified: true,
+  created_at: expectedReviewCreatedAt,
+  author: expectedUserUsername,
+  review_text: expectedPositiveReviewText
+};
+const expectedReviewRowNapapijri8: ReviewRow = {
+  author_id: expectedUserId,
+  created_at: expectedReviewCreatedAt,
+  id: 8,
+  product_id: expectedProductIdNapapijri,
+  rating: 5,
+  title: expectedPositiveReviewTitle,
+  review: expectedPositiveReviewText,
+  verified: true,
+};
+const expectedReviewNapapijri8: Review = {
+  id: expectedReviewIdNapapijri8,
+  product_id: expectedProductIdNapapijri,
+  rating: expectedPositiveRating,
+  title: expectedPositiveReviewTitle,
+  verified: true,
+  created_at: expectedReviewCreatedAt,
+  author: expectedUserUsername,
+  review_text: expectedPositiveReviewText
+};
+
+export const expectedReviews: ReviewRow[] = [
+  expectedReviewRowNapapijri1,
+  expectedReviewRowNapapijri2,
+  expectedReviewRowNapapijri3,
+  expectedReviewRowNapapijri4,
+  expectedReviewRowNapapijri5,
+  expectedReviewRowNapapijri6,
+  expectedReviewRowNapapijri7,
+  expectedReviewRowNapapijri8,
+];
+
+export const expectedTopReviews: Review[] = [
+  expectedReviewNapapijri2,
+  expectedReviewNapapijri3,
+  expectedReviewNapapijri4,
+  expectedReviewNapapijri5,
+  expectedReviewNapapijri6,
+  expectedReviewNapapijri7,
+  expectedReviewNapapijri8,
+];
+

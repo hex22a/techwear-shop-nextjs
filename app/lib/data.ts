@@ -19,7 +19,7 @@ import {
   UserWithPasskeyRaw,
   UserWithPasskeysSerialized,
   Product,
-  ProductRaw,
+  ProductRaw, ColorRow, SizeRow, StyleRow, CategoryRow,
 } from '@/app/lib/definitions';
 
 import { isoBase64URL } from '@simplewebauthn/server/helpers';
@@ -30,7 +30,7 @@ const DELIVERY_FEE = 15;
 
 export async function fetchAllColors(): Promise<Color[]> {
   try {
-    const queryResult = await db.query<Color>`SELECT * FROM color ORDER BY id LIMIT 10`;
+    const queryResult = await db.query<ColorRow>`SELECT * FROM color ORDER BY id LIMIT 10`;
     return queryResult.rows.map((row) => ({ ...row }));
   } catch (error) {
     console.error(`Database error: ${error}`);
@@ -40,7 +40,7 @@ export async function fetchAllColors(): Promise<Color[]> {
 
 export async function fetchAllSizes(): Promise<Size[]> {
   try {
-    const queryResult = await db.query<Size>`SELECT * FROM size ORDER BY id LIMIT 9`;
+    const queryResult = await db.query<SizeRow>`SELECT * FROM size ORDER BY id LIMIT 9`;
     return queryResult.rows.map((row) => ({ ...row }));
   } catch (error) {
     console.error(`Database error: ${error}`);
@@ -50,7 +50,7 @@ export async function fetchAllSizes(): Promise<Size[]> {
 
 export async function fetchAllStyles(): Promise<Style[]> {
   try {
-    const queryResult = await db.query<Style>`SELECT * FROM style ORDER BY id LIMIT 4`;
+    const queryResult = await db.query<StyleRow>`SELECT * FROM style ORDER BY id LIMIT 4`;
     return queryResult.rows.map((row) => ({ ...row }));
   } catch (error) {
     console.error(`Database error: ${error}`);
@@ -60,7 +60,7 @@ export async function fetchAllStyles(): Promise<Style[]> {
 
 export async function fetchAllCategories(): Promise<Category[]> {
   try {
-    const queryResult = await db.query<Style>`SELECT * FROM category ORDER BY id LIMIT 10`;
+    const queryResult = await db.query<CategoryRow>`SELECT * FROM category ORDER BY id LIMIT 10`;
     return queryResult.rows.map((row) => ({ ...row }));
   } catch (error) {
     console.error(`Database error: ${error}`);
@@ -367,14 +367,15 @@ export async function getTopReviews(): Promise<Review[]> {
             SELECT
                 r.id as id,
                 r.verified as verified,
-                r.author_id as author_id,
                 r.product_id as product_id,
                 r.rating as rating,
                 r.title as title,
                 r.review as review_text,
+                r.created_at as created_at,
                 u.username as author
             FROM review r
             LEFT JOIN public.user u on r.author_id = u.id
+            ORDER BY rating desc 
             LIMIT ${MAIN_PAGE_REVIEWS}
         `;
     return queryResult.rows.map((row) => ({ ...row }));

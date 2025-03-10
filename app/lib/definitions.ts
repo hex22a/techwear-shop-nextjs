@@ -5,29 +5,40 @@ export type Color = {
     hex_value: string;
     human_readable_value: string;
 }
+export type ColorRow = Color;
 
 export type Size = {
     id: number;
     size: string;
     value: string;
 }
+export type SizeRow = Size;
 
 export type Style = {
     id: number;
     name: string;
 }
+export type StyleRow = Style;
 
 export type Category = {
     id: number;
     name: string;
 }
+export type CategoryRow = Category;
 
-export type ReviewRaw = {
-    title: string;
-    rating: number;
-    review_text: string;
+export type ReviewRow = {
+    id: number;
+    author_id: string;
     product_id: number;
+    rating: number;
+    review: string;
+    created_at: Date;
     verified?: boolean;
+    title: string;
+};
+
+export type ReviewRaw = Omit<ReviewRow, 'author_id' | 'review'> & {
+    review_text: string;
 }
 
 export type Review = ReviewRaw & {

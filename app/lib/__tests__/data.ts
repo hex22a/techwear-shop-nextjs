@@ -1,6 +1,12 @@
 import Seed from './helpers/seed';
-import { fetchAllCategories, fetchAllColors, fetchAllSizes, fetchAllStyles } from '../data';
-import { expectedCategories, expectedColors, expectedSizes, expectedStyles } from './helpers/fixtures';
+import { fetchAllCategories, fetchAllColors, fetchAllSizes, fetchAllStyles, getTopReviews } from '../data';
+import {
+  expectedCategories,
+  expectedColors,
+  expectedSizes,
+  expectedStyles,
+  expectedTopReviews,
+} from './helpers/fixtures';
 
 jest.mock('@/auth', () => ({
   __esModule: true,
@@ -52,6 +58,16 @@ describe('data platform test', () => {
       const actualCategories = await fetchAllCategories();
       // Then
       expect(actualCategories).toEqual(expectedCategories);
+    });
+  });
+
+  describe('getTopReviews', () => {
+    it('should return 7 reviews', async () => {
+      // Given
+      // When
+      const actualTopReviews = await getTopReviews();
+      // Then
+      expect(actualTopReviews).toEqual(expect.arrayContaining(expectedTopReviews));
     });
   });
 });
