@@ -142,6 +142,45 @@ export async function fetchTopSelling(): Promise<Product[]> {
   }
 }
 
+function filterToProductFullProperties<T extends Record<string, unknown>>(
+  obj: T,
+): ProductFull {
+  const productFullInstance: ProductFull = {
+    average_rating: 0,
+    category: {
+      id: 0,
+      name: '',
+    },
+    colors: new Map(),
+    description: '',
+    details: '',
+    discount: { newPrice: 0, percent: 0 },
+    id: 0,
+    name: '',
+    photo_url: '',
+    photos: new Map(),
+    price: 0,
+    reviews: new Map(),
+    sizes: new Map(),
+    style: {
+      id: 0,
+      name: '',
+    },
+  };
+  const result: Partial<ProductFull> = {};
+
+  // Only copy properties that exist in ProductFull
+  for (const key of Object.keys(obj) as Array<keyof T>) {
+    if (key in productFullInstance || key === 'id') {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      result[key] = obj[key];
+    }
+  }
+
+  return result as ProductFull;
+}
+
 export async function fetchProduct(id: number): Promise<ProductFull> {
   try {
     const queryResult = await db.query<ExtraProductRaw>`
@@ -157,6 +196,7 @@ export async function fetchProduct(id: number): Promise<ProductFull> {
           product_photo.url as alt_photo_url,
           c.id as color_id,
           c.hex_value as color_hex_value,
+          c.human_readable_value as color_human_readable_value,
           s.id as size_id,
           s.size as size,
           s.value as size_value,
@@ -165,6 +205,8 @@ export async function fetchProduct(id: number): Promise<ProductFull> {
           r.review as review_text,
           r.rating as review_rating,
           r.verified as review_verified,
+          r.created_at as review_created_at,
+          u.username as review_author,
           COALESCE(ROUND(avg_reviews.average_rating::numeric, 1), 0) AS average_rating
       FROM product
       LEFT JOIN (
@@ -178,14 +220,17 @@ export async function fetchProduct(id: number): Promise<ProductFull> {
       LEFT JOIN product_size ps ON product.id = ps.product_id
       INNER JOIN size s ON s.id = ps.size_id
       LEFT JOIN public.review r ON product.id = r.product_id
+      INNER JOIN public.user u ON r.author_id = u.id
       WHERE product.id = ${id}
+      ORDER BY c.id, s.id, r.id, product_photo.id
     `;
     const product: ProductFull = {
+      ...filterToProductFullProperties(queryResult.rows[0]),
       photos: new Map(),
       colors: new Map(),
       sizes: new Map(),
       reviews: new Map(),
-      ...queryResult.rows[0],
+      average_rating: parseFloat(`${queryResult.rows[0].average_rating}`),
     };
     queryResult.rows.forEach((row) => {
       if (row.alt_photo_id !== null) {
@@ -197,7 +242,7 @@ export async function fetchProduct(id: number): Promise<ProductFull> {
       if (row.color_id !== null) {
         product.colors.set(row.color_id, {
           id: row.color_id,
-          human_readable_value: 'TBD SOME COLOR',
+          human_readable_value: row.color_human_readable_value,
           hex_value: row.color_hex_value,
         });
       }
@@ -217,7 +262,7 @@ export async function fetchProduct(id: number): Promise<ProductFull> {
           review_text: row.review_text,
           verified: row.review_verified,
           created_at: row.review_created_at,
-          author: row.review_text,
+          author: row.review_author,
         });
       }
     });

@@ -117,9 +117,10 @@ class Seed {
               Array.from(photos.entries()).map(
                 ([, photo]) => this.db.query`
             INSERT INTO public.product_photo
-              (product_id, url)
+              (id, product_id, url)
+            OVERRIDING SYSTEM VALUE
             VALUES 
-              (${id}, ${photo.url})
+              (${photo.id}, ${id}, ${photo.url})
             `,
               ),
             );
