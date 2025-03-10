@@ -30,7 +30,7 @@ const DELIVERY_FEE = 15;
 
 export async function fetchAllColors(): Promise<Color[]> {
   try {
-    const queryResult = await db.query<Color>`SELECT * FROM color LIMIT 10`;
+    const queryResult = await db.query<Color>`SELECT * FROM color ORDER BY id LIMIT 10`;
     return queryResult.rows.map((row) => ({ ...row }));
   } catch (error) {
     console.error(`Database error: ${error}`);
@@ -40,7 +40,7 @@ export async function fetchAllColors(): Promise<Color[]> {
 
 export async function fetchAllSizes(): Promise<Size[]> {
   try {
-    const queryResult = await db.query<Size>`SELECT * FROM size LIMIT 9`;
+    const queryResult = await db.query<Size>`SELECT * FROM size ORDER BY id LIMIT 9`;
     return queryResult.rows.map((row) => ({ ...row }));
   } catch (error) {
     console.error(`Database error: ${error}`);
@@ -50,7 +50,7 @@ export async function fetchAllSizes(): Promise<Size[]> {
 
 export async function fetchAllStyles(): Promise<Style[]> {
   try {
-    const queryResult = await db.query<Style>`SELECT * FROM style LIMIT 4`;
+    const queryResult = await db.query<Style>`SELECT * FROM style ORDER BY id LIMIT 4`;
     return queryResult.rows.map((row) => ({ ...row }));
   } catch (error) {
     console.error(`Database error: ${error}`);
@@ -60,7 +60,7 @@ export async function fetchAllStyles(): Promise<Style[]> {
 
 export async function fetchAllCategories(): Promise<Category[]> {
   try {
-    const queryResult = await db.query<Style>`SELECT * FROM category LIMIT 10`;
+    const queryResult = await db.query<Style>`SELECT * FROM category ORDER BY id LIMIT 10`;
     return queryResult.rows.map((row) => ({ ...row }));
   } catch (error) {
     console.error(`Database error: ${error}`);

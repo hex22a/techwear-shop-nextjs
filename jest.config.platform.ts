@@ -8,9 +8,9 @@ const createJestConfig = nextJest({
   dir: './',
 });
 
-const unitTestConfig: Config = {
+const platformTestConfig: Config = {
   ...config,
   testMatch: ["**/__tests__/*.[jt]s?(x)"],
 };
 
-export default createJestConfig(unitTestConfig);
+export default createJestConfig(platformTestConfig);

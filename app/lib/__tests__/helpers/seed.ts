@@ -6,7 +6,7 @@ import {
   expectedStyles,
   expectedUsers,
 } from './fixtures';
-import { queryFunction } from '@/app/lib/model/db';
+import { db, queryFunction } from '@/app/lib/model/db';
 import { ProductFull } from '@/app/lib/definitions';
 
 export type seedDbClient = { query: queryFunction };
@@ -14,8 +14,8 @@ export type seedDbClient = { query: queryFunction };
 class Seed {
   db: seedDbClient;
 
-  constructor(client: seedDbClient) {
-    this.db = client;
+  constructor() {
+    this.db = db as seedDbClient;
   }
 
   async seedUsers() {
