@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 CONTAINER_NAME=teckwear-shop-pg-test
-CONFIG_PATH="jest.config.platform.ts"
 
 # Determine if we're in the root directory or platform_tests
 if [ -d "platform_tests" ]; then
@@ -29,7 +28,7 @@ echo "waiting 5s for db to start..."
 sleep 5
 
 # Always stop container, but exit with 1 when tests are failing
-if jest -c ${CONFIG_PATH}; then
+if pnpm test:platform; then
   docker stop ${CONTAINER_NAME}
 else
   docker stop ${CONTAINER_NAME} && exit 1
