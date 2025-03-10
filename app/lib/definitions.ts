@@ -42,7 +42,6 @@ export type ReviewRaw = Omit<ReviewRow, 'author_id' | 'review'> & {
 }
 
 export type Review = ReviewRaw & {
-    id: number;
     author: string;
     created_at: Date;
 }
