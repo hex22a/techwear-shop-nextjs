@@ -112,20 +112,20 @@ class Seed {
               (${id}, ${name}, ${description}, ${details}, ${price}, ${discount?.percent || 0}, ${photo_url}, ${category?.id}, ${style?.id})
           `;
           if (photos) {
-            await Promise.all(photos.entries().map(([, photo]) => this.db.query`
+            await Promise.all(Array.from(photos.entries()).map(([, photo]) => this.db.query`
             INSERT INTO public.product_photo
               (product_id, url)
             VALUES 
               (${id}, ${photo.url})
             `));
           }
-          await Promise.all(colors.entries().map(([, color]) => this.db.query`
+          await Promise.all(Array.from(colors.entries()).map(([, color]) => this.db.query`
           INSERT INTO public.product_color
             (product_id, color_id)
           VALUES 
             (${id}, ${color.id})
           `));
-          await Promise.all(sizes.entries().map(([, size]) => this.db.query`
+          await Promise.all(Array.from(sizes.entries()).map(([, size]) => this.db.query`
           INSERT INTO public.product_size
             (product_id, size_id)
           VALUES 
