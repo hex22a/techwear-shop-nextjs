@@ -17,7 +17,7 @@ jobs:
         run: pnpm install
       - name: Run ESLint
         run: pnpm lint
-      - name: Run Jest Tests
+      - name: Run Unit Tests
         run: pnpm test
       - name: Install Vercel CLI
         run: pnpm install --global vercel@latest

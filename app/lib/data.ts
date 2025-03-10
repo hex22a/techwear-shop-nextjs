@@ -1,7 +1,7 @@
 'use server';
 
 import { auth } from '@/auth';
-import { sql } from '@vercel/postgres';
+import { db } from './model/db';
 import {
   Cart,
   CartRow,
@@ -19,7 +19,7 @@ import {
   UserWithPasskeyRaw,
   UserWithPasskeysSerialized,
   Product,
-  ProductRaw,
+  ProductRaw, ColorRow, SizeRow, StyleRow, CategoryRow,
 } from '@/app/lib/definitions';
 
 import { isoBase64URL } from '@simplewebauthn/server/helpers';
@@ -30,7 +30,7 @@ const DELIVERY_FEE = 15;
 
 export async function fetchAllColors(): Promise<Color[]> {
   try {
-    const queryResult = await sql<Color>`SELECT * FROM color LIMIT 10`;
+    const queryResult = await db.query<ColorRow>`SELECT * FROM color ORDER BY id LIMIT 10`;
     return queryResult.rows.map((row) => ({ ...row }));
   } catch (error) {
     console.error(`Database error: ${error}`);
@@ -40,7 +40,7 @@ export async function fetchAllColors(): Promise<Color[]> {
 
 export async function fetchAllSizes(): Promise<Size[]> {
   try {
-    const queryResult = await sql<Size>`SELECT * FROM size LIMIT 9`;
+    const queryResult = await db.query<SizeRow>`SELECT * FROM size ORDER BY id LIMIT 9`;
     return queryResult.rows.map((row) => ({ ...row }));
   } catch (error) {
     console.error(`Database error: ${error}`);
@@ -50,7 +50,7 @@ export async function fetchAllSizes(): Promise<Size[]> {
 
 export async function fetchAllStyles(): Promise<Style[]> {
   try {
-    const queryResult = await sql<Style>`SELECT * FROM style LIMIT 4`;
+    const queryResult = await db.query<StyleRow>`SELECT * FROM style ORDER BY id LIMIT 4`;
     return queryResult.rows.map((row) => ({ ...row }));
   } catch (error) {
     console.error(`Database error: ${error}`);
@@ -60,7 +60,7 @@ export async function fetchAllStyles(): Promise<Style[]> {
 
 export async function fetchAllCategories(): Promise<Category[]> {
   try {
-    const queryResult = await sql<Style>`SELECT * FROM category LIMIT 10`;
+    const queryResult = await db.query<CategoryRow>`SELECT * FROM category ORDER BY id LIMIT 10`;
     return queryResult.rows.map((row) => ({ ...row }));
   } catch (error) {
     console.error(`Database error: ${error}`);
@@ -70,7 +70,7 @@ export async function fetchAllCategories(): Promise<Category[]> {
 
 export async function fetchNewArrivals(): Promise<Product[]> {
   try {
-    const queryResult = await sql<ProductRaw>`
+    const queryResult = await db.query<ProductRaw>`
       SELECT
           product.id as id,
           product.name as name,
@@ -107,7 +107,7 @@ export async function fetchNewArrivals(): Promise<Product[]> {
 
 export async function fetchTopSelling(): Promise<Product[]> {
   try {
-    const queryResult = await sql<ProductRaw>`
+    const queryResult = await db.query<ProductRaw>`
       SELECT
           product.id as id,
           product.name as name,
@@ -142,9 +142,48 @@ export async function fetchTopSelling(): Promise<Product[]> {
   }
 }
 
+function filterToProductFullProperties<T extends Record<string, unknown>>(
+  obj: T,
+): ProductFull {
+  const productFullInstance: ProductFull = {
+    average_rating: 0,
+    category: {
+      id: 0,
+      name: '',
+    },
+    colors: new Map(),
+    description: '',
+    details: '',
+    discount: { newPrice: 0, percent: 0 },
+    id: 0,
+    name: '',
+    photo_url: '',
+    photos: new Map(),
+    price: 0,
+    reviews: new Map(),
+    sizes: new Map(),
+    style: {
+      id: 0,
+      name: '',
+    },
+  };
+  const result: Partial<ProductFull> = {};
+
+  // Only copy properties that exist in ProductFull
+  for (const key of Object.keys(obj) as Array<keyof T>) {
+    if (key in productFullInstance || key === 'id') {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      result[key] = obj[key];
+    }
+  }
+
+  return result as ProductFull;
+}
+
 export async function fetchProduct(id: number): Promise<ProductFull> {
   try {
-    const queryResult = await sql<ExtraProductRaw>`
+    const queryResult = await db.query<ExtraProductRaw>`
       SELECT
           product.id as id,
           product.name as name,
@@ -157,6 +196,7 @@ export async function fetchProduct(id: number): Promise<ProductFull> {
           product_photo.url as alt_photo_url,
           c.id as color_id,
           c.hex_value as color_hex_value,
+          c.human_readable_value as color_human_readable_value,
           s.id as size_id,
           s.size as size,
           s.value as size_value,
@@ -165,6 +205,8 @@ export async function fetchProduct(id: number): Promise<ProductFull> {
           r.review as review_text,
           r.rating as review_rating,
           r.verified as review_verified,
+          r.created_at as review_created_at,
+          u.username as review_author,
           COALESCE(ROUND(avg_reviews.average_rating::numeric, 1), 0) AS average_rating
       FROM product
       LEFT JOIN (
@@ -178,14 +220,17 @@ export async function fetchProduct(id: number): Promise<ProductFull> {
       LEFT JOIN product_size ps ON product.id = ps.product_id
       INNER JOIN size s ON s.id = ps.size_id
       LEFT JOIN public.review r ON product.id = r.product_id
+      INNER JOIN public.user u ON r.author_id = u.id
       WHERE product.id = ${id}
+      ORDER BY c.id, s.id, r.id, product_photo.id
     `;
     const product: ProductFull = {
+      ...filterToProductFullProperties(queryResult.rows[0]),
       photos: new Map(),
       colors: new Map(),
       sizes: new Map(),
       reviews: new Map(),
-      ...queryResult.rows[0],
+      average_rating: parseFloat(`${queryResult.rows[0].average_rating}`),
     };
     queryResult.rows.forEach((row) => {
       if (row.alt_photo_id !== null) {
@@ -197,7 +242,7 @@ export async function fetchProduct(id: number): Promise<ProductFull> {
       if (row.color_id !== null) {
         product.colors.set(row.color_id, {
           id: row.color_id,
-          human_readable_value: 'TBD SOME COLOR',
+          human_readable_value: row.color_human_readable_value,
           hex_value: row.color_hex_value,
         });
       }
@@ -217,7 +262,7 @@ export async function fetchProduct(id: number): Promise<ProductFull> {
           review_text: row.review_text,
           verified: row.review_verified,
           created_at: row.review_created_at,
-          author: row.review_text,
+          author: row.review_author,
         });
       }
     });
@@ -236,13 +281,13 @@ export async function fetchProduct(id: number): Promise<ProductFull> {
 }
 
 export async function findUser(username: string): Promise<User> {
-  const queryResult = await sql<User>`SELECT * FROM public.user WHERE username = ${username}`;
+  const queryResult = await db.query<User>`SELECT * FROM public.user WHERE username = ${username}`;
   return queryResult.rows[0] || null;
 }
 
 export async function findUserWithPasskeys(username: string): Promise<UserWithPasskeysSerialized> {
   try {
-    const queryResult = await sql<UserWithPasskeyRaw>`
+    const queryResult = await db.query<UserWithPasskeyRaw>`
                     SELECT
                         id,
                         username,
@@ -285,7 +330,7 @@ export async function createUser(username: string, passkey: PasskeySerialized): 
   const formattedTransports = formatPgArray(transports);
 
   try {
-    const queryResult = await sql<User>`
+    const queryResult = await db.query<User>`
             WITH new_user AS (
                 INSERT INTO public.user (username) VALUES (${username}) RETURNING id
             )
@@ -321,7 +366,7 @@ export async function createUser(username: string, passkey: PasskeySerialized): 
 export async function getPasskeyWithUserId(cred_id: string, internal_user_id: string): Promise<PasskeySerialized> {
   try {
     const queryResult =
-      await sql<PasskeySerialized>`SELECT * FROM passkey WHERE cred_id = ${cred_id} AND internal_user_id = ${internal_user_id}`;
+      await db.query<PasskeySerialized>`SELECT * FROM passkey WHERE cred_id = ${cred_id} AND internal_user_id = ${internal_user_id}`;
     return queryResult.rows[0];
   } catch (error) {
     console.error(`Database error: ${error}`);
@@ -337,7 +382,7 @@ export async function addReview(review: ReviewRaw): Promise<Review> {
   const { user } = user_session;
   const { product_id, title, rating, review_text } = review;
   try {
-    const queryResult = await sql<Review>`
+    const queryResult = await db.query<Review>`
             INSERT INTO review (
                 author_id,
                 product_id,
@@ -363,18 +408,19 @@ export async function addReview(review: ReviewRaw): Promise<Review> {
 
 export async function getTopReviews(): Promise<Review[]> {
   try {
-    const queryResult = await sql<Review>`
+    const queryResult = await db.query<Review>`
             SELECT
                 r.id as id,
                 r.verified as verified,
-                r.author_id as author_id,
                 r.product_id as product_id,
                 r.rating as rating,
                 r.title as title,
                 r.review as review_text,
+                r.created_at as created_at,
                 u.username as author
             FROM review r
             LEFT JOIN public.user u on r.author_id = u.id
+            ORDER BY rating desc 
             LIMIT ${MAIN_PAGE_REVIEWS}
         `;
     return queryResult.rows.map((row) => ({ ...row }));
@@ -387,7 +433,7 @@ export async function getTopReviews(): Promise<Review[]> {
 export async function createCart(cart: CartRow) {
   const { user_id, product_id, color_id, size_id, quantity } = cart;
   try {
-    await sql<CartRow>`
+    await db.query<CartRow>`
             INSERT INTO cart (
                 user_id,
                 product_id,
@@ -411,7 +457,7 @@ export async function createCart(cart: CartRow) {
 
 export async function getCart(user_id: string): Promise<Cart> {
   try {
-    const queryResult = await sql<FullCartRow>`
+    const queryResult = await db.query<FullCartRow>`
         SELECT
             user_id,
             product_id,
