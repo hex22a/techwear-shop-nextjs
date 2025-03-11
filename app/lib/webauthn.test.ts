@@ -5,7 +5,7 @@ import {
 } from './webauthn';
 import {
   findUser as mockFindUser,
-  findUserWithPasskeys as mockFindUserWithPasskeys,
+  getAllowCredentials as mockGetAllowCredentials,
   createUser as mockCreateUser,
   getPasskeyWithUserId as mockGetPasskeyWithUserId,
 } from './data';
@@ -28,7 +28,7 @@ import {
   AuthenticationResponseJSON,
   VerifyAuthenticationResponseOpts,
 } from '@simplewebauthn/server';
-import { PasskeySerialized, User, UserWithPasskeysSerialized } from '@/app/lib/definitions';
+import { AllowCredentials, PasskeySerialized, User, UserWithPasskeysSerialized } from '@/app/lib/definitions';
 import { PublicKeyCredentialCreationOptionsJSON } from '@simplewebauthn/server';
 import {
   WEBAUTHN_GENERATE_AUTHENTICATION_OPTIONS,
@@ -47,7 +47,7 @@ import {
 
 jest.mock('./data', () => ({
   findUser: jest.fn(),
-  findUserWithPasskeys: jest.fn(),
+  getAllowCredentials: jest.fn(),
   createUser: jest.fn(),
   getPasskeyWithUserId: jest.fn(),
 }));
@@ -413,14 +413,14 @@ describe('webauthn', () => {
       const expectedUsername = 'test';
       const expectedUser = null;
 
-      (mockFindUserWithPasskeys as jest.Mock).mockResolvedValue(expectedUser);
+      (mockGetAllowCredentials as jest.Mock).mockResolvedValue(expectedUser);
 
       // Act
       const actualResponse = await generateWebAuthnLoginOptions(expectedUsername);
 
       // Assert
       expect(actualResponse).toEqual(expectedResponse);
-      expect(mockFindUserWithPasskeys).toHaveBeenCalledWith(expectedUsername);
+      expect(mockGetAllowCredentials).toHaveBeenCalledWith(expectedUsername);
     });
 
     test('generate options', async () => {
@@ -430,15 +430,11 @@ describe('webauthn', () => {
       const expectedUsername = 'test';
       const expectedUserId = 'uuid-uuid-uuid-uuid';
       const expectedCredentialId = 'credId';
-      const expectedPasskeys = new Map<string, PasskeySerialized>();
+      const expectedPasskeys = new Map<string, AllowCredentials>();
       const expectedTransports = ['hybrid'];
       expectedPasskeys.set(expectedCredentialId, {
-        backup_eligible: false,
-        backup_status: false,
-        counter: 0,
-        cred_public_key: '',
         transports: expectedTransports as AuthenticatorTransportFuture[],
-        cred_id: expectedCredentialId
+        id: expectedCredentialId
       });
       const expectedUser: UserWithPasskeysSerialized = {
         passkeys: expectedPasskeys,
@@ -468,7 +464,7 @@ describe('webauthn', () => {
         ...WEBAUTHN_GENERATE_AUTHENTICATION_OPTIONS,
       };
 
-      (mockFindUserWithPasskeys as jest.Mock).mockResolvedValue(expectedUser);
+      (mockGetAllowCredentials as jest.Mock).mockResolvedValue(expectedUser);
       (mockGenerateAuthenticationOptions as jest.Mock).mockResolvedValue(expectedPublicKeyCredentialRequestOptions);
 
       // Act
@@ -476,7 +472,7 @@ describe('webauthn', () => {
 
       // Assert
       expect(actualResponse).toEqual(expectedResponse);
-      expect(mockFindUserWithPasskeys).toHaveBeenCalledWith(expectedUsername);
+      expect(mockGetAllowCredentials).toHaveBeenCalledWith(expectedUsername);
       expect(mockGenerateAuthenticationOptions).toHaveBeenCalledWith(expectedGenerateAuthenticationOptionsOpts);
       expect(mockUpdateCurrentWebauthnSession).toHaveBeenCalledWith({ currentChallenge: expectedChallenge, username: expectedUsername });
     });

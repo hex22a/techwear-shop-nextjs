@@ -4,7 +4,7 @@ import {
   fetchAllColors,
   fetchAllSizes,
   fetchAllStyles,
-  fetchProduct, findUser, findUserWithPasskeys,
+  fetchProduct, findUser, getAllowCredentials,
   getTopReviews,
 } from '../data';
 import {
@@ -12,7 +12,7 @@ import {
   expectedColors, expectedProductIdNapapijri, expectedProductNapapijriReturned,
   expectedSizes,
   expectedStyles,
-  expectedTopReviews, expectedUser, expectedUserUsername, expectedUserWithPasskeys,
+  expectedTopReviews, expectedUser, expectedUserCredentials, expectedUserUsername,
 } from './helpers/fixtures';
 import { ProductFull } from '@/app/lib/definitions';
 
@@ -116,10 +116,10 @@ describe('data platform test', () => {
       // Given
 
       // When
-      const actualUserWithPasskeys = await findUserWithPasskeys(expectedUserUsername);
+      const actualUserWithPasskeys = await getAllowCredentials(expectedUserUsername);
 
       // Then
-      expect(actualUserWithPasskeys).toEqual(expectedUserWithPasskeys);
+      expect(actualUserWithPasskeys).toEqual(expectedUserCredentials);
     });
   });
 });

@@ -17,9 +17,8 @@ import {
   Style,
   User,
   UserWithPasskeyRow,
-  UserWithPasskeysSerialized,
   Product,
-  ProductRaw, ColorRow, SizeRow, StyleRow, CategoryRow,
+  ProductRaw, ColorRow, SizeRow, StyleRow, CategoryRow, UserCredentials,
 } from '@/app/lib/definitions';
 
 import { formatPgArray } from '@/app/lib/model/helpers';
@@ -285,53 +284,8 @@ export async function findUser(username: string): Promise<User> {
   return queryResult.rows[0] || null;
 }
 
-function filterToUserWithPasskeysSerialized<T extends Record<string, unknown>>(
-  obj: T,
-): UserWithPasskeysSerialized {
-  const userWithPasskeysSerializedInstance: UserWithPasskeysSerialized = {
-    created_at: new Date(),
-    id: '',
-    passkeys: new Map(),
-    username: ''
-  };
-  const result: Partial<UserWithPasskeysSerialized> = {};
-  for (const key of Object.keys(obj) as Array<keyof T>) {
-    if (key in userWithPasskeysSerializedInstance || key === 'id') {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      result[key] = obj[key];
-    }
-  }
-  return result as UserWithPasskeysSerialized;
-}
 
-function filterToPasskeySerialized<T extends Record<string, unknown>>(
-  obj: T,
-): PasskeySerialized {
-  const passkeySerializedInstance: PasskeySerialized = {
-    backup_eligible: false,
-    backup_status: false,
-    counter: 0,
-    created_at: new Date(),
-    cred_id: '',
-    cred_public_key: '',
-    internal_user_id: '',
-    last_used: new Date(),
-    transports: [],
-    webauthn_user_id: ''
-  };
-  const result: Partial<PasskeySerialized> = {};
-  for (const key of Object.keys(obj) as Array<keyof T>) {
-    if (key in passkeySerializedInstance) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      result[key] = obj[key];
-    }
-  }
-  return result as PasskeySerialized;
-}
-
-export async function findUserWithPasskeys(username: string): Promise<UserWithPasskeysSerialized> {
+export async function getAllowCredentials(username: string): Promise<UserCredentials> {
   try {
     const queryResult = await db.query<UserWithPasskeyRow>`
                     SELECT
@@ -352,17 +306,14 @@ export async function findUserWithPasskeys(username: string): Promise<UserWithPa
                         public.user
                     LEFT JOIN passkey ON public.user.id = passkey.internal_user_id
                     WHERE public.user.username = ${username}`;
-    const user: UserWithPasskeysSerialized = {
-      ...filterToUserWithPasskeysSerialized(queryResult.rows[0]),
+    const user: UserCredentials = {
       passkeys: new Map(),
     };
     queryResult.rows.forEach((row) => {
-      const passkey: PasskeySerialized = {
-        ...filterToPasskeySerialized(row),
-        created_at: row.passkey_created_at,
-        cred_public_key: 'TBD ANY KEY RALLY WORK HERE???',
-      };
-      user.passkeys.set(row.cred_id, passkey);
+      user.passkeys.set(row.cred_id, {
+        id: row.cred_id,
+        transports: row.transports,
+      });
     });
     return user;
   } catch (error) {

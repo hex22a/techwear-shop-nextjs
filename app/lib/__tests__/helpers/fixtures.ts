@@ -1,4 +1,5 @@
 import {
+  AllowCredentials,
   Category,
   Color, PasskeySerialized,
   Photo,
@@ -7,9 +8,9 @@ import {
   ReviewRow,
   Size,
   Style,
-  User,
-  UserWithPasskeysSerialized,
+  User, UserCredentials,
 } from '@/app/lib/definitions';
+import { AuthenticatorTransportFuture } from '@simplewebauthn/server';
 
 const expectedUserId = '1d34ef0e-08cd-4439-9017-894d45074c0a';
 
@@ -25,29 +26,31 @@ export const expectedUser: User = {
   created_at: expectedUserCreatedAt,
 };
 
+const expectedCredId = 'some_cred_id';
+const expectedCredTransports: AuthenticatorTransportFuture[] = ['hybrid'];
+
 const expectedPasskeySerialized1: PasskeySerialized = {
   backup_eligible: false,
   backup_status: false,
   counter: 0,
   created_at: expectedPasskeyCreatedAt,
-  cred_id: 'some_cred_id',
+  cred_id: expectedCredId,
   cred_public_key: 'pQECAyYgASFYILX-FokseHU7Xp7e_mQLCLM5I_iTeh7oXXD14yNcJe2oIlgg59FEHfw1aTEwcVPZsu5oSHkodL0s1ZsTUpEJzC3uMN4',
   internal_user_id: expectedUserId,
   last_used: expectedPasskeyLastUsed,
-  transports: ['hybrid'],
+  transports: expectedCredTransports,
   webauthn_user_id: 'some_webauthn_user_id',
 };
 
-const expectedPasskeyReturned1: PasskeySerialized = {
-  ...expectedPasskeySerialized1,
-  cred_public_key: 'TBD ANY KEY RALLY WORK HERE???',
+const expectedAllowCredential1: AllowCredentials = {
+  id: expectedCredId,
+  transports: expectedCredTransports,
 };
 
 export const expectedPasskeys = [expectedPasskeySerialized1];
 
-export const expectedUserWithPasskeys: UserWithPasskeysSerialized = {
-  ...expectedUser,
-  passkeys: new Map([expectedPasskeyReturned1].map((passkey) => [passkey.cred_id, passkey])),
+export const expectedUserCredentials: UserCredentials = {
+  passkeys: new Map([expectedAllowCredential1].map((passkey) => [passkey.id, passkey])),
 };
 
 export const expectedUsers: User[] = [

@@ -112,9 +112,16 @@ export type UserRow = User;
 
 export type UserWithPasskeyRow = UserRow & PasskeyRow;
 
-export type UserWithPasskeysSerialized = User & {
-    passkeys: Map<string, PasskeySerialized>;
+export type UserCredentials = {
+    passkeys: Map<string, AllowCredentials>;
 }
+
+export type AllowCredentials = {
+    id: Base64URLString;
+    transports: AuthenticatorTransportFuture[];
+}
+
+export type UserWithPasskeysSerialized = User & UserCredentials
 
 export type Passkey = {
     cred_id: Base64URLString;

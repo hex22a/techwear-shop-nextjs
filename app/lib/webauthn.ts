@@ -18,7 +18,7 @@ import {
     updateCurrentWebauthnSession
 } from './session';
 import {isoBase64URL} from '@simplewebauthn/server/helpers';
-import {createUser, findUser, findUserWithPasskeys, getPasskeyWithUserId} from "@/app/lib/data";
+import {createUser, findUser, getAllowCredentials, getPasskeyWithUserId} from "@/app/lib/data";
 import {PasskeySerialized} from "@/app/lib/definitions";
 import {
     PASSKEY_NOT_FOUND_ERROR_MESSAGE,
@@ -122,7 +122,7 @@ export type WebAuthnResponse = {
 }
 
 export const generateWebAuthnLoginOptions = async (username: string): Promise<WebAuthnResponse> => {
-    const user = await findUserWithPasskeys(username);
+    const user = await getAllowCredentials(username);
 
     if (!user) {
         return {
@@ -133,7 +133,7 @@ export const generateWebAuthnLoginOptions = async (username: string): Promise<We
 
     const opts: GenerateAuthenticationOptionsOpts = {
         allowCredentials: Array.from(user.passkeys.entries()).map(([, value]) => ({
-            id: value.cred_id,
+            id: value.id,
             transports: value.transports.map((t): AuthenticatorTransportFuture => t.toString() as 'usb' | 'nfc' | 'ble' | 'internal'),
         })),
         ...WEBAUTHN_GENERATE_AUTHENTICATION_OPTIONS,
