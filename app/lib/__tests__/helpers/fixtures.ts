@@ -75,10 +75,13 @@ const expectedColorGreen: Color = {
   hex_value: '00C12B',
   human_readable_value: 'Green',
 };
+export const expectedColorIdRed = 2;
+export const expectedColorHexValueRed = 'F50606';
+export const expectedColorHumanReadableValueRed = 'Red';
 const expectedColorRed: Color = {
-  id: 2,
-  hex_value: 'F50606',
-  human_readable_value: 'Red',
+  id: expectedColorIdRed,
+  hex_value: expectedColorHexValueRed,
+  human_readable_value: expectedColorHumanReadableValueRed,
 };
 const expectedColorYellow: Color = {
   id: 3,
@@ -115,6 +118,7 @@ const expectedColorWhite: Color = {
   hex_value: 'EEEEEE',
   human_readable_value: 'White',
 };
+export const expectedProductDiscountPercentNapapijri = 10;
 const expectedColorBlack: Color = {
   id: 10,
   hex_value: '000000',
@@ -171,10 +175,13 @@ const expectedSizeS: Size = {
   size: 'Small',
   value: 's',
 };
+export const expectedSizeIdM = 4;
+export const expectedSizeSizeM = 'Medium';
+export const expectedSizeValueM = 'm';
 const expectedSizeM: Size = {
-  id: 4,
-  size: 'Medium',
-  value: 'm',
+  id: expectedSizeIdM,
+  size: expectedSizeSizeM,
+  value: expectedSizeValueM,
 };
 const expectedSizeL: Size = {
   id: 5,
@@ -240,19 +247,22 @@ const expectedPhotoMastrumBomber3: Photo = {
 
 export const expectedProductIdNapapijri = 1;
 
+export const expectedProductNameNapapijri = 'Skidoo 2.0 Anorak Jacket';
+export const expectedProductPriceNapapijri = 500;
+export const expectedProductPhotoUrlNapapijri = '/items/napa-anor.webp';
 export const expectedProductNapapijri: ProductFull = {
   id: expectedProductIdNapapijri,
   colors: new Map([expectedColorRed, expectedColorBlue, expectedColorPurple].map((color) => [color.id, color])),
   description: 'A contemporary take on the iconic Skidoo jacket, this is a loose-fit anorak for women made in stretch, water-resistant fabric. It features a faux- fur trim around the hood, Norwegian flag patch, and the iconic front flap pocket complete with our signature Napapijri Geographic graphic.',
   details: 'A contemporary take on the iconic Skidoo jacket, this is a loose-fit anorak for women made in stretch, water-resistant fabric. It features a faux- fur trim around the hood, Norwegian flag patch, and the iconic front flap pocket complete with our signature Napapijri Geographic graphic.',
-  discount: { newPrice: 450, percent: 10 },
+  discount: { newPrice: 450, percent: expectedProductDiscountPercentNapapijri },
   photos: new Map([expectedPhotoNapapijri1, expectedPhotoNapapijri2, expectedPhotoNapapijri3].map((photo) => [photo.id, photo])),
   reviews: new Map(),
   sizes: new Map([expectedSizeXs, expectedSizeM, expectedSizeL].map((size) => [size.id, size])),
   average_rating: 0,
-  name: 'Skidoo 2.0 Anorak Jacket',
-  photo_url: '/items/napa-anor.webp',
-  price: 500,
+  name: expectedProductNameNapapijri,
+  photo_url: expectedProductPhotoUrlNapapijri,
+  price: expectedProductPriceNapapijri,
   category: expectedCategoryJackets,
   style: expectedStyleCasual,
 };
@@ -497,12 +507,12 @@ export const expectedProductNapapijriReturned: ProductFull = {
   colors: new Map([expectedColorRed, expectedColorBlue, expectedColorPurple].map((color) => [color.id, color])),
   description: 'A contemporary take on the iconic Skidoo jacket, this is a loose-fit anorak for women made in stretch, water-resistant fabric. It features a faux- fur trim around the hood, Norwegian flag patch, and the iconic front flap pocket complete with our signature Napapijri Geographic graphic.',
   details: 'A contemporary take on the iconic Skidoo jacket, this is a loose-fit anorak for women made in stretch, water-resistant fabric. It features a faux- fur trim around the hood, Norwegian flag patch, and the iconic front flap pocket complete with our signature Napapijri Geographic graphic.',
-  discount: { newPrice: 450, percent: 10 },
+  discount: { newPrice: 450, percent: expectedProductDiscountPercentNapapijri },
   photos: new Map([expectedPhotoNapapijri1, expectedPhotoNapapijri2, expectedPhotoNapapijri3].map((photo) => [photo.id, photo])),
   reviews: new Map(expectedNapapijriReviews.map(review => [review.id, review])),
   sizes: new Map([expectedSizeXs, expectedSizeM, expectedSizeL].map((size) => [size.id, size])),
   average_rating: 4.5,
-  name: 'Skidoo 2.0 Anorak Jacket',
-  photo_url: '/items/napa-anor.webp',
-  price: 500,
+  name: expectedProductNameNapapijri,
+  photo_url: expectedProductPhotoUrlNapapijri,
+  price: expectedProductPriceNapapijri,
 };

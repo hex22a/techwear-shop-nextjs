@@ -161,7 +161,7 @@ export type FullCartRow = CartRow & Omit<Color, 'id'> & Omit<Size, 'id'> & {
 
 export type Cart = {
     user_id: string;
-    products: (Omit<FullProductRaw, 'average_rating'> & { quantity: number })[];
+    products: (Omit<FullProductRaw, 'average_rating' | 'discount_percent'> & { quantity: number, discount_percent: number })[];
     summary: {
         subtotal: number;
         total: number;

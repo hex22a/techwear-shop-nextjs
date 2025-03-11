@@ -430,10 +430,10 @@ export async function getTopReviews(): Promise<Review[]> {
   }
 }
 
-export async function createCart(cart: CartRow) {
+export async function createCart(cart: CartRow): Promise<CartRow> {
   const { user_id, product_id, color_id, size_id, quantity } = cart;
   try {
-    await db.query<CartRow>`
+    const queryResult = await db.query<CartRow>`
             INSERT INTO cart (
                 user_id,
                 product_id,
@@ -448,7 +448,9 @@ export async function createCart(cart: CartRow) {
                     ${size_id},
                     ${quantity}
                    )
+            RETURNING *;
         `;
+    return queryResult.rows[0];
   } catch (error) {
     console.error(`Database error: ${error}`);
     throw new Error('Failed to create cart');
@@ -469,7 +471,7 @@ export async function getCart(user_id: string): Promise<Cart> {
             p.discount as product_discount_percent,
             p.photo_url as product_photo_url,
             s.size as size,
-            s.value as size_value,
+            s.value as value,
             co.hex_value as hex_value,
             co.human_readable_value as human_readable_value,
             ROUND(SUM((p.price * (1 - COALESCE(p.discount, 0) / 100.0)) * cart.quantity)
@@ -507,11 +509,14 @@ export async function getCart(user_id: string): Promise<Cart> {
         name: row.product_name,
         photo_url: row.product_photo_url,
         price: row.product_price,
-        discount_percent: row.product_discount_percent,
+        discount_percent: parseInt(row.product_discount_percent, 10),
+        color_id: row.color_id,
         color_hex_value: row.hex_value,
         color_human_readable_value: row.human_readable_value,
+        size_id: row.size_id,
+        size: row.size,
         size_value: row.value,
-        ...row,
+        quantity: row.quantity,
       })),
     };
   } catch (error) {

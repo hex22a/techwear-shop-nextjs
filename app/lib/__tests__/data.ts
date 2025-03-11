@@ -1,22 +1,22 @@
 import Seed from './helpers/seed';
 import {
-  addReview,
+  addReview, createCart,
   createUser,
   fetchAllCategories,
   fetchAllColors,
   fetchAllSizes,
   fetchAllStyles,
-  fetchProduct, findUser, getAllowCredentials, getPasskeyWithUserId,
+  fetchProduct, findUser, getAllowCredentials, getCart, getPasskeyWithUserId,
   getTopReviews,
 } from '../data';
 import {
-  expectedCategories,
+  expectedCategories, expectedColorHexValueRed, expectedColorHumanReadableValueRed, expectedColorIdRed,
   expectedColors,
   expectedCredId,
-  expectedPasskeySerialized1,
-  expectedProductIdNapapijri,
-  expectedProductNapapijriReturned,
-  expectedSizes,
+  expectedPasskeySerialized1, expectedProductDiscountPercentNapapijri,
+  expectedProductIdNapapijri, expectedProductNameNapapijri,
+  expectedProductNapapijriReturned, expectedProductPhotoUrlNapapijri, expectedProductPriceNapapijri, expectedSizeIdM,
+  expectedSizes, expectedSizeSizeM, expectedSizeValueM,
   expectedStyles,
   expectedTopReviews,
   expectedUser,
@@ -24,7 +24,7 @@ import {
   expectedUserId,
   expectedUserUsername,
 } from './helpers/fixtures';
-import { PasskeySerialized, ProductFull, Review, ReviewRaw } from '@/app/lib/definitions';
+import { Cart, CartRow, PasskeySerialized, ProductFull, Review, ReviewRaw } from '@/app/lib/definitions';
 
 import { auth as mockAuth } from '@/auth';
 
@@ -199,6 +199,60 @@ describe('data platform test', () => {
 
       // Then
       expect(actualReview).toEqual(expectedAddedReview);
+    });
+  });
+
+  describe('createCart', () => {
+    it('should create cart', async () => {
+      // Given
+      const expectedCart: CartRow = {
+        color_id: expectedColorIdRed,
+        product_id: expectedProductIdNapapijri,
+        quantity: 1,
+        size_id: expectedSizeIdM,
+        user_id: expectedUserId
+      };
+
+      // When
+      const actualCart = await createCart(expectedCart);
+
+      // Then
+      expect(actualCart).toEqual(expectedCart);
+    });
+  });
+
+  describe('getCart', () => {
+    it('should get cart for user', async () => {
+      // Given
+      const expectedCart: Cart = {
+        products: [{
+          id: expectedProductIdNapapijri,
+          name: expectedProductNameNapapijri,
+          price: expectedProductPriceNapapijri,
+          discount_percent: expectedProductDiscountPercentNapapijri,
+          photo_url: expectedProductPhotoUrlNapapijri,
+          quantity: 1,
+          color_id: expectedColorIdRed,
+          color_hex_value: expectedColorHexValueRed,
+          color_human_readable_value: expectedColorHumanReadableValueRed,
+          size: expectedSizeSizeM,
+          size_id: expectedSizeIdM,
+          size_value: expectedSizeValueM,
+        }],
+        summary: {
+          deliveryFee: 15,
+          discount: 0,
+          subtotal: 450,
+          total: 465,
+        },
+        user_id: expectedUserId,
+      };
+
+      // When
+      const actualCart = await getCart(expectedUserId);
+
+      // Then
+      expect(actualCart).toEqual(expectedCart);
     });
   });
 });
