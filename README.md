@@ -52,7 +52,7 @@ pnpm install
 pnpm run lint:css
 
 # run eslint
-pnpm eslint
+pnpm run lint
 ```
 
 ### Unit tests
