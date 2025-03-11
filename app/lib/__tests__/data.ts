@@ -1,20 +1,29 @@
 import Seed from './helpers/seed';
 import {
+  createUser,
   fetchAllCategories,
   fetchAllColors,
   fetchAllSizes,
   fetchAllStyles,
-  fetchProduct, findUser, getAllowCredentials,
+  fetchProduct, findUser, getAllowCredentials, getPasskeyWithUserId,
   getTopReviews,
 } from '../data';
 import {
   expectedCategories,
-  expectedColors, expectedProductIdNapapijri, expectedProductNapapijriReturned,
+  expectedColors,
+  expectedCredId,
+  expectedPasskeySerialized1,
+  expectedProductIdNapapijri,
+  expectedProductNapapijriReturned,
   expectedSizes,
   expectedStyles,
-  expectedTopReviews, expectedUser, expectedUserCredentials, expectedUserUsername,
+  expectedTopReviews,
+  expectedUser,
+  expectedUserCredentials,
+  expectedUserId,
+  expectedUserUsername,
 } from './helpers/fixtures';
-import { ProductFull } from '@/app/lib/definitions';
+import { PasskeySerialized, ProductFull } from '@/app/lib/definitions';
 
 jest.mock('@/auth', () => ({
   __esModule: true,
@@ -111,7 +120,7 @@ describe('data platform test', () => {
     });
   });
 
-  describe('findUserWithPasskeys', () => {
+  describe('getAllowCredentials', () => {
     it('should find user along with passkeys', async () => {
       // Given
 
@@ -120,6 +129,44 @@ describe('data platform test', () => {
 
       // Then
       expect(actualUserWithPasskeys).toEqual(expectedUserCredentials);
+    });
+  });
+
+  describe('createUser', () => {
+    it('should create user', async () => {
+      // Give
+      const expectedUsername = 'test';
+      const expectedPasskey: PasskeySerialized = {
+        backup_eligible: false,
+        backup_status: false,
+        counter: 0,
+        cred_id: 'some_unique_cred_id',
+        cred_public_key: 'pQECAyYgASFYILX-FokseHU7Xp7e_mQLCLM5I_iTeh7oXXD14yNcJe2oIlgg59FEHfw1aTEwcVPZsu5oSHkodL0s1ZsTUpEJzC3uMN4',
+        transports: ['internal', 'hybrid']
+      };
+      const expectedNewUser = expect.objectContaining({
+        id: expect.any(String),
+        username: expectedUsername,
+        created_at: expect.any(Date),
+      });
+
+      // When
+      const actualUser = await createUser(expectedUsername, expectedPasskey);
+
+      // Then
+      expect(actualUser).toEqual(expectedNewUser);
+    });
+  });
+
+  describe('getPasskeyWithUserId', () => {
+    it('should find passkey with user id', async () => {
+      // Given
+
+      // When
+      const actualPasskey = await getPasskeyWithUserId(expectedCredId, expectedUserId);
+
+      // Then
+      expect(actualPasskey).toEqual(expectedPasskeySerialized1);
     });
   });
 });

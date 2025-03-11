@@ -329,30 +329,33 @@ export async function createUser(username: string, passkey: PasskeySerialized): 
   try {
     const queryResult = await db.query<User>`
             WITH new_user AS (
-                INSERT INTO public.user (username) VALUES (${username}) RETURNING id
+                INSERT INTO public.user (username) VALUES (${username}) RETURNING id, username, created_at
+            ),
+            new_passkey AS (
+                INSERT INTO passkey (
+                  internal_user_id,
+                  cred_id,
+                  counter,
+                  cred_public_key,
+                  backup_eligible,
+                  backup_status,
+                  webauthn_user_id,
+                  transports
+              )
+              VALUES (
+                  (SELECT id FROM new_user),
+                  ${cred_id},
+                  ${counter},
+                  ${cred_public_key},
+                  ${backup_eligible},
+                  ${backup_status},
+                  ${webauthn_user_id},
+                  ${formattedTransports}::text[]
+              )
+              RETURNING 1
             )
-            INSERT INTO passkey (
-                internal_user_id,
-                cred_id,
-                counter,
-                cred_public_key,
-                backup_eligible,
-                backup_status,
-                webauthn_user_id,
-                transports
-            )
-            VALUES (
-                (SELECT id FROM new_user),
-                ${cred_id},
-                ${counter},
-                ${cred_public_key},
-                ${backup_eligible},
-                ${backup_status},
-                ${webauthn_user_id},
-                ${formattedTransports}::text[]
-            )
-            RETURNING *;
-        `;
+            SELECT id, username, created_at FROM new_user;
+    `;
     return queryResult.rows[0];
   } catch (error) {
     console.error(`Database error: ${error}`);

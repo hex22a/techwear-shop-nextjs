@@ -12,7 +12,7 @@ import {
 } from '@/app/lib/definitions';
 import { AuthenticatorTransportFuture } from '@simplewebauthn/server';
 
-const expectedUserId = '1d34ef0e-08cd-4439-9017-894d45074c0a';
+export const expectedUserId = '1d34ef0e-08cd-4439-9017-894d45074c0a';
 
 const expectedUserCreatedAt = new Date("2025-09-29T09:52:52.000Z");
 const expectedReviewCreatedAt = new Date("2025-10-20T09:52:52.000Z");
@@ -26,10 +26,10 @@ export const expectedUser: User = {
   created_at: expectedUserCreatedAt,
 };
 
-const expectedCredId = 'some_cred_id';
+export const expectedCredId = 'some_cred_id';
 const expectedCredTransports: AuthenticatorTransportFuture[] = ['hybrid'];
 
-const expectedPasskeySerialized1: PasskeySerialized = {
+export const expectedPasskeySerialized1: PasskeySerialized = {
   backup_eligible: false,
   backup_status: false,
   counter: 0,
