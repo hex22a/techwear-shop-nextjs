@@ -194,6 +194,12 @@ class Seed {
     );
   }
 
+  async restoreReviewCounter() {
+    await this.db.query`
+        SELECT setval('review_id_seq', (SELECT MAX(id) FROM public.review), true)
+    `;
+  }
+
   async seedAll() {
     await Promise.all([
       this.seedUsers(),
@@ -205,6 +211,7 @@ class Seed {
     await this.seedPasskeys();
     await this.seedProducts();
     await this.seedReviews();
+    await this.restoreReviewCounter();
   }
 }
 

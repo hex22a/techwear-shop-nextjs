@@ -1,5 +1,6 @@
 import Seed from './helpers/seed';
 import {
+  addReview,
   createUser,
   fetchAllCategories,
   fetchAllColors,
@@ -23,11 +24,12 @@ import {
   expectedUserId,
   expectedUserUsername,
 } from './helpers/fixtures';
-import { PasskeySerialized, ProductFull } from '@/app/lib/definitions';
+import { PasskeySerialized, ProductFull, Review, ReviewRaw } from '@/app/lib/definitions';
+
+import { auth as mockAuth } from '@/auth';
 
 jest.mock('@/auth', () => ({
-  __esModule: true,
-  default: jest.fn(),
+  auth: jest.fn(),
 }));
 
 describe('data platform test', () => {
@@ -167,6 +169,36 @@ describe('data platform test', () => {
 
       // Then
       expect(actualPasskey).toEqual(expectedPasskeySerialized1);
+    });
+  });
+
+  describe('addReview', () => {
+    it('should add review', async () => {
+      // Given
+      const expectedReviewText = 'This is a review';
+      const expectedReviewTitle = 'Nice product';
+      const expectedRating = 5;
+      const expectedReview: ReviewRaw = {
+        product_id: expectedProductIdNapapijri,
+        rating: expectedRating,
+        review_text: expectedReviewText,
+        title: expectedReviewTitle,
+      };
+      const expectedAddedReview = expect.objectContaining({
+        id: expect.any(Number),
+        product_id: expectedProductIdNapapijri,
+        rating: expectedRating,
+        review_text: expectedReviewText,
+        title: expectedReviewTitle,
+        created_at: expect.any(Date),
+      });
+      (mockAuth as jest.Mock).mockResolvedValue({ user: { id: expectedUserId } });
+
+      // When
+      const actualReview: Review = await addReview(expectedReview);
+
+      // Then
+      expect(actualReview).toEqual(expectedAddedReview);
     });
   });
 });

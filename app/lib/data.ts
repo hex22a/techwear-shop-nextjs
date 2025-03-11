@@ -397,7 +397,7 @@ export async function addReview(review: ReviewRaw): Promise<Review> {
                 ${title},
                 ${review_text}
             )
-            RETURNING id
+            RETURNING id, product_id, rating, title, review as review_text, created_at
         `;
     return queryResult.rows[0];
   } catch (error) {
