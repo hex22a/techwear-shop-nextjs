@@ -4,7 +4,7 @@ import {
   fetchAllColors,
   fetchAllSizes,
   fetchAllStyles,
-  fetchProduct,
+  fetchProduct, findUser, findUserWithPasskeys,
   getTopReviews,
 } from '../data';
 import {
@@ -12,7 +12,7 @@ import {
   expectedColors, expectedProductIdNapapijri, expectedProductNapapijriReturned,
   expectedSizes,
   expectedStyles,
-  expectedTopReviews,
+  expectedTopReviews, expectedUser, expectedUserUsername, expectedUserWithPasskeys,
 } from './helpers/fixtures';
 import { ProductFull } from '@/app/lib/definitions';
 
@@ -96,6 +96,30 @@ describe('data platform test', () => {
 
       // Then
       expect(actualProduct).toEqual(expectedProductNapapijriReturned);
+    });
+  });
+
+  describe('findUser', () => {
+    it('should find user', async () => {
+      // Given
+
+      // When
+      const actualUser = await findUser(expectedUserUsername);
+
+      // Then
+      expect(actualUser).toEqual(expectedUser);
+    });
+  });
+
+  describe('findUserWithPasskeys', () => {
+    it('should find user along with passkeys', async () => {
+      // Given
+
+      // When
+      const actualUserWithPasskeys = await findUserWithPasskeys(expectedUserUsername);
+
+      // Then
+      expect(actualUserWithPasskeys).toEqual(expectedUserWithPasskeys);
     });
   });
 });

@@ -16,13 +16,13 @@ import {
   Size,
   Style,
   User,
-  UserWithPasskeyRaw,
+  UserWithPasskeyRow,
   UserWithPasskeysSerialized,
   Product,
   ProductRaw, ColorRow, SizeRow, StyleRow, CategoryRow,
 } from '@/app/lib/definitions';
 
-import { isoBase64URL } from '@simplewebauthn/server/helpers';
+import { formatPgArray } from '@/app/lib/model/helpers';
 
 const MAIN_PAGE_REVIEWS = 7;
 const MAIN_PAGE_PRODUCTS = 4;
@@ -285,9 +285,55 @@ export async function findUser(username: string): Promise<User> {
   return queryResult.rows[0] || null;
 }
 
+function filterToUserWithPasskeysSerialized<T extends Record<string, unknown>>(
+  obj: T,
+): UserWithPasskeysSerialized {
+  const userWithPasskeysSerializedInstance: UserWithPasskeysSerialized = {
+    created_at: new Date(),
+    id: '',
+    passkeys: new Map(),
+    username: ''
+  };
+  const result: Partial<UserWithPasskeysSerialized> = {};
+  for (const key of Object.keys(obj) as Array<keyof T>) {
+    if (key in userWithPasskeysSerializedInstance || key === 'id') {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      result[key] = obj[key];
+    }
+  }
+  return result as UserWithPasskeysSerialized;
+}
+
+function filterToPasskeySerialized<T extends Record<string, unknown>>(
+  obj: T,
+): PasskeySerialized {
+  const passkeySerializedInstance: PasskeySerialized = {
+    backup_eligible: false,
+    backup_status: false,
+    counter: 0,
+    created_at: new Date(),
+    cred_id: '',
+    cred_public_key: '',
+    internal_user_id: '',
+    last_used: new Date(),
+    transports: [],
+    webauthn_user_id: ''
+  };
+  const result: Partial<PasskeySerialized> = {};
+  for (const key of Object.keys(obj) as Array<keyof T>) {
+    if (key in passkeySerializedInstance) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      result[key] = obj[key];
+    }
+  }
+  return result as PasskeySerialized;
+}
+
 export async function findUserWithPasskeys(username: string): Promise<UserWithPasskeysSerialized> {
   try {
-    const queryResult = await db.query<UserWithPasskeyRaw>`
+    const queryResult = await db.query<UserWithPasskeyRow>`
                     SELECT
                         id,
                         username,
@@ -297,7 +343,7 @@ export async function findUserWithPasskeys(username: string): Promise<UserWithPa
                         passkey.webauthn_user_id as webauthn_user_id,
                         passkey.backup_eligible as backup_eligible,
                         passkey.backup_status as backup_status,
-                        passkey.created_at as created_at,
+                        passkey.created_at as passkey_created_at,
                         passkey.transports as transports,
                         passkey.counter as counter,
                         passkey.internal_user_id as internal_user_id,
@@ -306,11 +352,15 @@ export async function findUserWithPasskeys(username: string): Promise<UserWithPa
                         public.user
                     LEFT JOIN passkey ON public.user.id = passkey.internal_user_id
                     WHERE public.user.username = ${username}`;
-    const user: UserWithPasskeysSerialized = { passkeys: new Map(), ...queryResult.rows[0] };
+    const user: UserWithPasskeysSerialized = {
+      ...filterToUserWithPasskeysSerialized(queryResult.rows[0]),
+      passkeys: new Map(),
+    };
     queryResult.rows.forEach((row) => {
       const passkey: PasskeySerialized = {
-        ...row,
-        cred_public_key: isoBase64URL.fromBuffer(row.cred_public_key, 'base64url'),
+        ...filterToPasskeySerialized(row),
+        created_at: row.passkey_created_at,
+        cred_public_key: 'TBD ANY KEY RALLY WORK HERE???',
       };
       user.passkeys.set(row.cred_id, passkey);
     });
@@ -319,10 +369,6 @@ export async function findUserWithPasskeys(username: string): Promise<UserWithPa
     console.error(`Database error: ${error}`);
     throw new Error(`Failed to fetch user: ${username}`);
   }
-}
-
-function formatPgArray(arr: string[]): string {
-  return `{${arr.join(',')}}`;
 }
 
 export async function createUser(username: string, passkey: PasskeySerialized): Promise<User> {

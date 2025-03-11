@@ -108,8 +108,9 @@ export type User = {
     username: string;
     created_at: Date;
 }
+export type UserRow = User;
 
-export type UserWithPasskeyRaw = User & Passkey
+export type UserWithPasskeyRow = UserRow & PasskeyRow;
 
 export type UserWithPasskeysSerialized = User & {
     passkeys: Map<string, PasskeySerialized>;
@@ -127,6 +128,9 @@ export type Passkey = {
     created_at?: Date;
     last_used?: Date;
 }
+export type PasskeyRow = Omit<Passkey, 'created_at'> & {
+    passkey_created_at: Date;
+};
 
 export type PasskeySerialized = Omit<Passkey, 'cred_public_key'> & {
     cred_public_key: string;

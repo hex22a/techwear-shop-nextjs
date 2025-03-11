@@ -1,6 +1,7 @@
 import {
   expectedCategories,
   expectedColors,
+  expectedPasskeys,
   expectedProducts,
   expectedReviews,
   expectedSizes,
@@ -9,6 +10,7 @@ import {
 } from './fixtures';
 import { db, queryFunction } from '@/app/lib/model/db';
 import { ProductFull } from '@/app/lib/definitions';
+import { formatPgArray } from '@/app/lib/model/helpers';
 
 export type seedDbClient = { query: queryFunction };
 
@@ -24,10 +26,38 @@ class Seed {
       expectedUsers.map(
         (user) => this.db.query`
     INSERT INTO public.user
-        (id, username)
+        (id, username, created_at)
     VALUES
-        (${user.id}, ${user.username})
+        (${user.id}, ${user.username}, ${user.created_at})
   `,
+      ),
+    );
+  }
+
+  async seedPasskeys() {
+    return Promise.all(
+      expectedPasskeys.map(
+        async ({
+          cred_id,
+          cred_public_key,
+          internal_user_id,
+          webauthn_user_id,
+          counter,
+          backup_eligible,
+          backup_status,
+          transports,
+          created_at,
+          last_used,
+        }) => {
+          const formattedTransports = formatPgArray(transports);
+
+          await this.db.query`
+          INSERT INTO passkey
+            (cred_id, cred_public_key, internal_user_id, webauthn_user_id, counter, backup_eligible, backup_status, transports, created_at, last_used) 
+          VALUES 
+            (${cred_id}, ${cred_public_key}, ${internal_user_id}, ${webauthn_user_id}, ${counter}, ${backup_eligible}, ${backup_status}, ${formattedTransports}::text[], ${created_at}, ${last_used})
+          `;
+        },
       ),
     );
   }
@@ -172,6 +202,7 @@ class Seed {
       this.seedStyles(),
       this.seedSizes(),
     ]);
+    await this.seedPasskeys();
     await this.seedProducts();
     await this.seedReviews();
   }

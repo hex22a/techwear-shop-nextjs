@@ -1,15 +1,53 @@
-import { Category, Color, Photo, ProductFull, Review, ReviewRow, Size, Style, User } from '@/app/lib/definitions';
+import {
+  Category,
+  Color, PasskeySerialized,
+  Photo,
+  ProductFull,
+  Review,
+  ReviewRow,
+  Size,
+  Style,
+  User,
+  UserWithPasskeysSerialized,
+} from '@/app/lib/definitions';
 
 const expectedUserId = '1d34ef0e-08cd-4439-9017-894d45074c0a';
 
 const expectedUserCreatedAt = new Date("2025-09-29T09:52:52.000Z");
 const expectedReviewCreatedAt = new Date("2025-10-20T09:52:52.000Z");
-const expectedUserUsername = 'crash';
+const expectedPasskeyCreatedAt = new Date("2025-11-20T09:52:52.000Z");
+const expectedPasskeyLastUsed = new Date("2025-12-20T09:52:52.000Z");
+export const expectedUserUsername = 'crash';
 
 export const expectedUser: User = {
   id: expectedUserId,
   username: expectedUserUsername,
   created_at: expectedUserCreatedAt,
+};
+
+const expectedPasskeySerialized1: PasskeySerialized = {
+  backup_eligible: false,
+  backup_status: false,
+  counter: 0,
+  created_at: expectedPasskeyCreatedAt,
+  cred_id: 'some_cred_id',
+  cred_public_key: 'pQECAyYgASFYILX-FokseHU7Xp7e_mQLCLM5I_iTeh7oXXD14yNcJe2oIlgg59FEHfw1aTEwcVPZsu5oSHkodL0s1ZsTUpEJzC3uMN4',
+  internal_user_id: expectedUserId,
+  last_used: expectedPasskeyLastUsed,
+  transports: ['hybrid'],
+  webauthn_user_id: 'some_webauthn_user_id',
+};
+
+const expectedPasskeyReturned1: PasskeySerialized = {
+  ...expectedPasskeySerialized1,
+  cred_public_key: 'TBD ANY KEY RALLY WORK HERE???',
+};
+
+export const expectedPasskeys = [expectedPasskeySerialized1];
+
+export const expectedUserWithPasskeys: UserWithPasskeysSerialized = {
+  ...expectedUser,
+  passkeys: new Map([expectedPasskeyReturned1].map((passkey) => [passkey.cred_id, passkey])),
 };
 
 export const expectedUsers: User[] = [
