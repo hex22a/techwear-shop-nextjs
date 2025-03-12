@@ -9,7 +9,7 @@ import {
   expectedUsers,
 } from './fixtures';
 import { db, queryFunction } from '@/app/lib/model/db';
-import { ProductFull } from '@/app/lib/definitions';
+import { ProductComplete } from '@/app/lib/definitions';
 import { formatPgArray } from '@/app/lib/model/helpers';
 
 export type seedDbClient = { query: queryFunction };
@@ -134,7 +134,7 @@ class Seed {
           photos,
           colors,
           sizes,
-        }: ProductFull) => {
+        }: ProductComplete) => {
           await this.db.query`
           INSERT INTO public.product
               (id, name, description, details, price, discount, photo_url, category_id, style_id)

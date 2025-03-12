@@ -5,10 +5,10 @@ import Arrow from "@/app/ui/vector/arrow.svg";
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import ReviewComponent from "@/app/ui/review";
-import {Review} from "@/app/lib/definitions";
+import {ReviewComplete} from "@/app/lib/definitions";
 
 export type CarouselProps = {
-    items: Review[]
+    items: ReviewComplete[]
 }
 
 export default function Carousel(props: CarouselProps) {

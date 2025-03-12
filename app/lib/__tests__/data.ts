@@ -36,7 +36,7 @@ import {
   expectedUserId,
   expectedUserUsername,
 } from './helpers/fixtures';
-import { Cart, CartRow, PasskeySerialized, ProductFull, Review, ReviewRaw } from '@/app/lib/definitions';
+import { Cart, CartSubmission, PasskeySerialized, ProductComplete, ReviewComplete, Review } from '@/app/lib/definitions';
 
 import { auth as mockAuth } from '@/auth';
 
@@ -115,7 +115,7 @@ describe('data platform test', () => {
       // Given
 
       // When
-      const actualProduct: ProductFull = await fetchProduct(expectedProductIdNapapijri);
+      const actualProduct: ProductComplete = await fetchProduct(expectedProductIdNapapijri);
 
       // Then
       expect(actualProduct).toEqual(expectedProductNapapijriReturned);
@@ -125,7 +125,7 @@ describe('data platform test', () => {
       // Given
 
       // When
-      const actualProduct: ProductFull = await fetchProduct(expectedProductIdMastrumBomber);
+      const actualProduct: ProductComplete = await fetchProduct(expectedProductIdMastrumBomber);
 
       // Then
       expect(actualProduct).toEqual(expectedProductMastrumBomberReturned);
@@ -200,7 +200,7 @@ describe('data platform test', () => {
       const expectedReviewText = 'This is a review';
       const expectedReviewTitle = 'Nice product';
       const expectedRating = 5;
-      const expectedReview: ReviewRaw = {
+      const expectedReview: Review = {
         product_id: expectedProductIdNapapijri,
         rating: expectedRating,
         review_text: expectedReviewText,
@@ -217,7 +217,7 @@ describe('data platform test', () => {
       (mockAuth as jest.Mock).mockResolvedValue({ user: { id: expectedUserId } });
 
       // When
-      const actualReview: Review = await addReview(expectedReview);
+      const actualReview: ReviewComplete = await addReview(expectedReview);
 
       // Then
       expect(actualReview).toEqual(expectedAddedReview);
@@ -227,7 +227,7 @@ describe('data platform test', () => {
   describe('createCart', () => {
     it('should create cart', async () => {
       // Given
-      const expectedCart: CartRow = {
+      const expectedCart: CartSubmission = {
         color_id: expectedColorIdRed,
         product_id: expectedProductIdNapapijri,
         quantity: 1,

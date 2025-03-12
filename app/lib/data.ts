@@ -4,21 +4,21 @@ import { auth } from '@/auth';
 import { db } from './model/db';
 import {
   Cart,
-  CartRow,
+  CartSubmission,
   Category,
   Color,
-  FullCartRow,
-  ExtraProductRaw,
+  CartRow,
+  FetchProductRow,
   PasskeySerialized,
-  ProductFull,
+  ProductComplete,
+  ReviewComplete,
   Review,
-  ReviewRaw,
   Size,
   Style,
   User,
   UserWithPasskeyRow,
   Product,
-  ProductRaw, ColorRow, SizeRow, StyleRow, CategoryRow, UserCredentials,
+  ProductRow, ColorRow, SizeRow, StyleRow, CategoryRow, UserCredentials,
 } from '@/app/lib/definitions';
 
 import { formatPgArray } from '@/app/lib/model/helpers';
@@ -69,7 +69,7 @@ export async function fetchAllCategories(): Promise<Category[]> {
 
 export async function fetchNewArrivals(): Promise<Product[]> {
   try {
-    const queryResult = await db.query<ProductRaw>`
+    const queryResult = await db.query<ProductRow>`
       SELECT
           product.id as id,
           product.name as name,
@@ -91,7 +91,7 @@ export async function fetchNewArrivals(): Promise<Product[]> {
       ORDER BY product.created_at DESC
       LIMIT ${MAIN_PAGE_PRODUCTS}
       `;
-    return queryResult.rows.map((row: ProductRaw): Product => ({
+    return queryResult.rows.map((row: ProductRow): Product => ({
       ...row,
       discount: row.discount_percent ? {
         percent: parseInt(row.discount_percent, 10),
@@ -106,7 +106,7 @@ export async function fetchNewArrivals(): Promise<Product[]> {
 
 export async function fetchTopSelling(): Promise<Product[]> {
   try {
-    const queryResult = await db.query<ProductRaw>`
+    const queryResult = await db.query<ProductRow>`
       SELECT
           product.id as id,
           product.name as name,
@@ -128,7 +128,7 @@ export async function fetchTopSelling(): Promise<Product[]> {
       ORDER BY average_rating DESC
       LIMIT ${MAIN_PAGE_PRODUCTS}
     `;
-    return queryResult.rows.map((row: ProductRaw): Product => ({
+    return queryResult.rows.map((row: ProductRow): Product => ({
       ...row,
       discount: row.discount_percent ? {
         percent: parseInt(row.discount_percent, 10),
@@ -143,8 +143,8 @@ export async function fetchTopSelling(): Promise<Product[]> {
 
 function filterToProductFullProperties<T extends Record<string, unknown>>(
   obj: T,
-): ProductFull {
-  const productFullInstance: ProductFull = {
+): ProductComplete {
+  const productFullInstance: ProductComplete = {
     average_rating: 0,
     category: {
       id: 0,
@@ -166,7 +166,7 @@ function filterToProductFullProperties<T extends Record<string, unknown>>(
       name: '',
     },
   };
-  const result: Partial<ProductFull> = {};
+  const result: Partial<ProductComplete> = {};
 
   // Only copy properties that exist in ProductFull
   for (const key of Object.keys(obj) as Array<keyof T>) {
@@ -177,12 +177,12 @@ function filterToProductFullProperties<T extends Record<string, unknown>>(
     }
   }
 
-  return result as ProductFull;
+  return result as ProductComplete;
 }
 
-export async function fetchProduct(id: number): Promise<ProductFull> {
+export async function fetchProduct(id: number): Promise<ProductComplete> {
   try {
-    const queryResult = await db.query<ExtraProductRaw>`
+    const queryResult = await db.query<FetchProductRow>`
       SELECT
           product.id as id,
           product.name as name,
@@ -223,7 +223,7 @@ export async function fetchProduct(id: number): Promise<ProductFull> {
       WHERE product.id = ${id}
       ORDER BY c.id, s.id, r.id, product_photo.id
     `;
-    const product: ProductFull = {
+    const product: ProductComplete = {
       ...filterToProductFullProperties(queryResult.rows[0]),
       photos: new Map(),
       colors: new Map(),
@@ -374,7 +374,7 @@ export async function getPasskeyWithUserId(cred_id: string, internal_user_id: st
   }
 }
 
-export async function addReview(review: ReviewRaw): Promise<Review> {
+export async function addReview(review: Review): Promise<ReviewComplete> {
   const user_session = await auth();
   if (!user_session) {
     throw new Error('User not logged in.');
@@ -382,7 +382,7 @@ export async function addReview(review: ReviewRaw): Promise<Review> {
   const { user } = user_session;
   const { product_id, title, rating, review_text } = review;
   try {
-    const queryResult = await db.query<Review>`
+    const queryResult = await db.query<ReviewComplete>`
             INSERT INTO review (
                 author_id,
                 product_id,
@@ -406,9 +406,9 @@ export async function addReview(review: ReviewRaw): Promise<Review> {
   }
 }
 
-export async function getTopReviews(): Promise<Review[]> {
+export async function getTopReviews(): Promise<ReviewComplete[]> {
   try {
-    const queryResult = await db.query<Review>`
+    const queryResult = await db.query<ReviewComplete>`
             SELECT
                 r.id as id,
                 r.verified as verified,
@@ -430,10 +430,10 @@ export async function getTopReviews(): Promise<Review[]> {
   }
 }
 
-export async function createCart(cart: CartRow): Promise<CartRow> {
+export async function createCart(cart: CartSubmission): Promise<CartSubmission> {
   const { user_id, product_id, color_id, size_id, quantity } = cart;
   try {
-    const queryResult = await db.query<CartRow>`
+    const queryResult = await db.query<CartSubmission>`
             INSERT INTO cart (
                 user_id,
                 product_id,
@@ -459,7 +459,7 @@ export async function createCart(cart: CartRow): Promise<CartRow> {
 
 export async function getCart(user_id: string): Promise<Cart> {
   try {
-    const queryResult = await db.query<FullCartRow>`
+    const queryResult = await db.query<CartRow>`
         SELECT
             user_id,
             product_id,

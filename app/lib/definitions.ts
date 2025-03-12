@@ -26,22 +26,24 @@ export type CategoryRow = {
 }
 export type Category = CategoryRow;
 
-export type ReviewRow = {
-    id: number;
-    author_id: string;
+export type Review = {
     product_id: number;
-    rating: number;
-    review: string;
-    created_at: Date;
     verified?: boolean;
+    rating: number;
     title: string;
-};
-
-export type ReviewRaw = Omit<ReviewRow, 'author_id' | 'review' | 'id' | 'created_at'> & {
     review_text: string;
 }
 
-export type Review = ReviewRaw & {
+export type ReviewRow = Omit<Review, 'review_text'> & {
+    id: number;
+    author_id: string;
+    review: string;
+    created_at: Date;
+};
+
+export type ReviewUI = Review;
+
+export type ReviewComplete = Review & {
     id: number
     author: string;
     created_at: Date;
@@ -52,7 +54,7 @@ export type Photo = {
     url: string;
 }
 
-export type ProductRaw = {
+export type ProductRow = {
     id: number,
     name: string,
     price: number,
@@ -61,7 +63,7 @@ export type ProductRaw = {
     average_rating: number;
 }
 
-export type FullProductRaw = ProductRaw & {
+export type ProductWithSizesAndColorsRow = ProductRow & {
     color_id: number,
     color_hex_value: string,
     color_human_readable_value: string,
@@ -70,7 +72,7 @@ export type FullProductRaw = ProductRaw & {
     size_value: string,
 }
 
-export type ExtraProductRaw = FullProductRaw & {
+export type FetchProductRow = ProductWithSizesAndColorsRow & {
     description: string,
     details: string,
     alt_photo_id: number,
@@ -84,19 +86,22 @@ export type ExtraProductRaw = FullProductRaw & {
     review_created_at: Date,
 }
 
-export type Product = Omit<ProductRaw, 'discount_percent'> & {
+export type Product = Omit<ProductRow, 'discount_percent'> & {
     discount?: {
         newPrice: number;
         percent: number;
     };
 }
 
+export type CartProduct = Omit<ProductWithSizesAndColorsRow, 'average_rating' | 'discount_percent'> & {
+    quantity: number, discount_percent: number
+};
 
-export type ProductFull = Product & {
+export type ProductComplete = Product & {
     description: string;
     details: string;
     photos: Map<number, Photo>
-    reviews: Map<number, Review>;
+    reviews: Map<number, ReviewComplete>;
     colors: Map<number, Color>;
     sizes: Map<number, Size>;
     category?: Category;
@@ -143,7 +148,7 @@ export type PasskeySerialized = Omit<Passkey, 'cred_public_key'> & {
     cred_public_key: string;
 }
 
-export type CartRow = {
+export type CartSubmission = {
     user_id: string;
     product_id: number;
     color_id: number;
@@ -151,7 +156,7 @@ export type CartRow = {
     quantity: number;
 }
 
-export type FullCartRow = CartRow & Omit<Color, 'id'> & Omit<Size, 'id'> & {
+export type CartRow = CartSubmission & Omit<Color, 'id'> & Omit<Size, 'id'> & {
     product_name: string;
     product_price: number;
     product_discount_percent: string;
@@ -161,7 +166,7 @@ export type FullCartRow = CartRow & Omit<Color, 'id'> & Omit<Size, 'id'> & {
 
 export type Cart = {
     user_id: string;
-    products: (Omit<FullProductRaw, 'average_rating' | 'discount_percent'> & { quantity: number, discount_percent: number })[];
+    products: CartProduct[];
     summary: {
         subtotal: number;
         total: number;

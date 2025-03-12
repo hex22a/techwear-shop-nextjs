@@ -7,7 +7,7 @@ import Price from "@/app/ui/price";
 import Featured from "@/app/ui/featured";
 
 import AddToCartForm from "./ui/add_to_cart_form";
-import {Color, ProductFull, Size} from "@/app/lib/definitions";
+import {Color, ProductComplete, Size} from "@/app/lib/definitions";
 import {fetchProduct} from "@/app/lib/data";
 import Tabs from "./ui/tabs";
 import {Tab} from "@/app/product/[id]/ui/tabs_header";
@@ -34,7 +34,7 @@ const sitePath = [
 export default async function ProductPage(props: {params: Promise<{id: string}>}) {
     const params = await props.params;
     const product_id = parseInt(params.id, 10);
-    const { name, price, description, photo_url, photos, sizes, colors, discount, reviews, details, average_rating }: ProductFull = await fetchProduct(product_id);
+    const { name, price, description, photo_url, photos, sizes, colors, discount, reviews, details, average_rating }: ProductComplete = await fetchProduct(product_id);
     const sizesArray: Size[] = Array.from(sizes.entries()).map(([, value]) => ({...value}));
     const colorsArray: Color[] = Array.from(colors.entries()).map(([, value]) => ({...value}));
 

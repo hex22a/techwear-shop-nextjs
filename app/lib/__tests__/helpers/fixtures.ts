@@ -3,8 +3,8 @@ import {
   Category,
   Color, PasskeySerialized,
   Photo,
-  ProductFull,
-  Review,
+  ProductComplete,
+  ReviewComplete,
   ReviewRow,
   Size,
   Style,
@@ -251,7 +251,7 @@ export const expectedProductIdNapapijri = 1;
 export const expectedProductNameNapapijri = 'Skidoo 2.0 Anorak Jacket';
 export const expectedProductPriceNapapijri = 500;
 export const expectedProductPhotoUrlNapapijri = '/items/napa-anor.webp';
-export const expectedProductNapapijri: ProductFull = {
+export const expectedProductNapapijri: ProductComplete = {
   id: expectedProductIdNapapijri,
   colors: new Map([expectedColorRed, expectedColorBlue, expectedColorPurple].map((color) => [color.id, color])),
   description: 'A contemporary take on the iconic Skidoo jacket, this is a loose-fit anorak for women made in stretch, water-resistant fabric. It features a faux- fur trim around the hood, Norwegian flag patch, and the iconic front flap pocket complete with our signature Napapijri Geographic graphic.',
@@ -274,7 +274,7 @@ const expectedProductDescriptionMastrumBomber = 'MA.STRUM Bomber Jacket';
 const expectedProductDetailsMastrumBomber = 'MA.STRUM Bomber Jacket';
 const expectedProductNameMastrumBomber = 'MA.STRUM Bomber Jacket';
 
-export const expectedProductMastrumBomber: ProductFull = {
+export const expectedProductMastrumBomber: ProductComplete = {
   id: expectedProductIdMastrumBomber,
   colors: new Map([expectedColorRed, expectedColorPurple].map((color) => [color.id, color])),
   description: expectedProductDescriptionMastrumBomber,
@@ -290,7 +290,7 @@ export const expectedProductMastrumBomber: ProductFull = {
   style: expectedStyleCasual,
 };
 
-export const expectedProducts: ProductFull[] = [
+export const expectedProducts: ProductComplete[] = [
   expectedProductNapapijri,
   expectedProductMastrumBomber,
 ];
@@ -324,7 +324,7 @@ const expectedReviewRowNapapijri1: ReviewRow = {
   review: expectedNegativeReviewText,
   verified: true,
 };
-const expectedReviewNapapijri1: Review = {
+const expectedReviewNapapijri1: ReviewComplete = {
   id: expectedReviewIdNapapijri1,
   product_id: expectedProductIdNapapijri,
   rating: expectedNegativeRating,
@@ -345,7 +345,7 @@ const expectedReviewRowNapapijri2: ReviewRow = {
   review: expectedPositiveReviewText,
   verified: true,
 };
-const expectedReviewNapapijri2: Review = {
+const expectedReviewNapapijri2: ReviewComplete = {
   id: expectedReviewIdNapapijri2,
   product_id: expectedProductIdNapapijri,
   rating: expectedPositiveRating,
@@ -365,7 +365,7 @@ const expectedReviewRowNapapijri3: ReviewRow = {
   review: expectedPositiveReviewText,
   verified: true,
 };
-const expectedReviewNapapijri3: Review = {
+const expectedReviewNapapijri3: ReviewComplete = {
   id: expectedReviewIdNapapijri3,
   product_id: expectedProductIdNapapijri,
   rating: expectedPositiveRating,
@@ -385,7 +385,7 @@ const expectedReviewRowNapapijri4: ReviewRow = {
   review: expectedPositiveReviewText,
   verified: true,
 };
-const expectedReviewNapapijri4: Review = {
+const expectedReviewNapapijri4: ReviewComplete = {
   id: expectedReviewIdNapapijri4,
   product_id: expectedProductIdNapapijri,
   rating: expectedPositiveRating,
@@ -405,7 +405,7 @@ const expectedReviewRowNapapijri5: ReviewRow = {
   review: expectedPositiveReviewText,
   verified: true,
 };
-const expectedReviewNapapijri5: Review = {
+const expectedReviewNapapijri5: ReviewComplete = {
   id: expectedReviewIdNapapijri5,
   product_id: expectedProductIdNapapijri,
   rating: expectedPositiveRating,
@@ -426,7 +426,7 @@ const expectedReviewRowNapapijri6: ReviewRow = {
   review: expectedPositiveReviewText,
   verified: true,
 };
-const expectedReviewNapapijri6: Review = {
+const expectedReviewNapapijri6: ReviewComplete = {
   id: expectedReviewIdNapapijri6,
   product_id: expectedProductIdNapapijri,
   rating: expectedPositiveRating,
@@ -446,7 +446,7 @@ const expectedReviewRowNapapijri7: ReviewRow = {
   review: expectedPositiveReviewText,
   verified: true,
 };
-const expectedReviewNapapijri7: Review = {
+const expectedReviewNapapijri7: ReviewComplete = {
   id: expectedReviewIdNapapijri7,
   product_id: expectedProductIdNapapijri,
   rating: expectedPositiveRating,
@@ -466,7 +466,7 @@ const expectedReviewRowNapapijri8: ReviewRow = {
   review: expectedPositiveReviewText,
   verified: true,
 };
-const expectedReviewNapapijri8: Review = {
+const expectedReviewNapapijri8: ReviewComplete = {
   id: expectedReviewIdNapapijri8,
   product_id: expectedProductIdNapapijri,
   rating: expectedPositiveRating,
@@ -488,7 +488,7 @@ export const expectedReviews: ReviewRow[] = [
   expectedReviewRowNapapijri8,
 ];
 
-export const expectedTopReviews: Review[] = [
+export const expectedTopReviews: ReviewComplete[] = [
   expectedReviewNapapijri2,
   expectedReviewNapapijri3,
   expectedReviewNapapijri4,
@@ -498,7 +498,7 @@ export const expectedTopReviews: Review[] = [
   expectedReviewNapapijri8,
 ];
 
-export const expectedNapapijriReviews: Review[] = [
+export const expectedNapapijriReviews: ReviewComplete[] = [
   expectedReviewNapapijri1,
   expectedReviewNapapijri2,
   expectedReviewNapapijri3,
@@ -509,7 +509,7 @@ export const expectedNapapijriReviews: Review[] = [
   expectedReviewNapapijri8,
 ];
 
-export const expectedProductNapapijriReturned: ProductFull = {
+export const expectedProductNapapijriReturned: ProductComplete = {
   id: expectedProductIdNapapijri,
   colors: new Map([expectedColorRed, expectedColorBlue, expectedColorPurple].map((color) => [color.id, color])),
   description: 'A contemporary take on the iconic Skidoo jacket, this is a loose-fit anorak for women made in stretch, water-resistant fabric. It features a faux- fur trim around the hood, Norwegian flag patch, and the iconic front flap pocket complete with our signature Napapijri Geographic graphic.',
@@ -524,7 +524,7 @@ export const expectedProductNapapijriReturned: ProductFull = {
   price: expectedProductPriceNapapijri,
 };
 
-export const expectedProductMastrumBomberReturned: ProductFull = {
+export const expectedProductMastrumBomberReturned: ProductComplete = {
   id: expectedProductIdMastrumBomber,
   colors: new Map([expectedColorRed, expectedColorPurple].map((color) => [color.id, color])),
   description: expectedProductDescriptionMastrumBomber,

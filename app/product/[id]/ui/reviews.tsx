@@ -5,13 +5,13 @@ import Filters from "@/app/ui/vector/filters.svg";
 import styles from "@/app/product/[id]/page.module.css";
 import ReviewComponent from "@/app/ui/review";
 import InteractiveStars from "./interactive_stars";
-import {Review} from "@/app/lib/definitions";
+import {ReviewComplete} from "@/app/lib/definitions";
 import { submitReview } from '@/app/lib/actions';
 
 
 export type ReviewProps = {
     product_id: number,
-    reviews: Map<number, Review>,
+    reviews: Map<number, ReviewComplete>,
 }
 
 export default function Reviews(props: ReviewProps) {

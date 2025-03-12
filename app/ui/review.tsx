@@ -1,8 +1,8 @@
 import Stars from "@/app/ui/stars";
 import Image from "next/image";
-import {ReviewRaw} from "@/app/lib/definitions";
+import { ReviewUI } from '@/app/lib/definitions';
 
-export default function Review(props: ReviewRaw) {
+export default function Review(props: ReviewUI) {
   const { title, review_text, rating, verified } = props;
     return (
       <div className="h-full border border-gray-500 rounded-xl px-8 py-7">
