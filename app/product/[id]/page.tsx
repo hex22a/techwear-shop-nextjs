@@ -34,7 +34,7 @@ const sitePath = [
 export default async function ProductPage(props: {params: Promise<{id: string}>}) {
     const params = await props.params;
     const product_id = parseInt(params.id, 10);
-    const { name, price, description, photo_url, photos, sizes, colors, discount, reviews, details }: ProductFull = await fetchProduct(product_id);
+    const { name, price, description, photo_url, photos, sizes, colors, discount, reviews, details, average_rating }: ProductFull = await fetchProduct(product_id);
     const sizesArray: Size[] = Array.from(sizes.entries()).map(([, value]) => ({...value}));
     const colorsArray: Color[] = Array.from(colors.entries()).map(([, value]) => ({...value}));
 
@@ -75,7 +75,7 @@ export default async function ProductPage(props: {params: Promise<{id: string}>}
                     <div>
                         <h1 className="text-4xl">{name}</h1>
                         <div>
-                            <Stars rating={4.5}/>
+                            <Stars rating={average_rating}/>
                         </div>
                         <div>
                             <Price price={price} discount={discount}/>
