@@ -219,7 +219,7 @@ export async function fetchProduct(id: number): Promise<ProductFull> {
       LEFT JOIN product_size ps ON product.id = ps.product_id
       INNER JOIN size s ON s.id = ps.size_id
       LEFT JOIN public.review r ON product.id = r.product_id
-      INNER JOIN public.user u ON r.author_id = u.id
+      LEFT JOIN public.user u ON r.author_id = u.id
       WHERE product.id = ${id}
       ORDER BY c.id, s.id, r.id, product_photo.id
     `;

@@ -10,13 +10,25 @@ import {
   getTopReviews,
 } from '../data';
 import {
-  expectedCategories, expectedColorHexValueRed, expectedColorHumanReadableValueRed, expectedColorIdRed,
+  expectedCategories,
+  expectedColorHexValueRed,
+  expectedColorHumanReadableValueRed,
+  expectedColorIdRed,
   expectedColors,
   expectedCredId,
-  expectedPasskeySerialized1, expectedProductDiscountPercentNapapijri,
-  expectedProductIdNapapijri, expectedProductNameNapapijri,
-  expectedProductNapapijriReturned, expectedProductPhotoUrlNapapijri, expectedProductPriceNapapijri, expectedSizeIdM,
-  expectedSizes, expectedSizeSizeM, expectedSizeValueM,
+  expectedPasskeySerialized1,
+  expectedProductDiscountPercentNapapijri,
+  expectedProductIdMastrumBomber,
+  expectedProductIdNapapijri,
+  expectedProductMastrumBomberReturned,
+  expectedProductNameNapapijri,
+  expectedProductNapapijriReturned,
+  expectedProductPhotoUrlNapapijri,
+  expectedProductPriceNapapijri,
+  expectedSizeIdM,
+  expectedSizes,
+  expectedSizeSizeM,
+  expectedSizeValueM,
   expectedStyles,
   expectedTopReviews,
   expectedUser,
@@ -99,7 +111,7 @@ describe('data platform test', () => {
   });
 
   describe('fetchProduct', () => {
-    it('should fetch detailed product', async () => {
+    it('should fetch detailed product with reviews', async () => {
       // Given
 
       // When
@@ -107,6 +119,16 @@ describe('data platform test', () => {
 
       // Then
       expect(actualProduct).toEqual(expectedProductNapapijriReturned);
+    });
+
+    it('should fetch detailed product w/o reviews', async () => {
+      // Given
+
+      // When
+      const actualProduct: ProductFull = await fetchProduct(expectedProductIdMastrumBomber);
+
+      // Then
+      expect(actualProduct).toEqual(expectedProductMastrumBomberReturned);
     });
   });
 

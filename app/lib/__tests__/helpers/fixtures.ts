@@ -232,17 +232,18 @@ const expectedPhotoNapapijri3: Photo = {
   id: 3,
   url: '/items/NA4I5F176-ALT3.webp',
 };
+const expectedProductPhotoUrlMastrumBomber = '/items/mastrum.jpg';
 const expectedPhotoMastrumBomber1: Photo = {
   id: 4,
-  url: '/items/mastrum.jpg',
+  url: expectedProductPhotoUrlMastrumBomber,
 };
 const expectedPhotoMastrumBomber2: Photo = {
   id: 5,
-  url: '/items/mastrum.jpg',
+  url: expectedProductPhotoUrlMastrumBomber,
 };
 const expectedPhotoMastrumBomber3: Photo = {
   id: 6,
-  url: '/items/mastrum.jpg',
+  url: expectedProductPhotoUrlMastrumBomber,
 };
 
 export const expectedProductIdNapapijri = 1;
@@ -267,17 +268,23 @@ export const expectedProductNapapijri: ProductFull = {
   style: expectedStyleCasual,
 };
 
+export const expectedProductIdMastrumBomber = 2;
+
+const expectedProductDescriptionMastrumBomber = 'MA.STRUM Bomber Jacket';
+const expectedProductDetailsMastrumBomber = 'MA.STRUM Bomber Jacket';
+const expectedProductNameMastrumBomber = 'MA.STRUM Bomber Jacket';
+
 export const expectedProductMastrumBomber: ProductFull = {
-  id: 2,
+  id: expectedProductIdMastrumBomber,
   colors: new Map([expectedColorRed, expectedColorPurple].map((color) => [color.id, color])),
-  description: 'MA.STRUM Bomber Jacket',
-  details: 'MA.STRUM Bomber Jacket',
+  description: expectedProductDescriptionMastrumBomber,
+  details: expectedProductDetailsMastrumBomber,
   photos: new Map([expectedPhotoMastrumBomber1, expectedPhotoMastrumBomber2, expectedPhotoMastrumBomber3].map((photo) => [photo.id, photo])),
   reviews: new Map(),
   sizes: new Map([expectedSizeXs, expectedSizeS].map((size) => [size.id, size])),
   average_rating: 0,
-  name: 'MA.STRUM Bomber Jacket',
-  photo_url: '/items/mastrum.jpg',
+  name: expectedProductNameMastrumBomber,
+  photo_url: expectedProductPhotoUrlMastrumBomber,
   price: 150,
   category: expectedCategoryJackets,
   style: expectedStyleCasual,
@@ -515,4 +522,18 @@ export const expectedProductNapapijriReturned: ProductFull = {
   name: expectedProductNameNapapijri,
   photo_url: expectedProductPhotoUrlNapapijri,
   price: expectedProductPriceNapapijri,
+};
+
+export const expectedProductMastrumBomberReturned: ProductFull = {
+  id: expectedProductIdMastrumBomber,
+  colors: new Map([expectedColorRed, expectedColorPurple].map((color) => [color.id, color])),
+  description: expectedProductDescriptionMastrumBomber,
+  details: expectedProductDetailsMastrumBomber,
+  photos: new Map([expectedPhotoMastrumBomber1, expectedPhotoMastrumBomber2, expectedPhotoMastrumBomber3].map((photo) => [photo.id, photo])),
+  reviews: new Map(),
+  sizes: new Map([expectedSizeXs, expectedSizeS].map((size) => [size.id, size])),
+  average_rating: 0,
+  name: expectedProductNameMastrumBomber,
+  photo_url: expectedProductPhotoUrlMastrumBomber,
+  price: 150,
 };
