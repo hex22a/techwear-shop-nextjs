@@ -1,16 +1,18 @@
 'use server';
 
 import { auth } from '@/auth';
-import { createCart } from './data';
+import { addReview, createCart } from './data';
 import { stripe } from "./stripe";
 import { headers } from 'next/headers';
 import {
   USER_NOT_LOGGED_IN_MESSAGE,
   ADD_TO_CART_MISSING_FIELDS_ERROR_MESSAGE,
   ORDER_PRODUCTS_MISSING_FIELDS_ERROR_MESSAGE,
+  ADD_REVIEW_MISSING_FIELDS_ERROR_MESSAGE,
+  FAILED_TO_ADD_REVIEW_ERROR_MESSAGE,
 } from './constants';
 import { STRIPE_SESSION_CREATE_PARAMS } from './config';
-import { AddToCartFormSchema, OrderProductsFormSchema } from './form_schemas';
+import { AddToCartFormSchema, OrderProductsFormSchema, ReviewFormSchema } from './form_schemas';
 import { transformProductsData } from './transformers';
 
 export type AddToCartFormState = {
@@ -100,4 +102,37 @@ export async function orderProducts(
   return {
     url: checkoutSession.url,
   };
+}
+
+export type SubmitReviewFormState = {
+  errors?: {
+    product_id?: string[];
+    review_title?: string[];
+    review_text?: string[];
+    rating?: string[];
+  },
+  message?: string | null;
+};
+
+export async function submitReview(
+  prevState: SubmitReviewFormState | undefined,
+  formData: FormData,
+) {
+  const validated = ReviewFormSchema.safeParse(Object.fromEntries(formData.entries()));
+  if (!validated.success) {
+    return {
+      errors: validated.error.flatten().fieldErrors,
+      message: ADD_REVIEW_MISSING_FIELDS_ERROR_MESSAGE,
+    };
+  }
+
+  try {
+    await addReview({ product_id: validated.data.product_id, title: validated.data.review_title, review_text: validated.data.review_text, rating: validated.data.rating });
+  } catch (error) {
+    if (error instanceof Error) {
+      return {
+        message: FAILED_TO_ADD_REVIEW_ERROR_MESSAGE,
+      };
+    }
+  }
 }

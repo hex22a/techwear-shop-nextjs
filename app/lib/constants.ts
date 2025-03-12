@@ -14,6 +14,8 @@ export const PASSKEY_NOT_FOUND_ERROR_MESSAGE = 'Passkey not found.';
 export const USER_NOT_LOGGED_IN_MESSAGE = 'User not logged in.';
 export const ADD_TO_CART_MISSING_FIELDS_ERROR_MESSAGE = 'Missing Fields. Failed to add to cart.';
 export const ORDER_PRODUCTS_MISSING_FIELDS_ERROR_MESSAGE = 'Missing Fields. Failed to order products.';
+export const ADD_REVIEW_MISSING_FIELDS_ERROR_MESSAGE = 'Missing Fields. Failed to add review.';
+export const FAILED_TO_ADD_REVIEW_ERROR_MESSAGE = 'Failed to add review.';
 
 export const WEBAUTHN_SESSION_ID_COOKIE_NAME = 'w-session-id';
 export const WEBAUTHN_SESSION_PREFIX = 'techwear-shop-webauthn-session-';

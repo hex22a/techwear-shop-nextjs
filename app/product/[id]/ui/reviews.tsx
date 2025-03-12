@@ -1,19 +1,13 @@
 'use client';
 
-import {useState} from "react";
-import z from 'zod';
+import { useActionState, useState } from 'react';
 import Filters from "@/app/ui/vector/filters.svg";
 import styles from "@/app/product/[id]/page.module.css";
 import ReviewComponent from "@/app/ui/review";
 import InteractiveStars from "./interactive_stars";
-import {addReview} from "@/app/lib/data";
 import {Review} from "@/app/lib/definitions";
+import { submitReview } from '@/app/lib/actions';
 
-const ReviewFormSchema = z.object({
-    review_title: z.string().nonempty(),
-    review_text: z.string().nonempty(),
-    rating: z.number(),
-});
 
 export type ReviewProps = {
     product_id: number,
@@ -28,14 +22,7 @@ export default function Reviews(props: ReviewProps) {
     const openReviewForm = () => setIsReviewFormVisible(true);
     const closeReviewForm = () => setIsReviewFormVisible(false);
 
-    const handleReviewSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        const validationResult = ReviewFormSchema.safeParse({ rating, ...Object.fromEntries(formData.entries())});
-        if (validationResult.success) {
-            await addReview({ product_id: props.product_id, title: validationResult.data.review_title, review_text: validationResult.data.review_text, rating: validationResult.data.rating });
-        }
-    };
+    const [formState, addReviewAction] = useActionState(submitReview, undefined);
 
     return (
         <>
@@ -59,17 +46,40 @@ export default function Reviews(props: ReviewProps) {
                 </div>
             </div>
             {isReviewFormVisible &&
-                <form onSubmit={handleReviewSubmit} className="w-full">
+                <form action={addReviewAction} className="w-full">
+                    <input type="hidden" name="product_id" value={props.product_id}/>
+                    <input type="hidden" name="rating" value={rating}/>
                     <fieldset>
                         <legend className="sr-only">Review</legend>
                         <label htmlFor="review_title">Title:</label>
                         <input type="text" id="review_title" name="review_title" placeholder="Great product"
                                className="block w-full p-2 my-3 border rounded-xl"/>
+                        <div className="text-red-500 text-sm md:text-base">
+                            {formState?.errors?.review_title &&
+                              formState.errors.review_title.map((error) => (
+                                <p key={error}>{error}</p>
+                              ))
+                            }
+                        </div>
                         <label className="block" htmlFor="review_text">White your review:</label>
                         <textarea className="block w-full p-2 my-3 border rounded-xl" name="review_text" id="review_text"
                                   rows={10}/>
+                        <div className="text-red-500 text-sm md:text-base">
+                            {formState?.errors?.review_text &&
+                              formState.errors.review_text.map((error) => (
+                                <p key={error}>{error}</p>
+                              ))
+                            }
+                        </div>
                         <label className="block" htmlFor="rating">Rating:</label>
                         <InteractiveStars rating={rating} onChange={setRating} />
+                        <div className="text-red-500 text-sm md:text-base">
+                            {formState?.errors?.rating &&
+                              formState.errors.rating.map((error) => (
+                                <p key={error}>{error}</p>
+                              ))
+                            }
+                        </div>
                     </fieldset>
                     <button onClick={closeReviewForm}
                             className="inline-block bg-gray-300 text-black text-sm md:text-base rounded-full mr-1 py-3 md:py-3.5 px-3 md:px-5"
@@ -79,6 +89,11 @@ export default function Reviews(props: ReviewProps) {
                         className="inline-block bg-black text-white text-sm md:text-base rounded-full py-3 md:py-3.5 px-3 md:px-5"
                         type="submit">Submit a review
                     </button>
+                    {formState?.message && (
+                      <div className="text-red-500 text-sm md:text-base">
+                          {formState.message}
+                      </div>
+                    )}
                 </form>
             }
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 mt-10">

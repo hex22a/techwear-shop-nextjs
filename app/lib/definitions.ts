@@ -1,30 +1,30 @@
 import { Base64URLString, AuthenticatorTransportFuture } from '@simplewebauthn/server';
 
-export type Color = {
+export type ColorRow = {
     id: number;
     hex_value: string;
     human_readable_value: string;
 }
-export type ColorRow = Color;
+export type Color = ColorRow;
 
-export type Size = {
+export type SizeRow = {
     id: number;
     size: string;
     value: string;
 }
-export type SizeRow = Size;
+export type Size = SizeRow;
 
-export type Style = {
+export type StyleRow = {
     id: number;
     name: string;
 }
-export type StyleRow = Style;
+export type Style = StyleRow;
 
-export type Category = {
+export type CategoryRow = {
     id: number;
     name: string;
 }
-export type CategoryRow = Category;
+export type Category = CategoryRow;
 
 export type ReviewRow = {
     id: number;

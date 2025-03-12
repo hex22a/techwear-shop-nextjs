@@ -1,17 +1,30 @@
-import { addToCart, AddToCartFormState, orderProducts, OrderProductsFormState } from './actions';
+import {
+  addToCart,
+  AddToCartFormState,
+  orderProducts,
+  OrderProductsFormState,
+  submitReview,
+  SubmitReviewFormState,
+} from './actions';
 import { typeToFlattenedError, ZodError } from 'zod';
 import {
   USER_NOT_LOGGED_IN_MESSAGE,
   ADD_TO_CART_MISSING_FIELDS_ERROR_MESSAGE,
   ORDER_PRODUCTS_MISSING_FIELDS_ERROR_MESSAGE,
+  ADD_REVIEW_MISSING_FIELDS_ERROR_MESSAGE,
+  FAILED_TO_ADD_REVIEW_ERROR_MESSAGE,
 } from './constants';
 
 import { auth as mockAuth } from '@/auth';
 import {
   AddToCartFormSchema as MockAddToCartFormSchema,
   OrderProductsFormSchema as MockOrderProductsFormSchema,
+  ReviewFormSchema as MockReviewFormSchema,
 } from './form_schemas';
-import { createCart as mockCreateCart } from './data';
+import {
+  createCart as mockCreateCart,
+  addReview as mockAddReview,
+} from './data';
 import { transformProductsData as mockTransformProductsData } from './transformers';
 import { stripe as mockStripe } from './stripe';
 import { headers as mockHeaders } from 'next/headers';
@@ -22,6 +35,7 @@ jest.mock('@/auth', () => ({
 }));
 jest.mock('./data', () => ({
   createCart: jest.fn(),
+  addReview: jest.fn(),
 }));
 jest.mock('./stripe', () => ({
   stripe: {
@@ -41,6 +55,9 @@ jest.mock('./form_schemas', () => ({
   },
   OrderProductsFormSchema: {
     safeParse: jest.fn(),
+  },
+  ReviewFormSchema: {
+    safeParse: jest.fn(),
   }
 }));
 jest.mock('./transformers');
@@ -56,11 +73,14 @@ describe('actions', () => {
         message: USER_NOT_LOGGED_IN_MESSAGE,
       };
       (mockAuth as jest.Mock).mockReturnValue(expectedUserSession);
+
       // Act
       const actualNewState = await addToCart(expectedPrevState, expectedFormData);
+
       // Assert
       expect(actualNewState).toEqual(expectedNewState);
     });
+
     test('user is not logged in', async () => {
       // Arrange
       const expectedUserSession = {};
@@ -70,11 +90,14 @@ describe('actions', () => {
         message: USER_NOT_LOGGED_IN_MESSAGE,
       };
       (mockAuth as jest.Mock).mockReturnValue(expectedUserSession);
+
       // Act
       const actualNewState = await addToCart(expectedPrevState, expectedFormData);
+
       // Assert
       expect(actualNewState).toEqual(expectedNewState);
     });
+
     test('user id is not presented', async () => {
       // Arrange
       const expectedUserSession = { user: {} };
@@ -84,11 +107,14 @@ describe('actions', () => {
         message: USER_NOT_LOGGED_IN_MESSAGE,
       };
       (mockAuth as jest.Mock).mockReturnValue(expectedUserSession);
+
       // Act
       const actualNewState = await addToCart(expectedPrevState, expectedFormData);
+
       // Assert
       expect(actualNewState).toEqual(expectedNewState);
     });
+
     test('form data validation failed', async () => {
       // Arrange
       const expectedUserId = 'uuid-uuid-uuid';
@@ -115,8 +141,10 @@ describe('actions', () => {
         success: false,
         error: expectedValidationErrors,
       });
+
       // Act
       const actualNewState = await addToCart(expectedPrevState, expectedFormData);
+
       // Assert
       expect(actualNewState).toEqual(expectedNewState);
       expect(MockAddToCartFormSchema.safeParse).toHaveBeenCalledWith(expectedData);
@@ -147,8 +175,10 @@ describe('actions', () => {
       });
       (mockCreateCart as jest.Mock).mockImplementation(() => {
         throw new Error(expectedDbErrorMessage); });
+
       // Act
       const actualNewState = await addToCart(expectedPrevState, expectedFormData);
+
       // Assert
       expect(actualNewState).toEqual(expectedNewState);
       expect(MockAddToCartFormSchema.safeParse).toHaveBeenCalledWith(expectedData);
@@ -227,8 +257,10 @@ describe('actions', () => {
         error: expectedValidationErrors,
       });
       (mockTransformProductsData as jest.Mock).mockReturnValue(expectedTransformedData);
+
       // Act
       const actualNewState = await orderProducts(expectedPrevState, expectedFormData);
+
       // Assert
       expect(actualNewState).toEqual(expectedNewState);
       expect(mockTransformProductsData).toHaveBeenCalledWith(expectedData);
@@ -317,13 +349,129 @@ describe('actions', () => {
       (mockStripe.checkout.sessions.create as jest.Mock).mockReturnValue(({
         url: expectedCheckoutSessionUrl,
       }));
+
       // Act
       const actualNewState = await orderProducts(expectedPrevState, expectedFormData);
+
       // Assert
       expect(actualNewState).toEqual(expectedNewState);
       expect(mockTransformProductsData).toHaveBeenCalledWith(expectedData);
       expect(MockOrderProductsFormSchema.safeParse).toHaveBeenCalledWith(expectedTransformedData);
       expect(mockStripe.checkout.sessions.create).toHaveBeenCalledWith(expectedStripeSessionConfiguration);
+    });
+  });
+
+  describe('submitReview', () => {
+    test('validation failed', async () => {
+      // Arrange
+      const expectedPrevState = undefined;
+      const expectedData = {};
+      const expectedFormData = new FormData();
+      const expectedFieldErrors = { review_title: ['Missing review title'], review_text: ['Missing review text'], rating: ['Missing rating'] };
+      const expectedValidationErrors: Partial<ZodError> = {
+        flatten<U>(): typeToFlattenedError<U> {
+          return { fieldErrors: expectedFieldErrors } as unknown as typeToFlattenedError<U>;
+        },
+      };
+      const expectedNewState: SubmitReviewFormState = {
+        errors: expectedFieldErrors,
+        message: ADD_REVIEW_MISSING_FIELDS_ERROR_MESSAGE,
+      };
+      (MockReviewFormSchema.safeParse as jest.Mock).mockReturnValue({
+        success: false,
+        error: expectedValidationErrors,
+      });
+
+      // Act
+      const actualNewState = await submitReview(expectedPrevState, expectedFormData);
+
+      // Assert
+      expect(actualNewState).toEqual(expectedNewState);
+      expect(MockReviewFormSchema.safeParse).toHaveBeenCalledWith(expectedData);
+    });
+
+    test('database error', async () => {
+      // Arrange
+      const expectedPrevState = undefined;
+      const expectedReviewTitle = 'title';
+      const expectedReviewText = 'text';
+      const expectedReviewRating = '5';
+      const expectedProductId = '1';
+      const expectedData = {
+        product_id: expectedProductId,
+        review_title: expectedReviewTitle,
+        review_text: expectedReviewText,
+        rating: expectedReviewRating,
+      };
+      const expectedFormData = new FormData();
+      expectedFormData.append('product_id', expectedProductId);
+      expectedFormData.append('review_title', expectedReviewTitle);
+      expectedFormData.append('review_text', expectedReviewText);
+      expectedFormData.append('rating', expectedReviewRating);
+      const expectedNewState: SubmitReviewFormState = {
+        message: FAILED_TO_ADD_REVIEW_ERROR_MESSAGE,
+      };
+      const expectedReview = {
+        product_id: expectedProductId,
+        rating: expectedReviewRating,
+        review_text: expectedReviewText,
+        title: expectedReviewTitle,
+      };
+      (MockReviewFormSchema.safeParse as jest.Mock).mockReturnValue({
+        success: true,
+        data: expectedData,
+      });
+      (mockAddReview as jest.Mock).mockImplementation(() => {
+        throw new Error('Failed to add review');
+      });
+
+      // Act
+      const actualNewState = await submitReview(expectedPrevState, expectedFormData);
+
+      // Assert
+      expect(actualNewState).toEqual(expectedNewState);
+      expect(MockReviewFormSchema.safeParse).toHaveBeenCalledWith(expectedData);
+      expect(mockAddReview).toHaveBeenCalledWith(expectedReview);
+    });
+
+    test('review added', async () => {
+      // Arrange
+      const expectedPrevState = undefined;
+      const expectedReviewTitle = 'title';
+      const expectedReviewText = 'text';
+      const expectedReviewRating = '5';
+      const expectedProductId = '1';
+      const expectedData = {
+        product_id: expectedProductId,
+        review_title: expectedReviewTitle,
+        review_text: expectedReviewText,
+        rating: expectedReviewRating,
+      };
+      const expectedFormData = new FormData();
+      expectedFormData.append('product_id', expectedProductId);
+      expectedFormData.append('review_title', expectedReviewTitle);
+      expectedFormData.append('review_text', expectedReviewText);
+      expectedFormData.append('rating', expectedReviewRating);
+      const expectedNewState = undefined;
+      const expectedReview = {
+        product_id: expectedProductId,
+        rating: expectedReviewRating,
+        review_text: expectedReviewText,
+        title: expectedReviewTitle,
+      };
+      (MockReviewFormSchema.safeParse as jest.Mock).mockReturnValue({
+        success: true,
+        data: expectedData,
+      });
+      (mockAddReview as jest.Mock).mockResolvedValue(expectedReview);
+
+      // Act
+      const actualNewState = await submitReview(expectedPrevState, expectedFormData);
+
+      // Assert
+      expect(actualNewState).toEqual(expectedNewState);
+      expect(MockReviewFormSchema.safeParse).toHaveBeenCalledWith(expectedData);
+      expect(mockAddReview).toHaveBeenCalledWith(expectedReview);
     });
   });
 });
