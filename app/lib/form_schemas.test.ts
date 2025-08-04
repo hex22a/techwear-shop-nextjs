@@ -8,9 +8,9 @@ import {
 } from './form_schemas';
 
 describe('form schemas', () => {
-  const expectedNotANumberErrorMessage = 'Expected number, received nan';
-  const expectedGtErrorMessage = 'Number must be greater than or equal to ';
-  const expectedLtErrorMessage = 'Number must be less than or equal to ';
+  const expectedNotANumberErrorMessage = 'Invalid input: expected number, received NaN';
+  const expectedGtErrorMessage = 'Too small: expected number to be >=';
+  const expectedLtErrorMessage = 'Too big: expected number to be <=';
 
   describe('AddToCartFormSchema', () => {
 
