@@ -14,6 +14,7 @@
   "dependencies": {
     "@simplewebauthn/browser": "^13.1.2",
     "@simplewebauthn/server": "^13.1.2",
+    "@tailwindcss/postcss": "^4.1.12",
     "@types/pg": "^8.15.5",
     "@vercel/postgres": "^0.10.0",
     "@vercel/speed-insights": "^1.2.0",
