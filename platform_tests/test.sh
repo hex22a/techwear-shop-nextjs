@@ -15,7 +15,19 @@ else
   cd ..
 fi
 
-docker run -d --rm \
+ENGINE="${ENGINE:-}"
+if [[ -z "${ENGINE}" ]]; then
+  if command -v docker >/dev/null 2>&1; then
+    ENGINE=docker
+  elif command -v podman >/dev/null 2>&1; then
+    ENGINE=podman
+  else
+    echo "Neither docker nor podman found in PATH" >&2
+    exit 1
+  fi
+fi
+
+${ENGINE} run -d --rm \
   --name ${CONTAINER_NAME} \
   -e POSTGRES_DB=public \
   -e POSTGRES_USER=pg \
