@@ -2,6 +2,10 @@ import { FetchProductRow, Product, ProductComplete, ProductRow } from '@/app/lib
 import { db } from '@/app/lib/model/db';
 
 const MAIN_PAGE_PRODUCTS = 4;
+const SEARCH_RESULTS_PER_PAGE = 10;
+const TRIGRAM_THRESHOLD = 0.3;
+
+const offset = 0;
 
 export async function fetchNewArrivals(): Promise<Product[]> {
   try {
@@ -85,7 +89,7 @@ export async function fetchTopSelling(): Promise<Product[]> {
   }
 }
 
-function filterToProductFullProperties<T extends Record<string, unknown>>(obj: T): ProductComplete {
+export function filterToProductFullProperties<T extends Record<string, unknown>>(obj: T): ProductComplete {
   const productFullInstance: ProductComplete = {
     average_rating: 0,
     category: {
@@ -110,7 +114,6 @@ function filterToProductFullProperties<T extends Record<string, unknown>>(obj: T
   };
   const result: Partial<ProductComplete> = {};
 
-  // Only copy properties that exist in ProductFull
   for (const key of Object.keys(obj) as Array<keyof T>) {
     if (key in productFullInstance || key === 'id') {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -120,6 +123,28 @@ function filterToProductFullProperties<T extends Record<string, unknown>>(obj: T
   }
 
   return result as ProductComplete;
+}
+
+export function filterToProductThumbnailProperties<T extends Record<string, unknown>>(obj: T): Product {
+  const productThumbnailInstance: Product = {
+    average_rating: 0,
+    discount: { newPrice: 0, percent: 0 },
+    id: 0,
+    name: '',
+    photo_url: '',
+    price: 0
+  };
+  const result: Partial<Product> = {};
+
+  for (const key of Object.keys(obj) as Array<keyof T>) {
+    if (key in productThumbnailInstance || key === 'id') {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      result[key] = obj[key];
+    }
+  }
+
+  return result as Product;
 }
 
 export async function fetchProduct(id: number): Promise<ProductComplete> {
@@ -218,5 +243,64 @@ export async function fetchProduct(id: number): Promise<ProductComplete> {
   } catch (error) {
     console.error(`Database error: ${error}`);
     throw new Error(`Failed to fetch product id: ${id}`);
+  }
+}
+
+export async function findProductsFts(searchText: string): Promise<Product[]> {
+  try {
+    const queryResult = await db.query<ProductRow>`
+      WITH
+        q AS (SELECT websearch_to_tsquery('english', ${searchText}) AS tsq),
+        reviews AS (
+          SELECT
+            r.product_id,
+            ROUND(AVG(r.rating)::numeric, 1) AS average_rating
+          FROM public.review r
+          GROUP BY r.product_id
+        ),
+        s AS (
+          SELECT
+            p.id,
+            p.name,
+            p.price,
+            p.discount AS discount_percent,
+            p.details,
+            p.photo_url,
+            COALESCE(rv.average_rating, 0) AS average_rating,
+            ts_rank_cd(p.fts, q.tsq) AS rank,
+            similarity(p.name, ${searchText}) AS sim,
+            (0.7 * COALESCE(ts_rank_cd(p.fts, q.tsq), 0) + 0.3 * COALESCE(similarity(p.name, ${searchText}), 0)) AS score
+          FROM public.product AS p
+                 CROSS JOIN q
+                 LEFT JOIN reviews rv ON rv.product_id = p.id
+          WHERE (p.fts @@ q.tsq) OR (similarity(p.name, ${searchText}) > ${TRIGRAM_THRESHOLD})
+        )
+      SELECT
+        s.id,
+        s.name,
+        s.price,
+        s.discount_percent,
+        s.details,
+        s.photo_url,
+        s.average_rating
+      FROM s
+      ORDER BY score DESC
+      LIMIT ${SEARCH_RESULTS_PER_PAGE} OFFSET ${offset}
+    `;
+    return queryResult.rows.map(
+      (row: ProductRow): Product => ({
+        ...filterToProductThumbnailProperties(row),
+        average_rating: parseFloat(`${row.average_rating}`),
+        discount: row.discount_percent
+          ? {
+            percent: parseInt(row.discount_percent, 10),
+            newPrice: (row.price * (100 - parseInt(row.discount_percent, 10))) / 100,
+          }
+          : undefined,
+      }),
+    );
+  } catch (error) {
+    console.error(`Database error: ${error}`);
+    throw new Error(`Failed to perform full-text search. Query: ${searchText}`);
   }
 }

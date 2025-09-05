@@ -1,14 +1,17 @@
 import {
   AllowCredentials,
   Category,
-  Color, PasskeySerialized,
+  Color,
+  PasskeySerialized,
   Photo,
+  Product,
   ProductComplete,
   ReviewComplete,
   ReviewRow,
   Size,
   Style,
-  User, UserCredentials,
+  User,
+  UserCredentials,
 } from '@/app/lib/definitions';
 import { AuthenticatorTransportFuture } from '@simplewebauthn/server';
 
@@ -251,11 +254,12 @@ export const expectedProductIdNapapijri = 1;
 export const expectedProductNameNapapijri = 'Skidoo 2.0 Anorak Jacket';
 export const expectedProductPriceNapapijri = 500;
 export const expectedProductPhotoUrlNapapijri = '/items/napa-anor.webp';
+const expectedProductDescriptionNapapijri = 'A contemporary take on the iconic Skidoo jacket, this is a loose-fit anorak for women made in stretch, water-resistant fabric. It features a faux- fur trim around the hood, Norwegian flag patch, and the iconic front flap pocket complete with our signature Napapijri Geographic graphic.';
 export const expectedProductNapapijri: ProductComplete = {
   id: expectedProductIdNapapijri,
   colors: new Map([expectedColorRed, expectedColorBlue, expectedColorPurple].map((color) => [color.id, color])),
-  description: 'A contemporary take on the iconic Skidoo jacket, this is a loose-fit anorak for women made in stretch, water-resistant fabric. It features a faux- fur trim around the hood, Norwegian flag patch, and the iconic front flap pocket complete with our signature Napapijri Geographic graphic.',
-  details: 'A contemporary take on the iconic Skidoo jacket, this is a loose-fit anorak for women made in stretch, water-resistant fabric. It features a faux- fur trim around the hood, Norwegian flag patch, and the iconic front flap pocket complete with our signature Napapijri Geographic graphic.',
+  description: expectedProductDescriptionNapapijri,
+  details: expectedProductDescriptionNapapijri,
   discount: { newPrice: 450, percent: expectedProductDiscountPercentNapapijri },
   photos: new Map([expectedPhotoNapapijri1, expectedPhotoNapapijri2, expectedPhotoNapapijri3].map((photo) => [photo.id, photo])),
   reviews: new Map(),
@@ -266,6 +270,14 @@ export const expectedProductNapapijri: ProductComplete = {
   price: expectedProductPriceNapapijri,
   category: expectedCategoryJackets,
   style: expectedStyleCasual,
+};
+export const expectedProductNapapijriMin: Product = {
+  id: expectedProductIdNapapijri,
+  name: expectedProductNameNapapijri,
+  photo_url: expectedProductPhotoUrlNapapijri,
+  price: expectedProductPriceNapapijri,
+  average_rating: 4.5,
+  discount: { newPrice: 450, percent: expectedProductDiscountPercentNapapijri },
 };
 
 export const expectedProductIdMastrumBomber = 2;
@@ -512,8 +524,8 @@ export const expectedNapapijriReviews: ReviewComplete[] = [
 export const expectedProductNapapijriReturned: ProductComplete = {
   id: expectedProductIdNapapijri,
   colors: new Map([expectedColorRed, expectedColorBlue, expectedColorPurple].map((color) => [color.id, color])),
-  description: 'A contemporary take on the iconic Skidoo jacket, this is a loose-fit anorak for women made in stretch, water-resistant fabric. It features a faux- fur trim around the hood, Norwegian flag patch, and the iconic front flap pocket complete with our signature Napapijri Geographic graphic.',
-  details: 'A contemporary take on the iconic Skidoo jacket, this is a loose-fit anorak for women made in stretch, water-resistant fabric. It features a faux- fur trim around the hood, Norwegian flag patch, and the iconic front flap pocket complete with our signature Napapijri Geographic graphic.',
+  description: expectedProductDescriptionNapapijri,
+  details: expectedProductDescriptionNapapijri,
   discount: { newPrice: 450, percent: expectedProductDiscountPercentNapapijri },
   photos: new Map([expectedPhotoNapapijri1, expectedPhotoNapapijri2, expectedPhotoNapapijri3].map((photo) => [photo.id, photo])),
   reviews: new Map(expectedNapapijriReviews.map(review => [review.id, review])),

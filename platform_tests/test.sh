@@ -41,7 +41,7 @@ sleep 5
 
 # Always stop container, but exit with 1 when tests are failing
 if pnpm test:platform; then
-  docker stop ${CONTAINER_NAME}
+  ${ENGINE} stop ${CONTAINER_NAME}
 else
-  docker stop ${CONTAINER_NAME} && exit 1
+  ${ENGINE} stop ${CONTAINER_NAME} && exit 1
 fi

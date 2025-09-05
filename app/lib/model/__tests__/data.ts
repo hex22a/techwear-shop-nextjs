@@ -18,7 +18,7 @@ import {
   expectedProductIdMastrumBomber,
   expectedProductIdNapapijri,
   expectedProductMastrumBomberReturned,
-  expectedProductNameNapapijri,
+  expectedProductNameNapapijri, expectedProductNapapijriMin,
   expectedProductNapapijriReturned,
   expectedProductPhotoUrlNapapijri,
   expectedProductPriceNapapijri,
@@ -33,10 +33,18 @@ import {
   expectedUserId,
   expectedUserUsername,
 } from './helpers/fixtures';
-import { Cart, CartSubmission, PasskeySerialized, ProductComplete, ReviewComplete, Review } from '@/app/lib/definitions';
+import {
+  Cart,
+  CartSubmission,
+  PasskeySerialized,
+  ProductComplete,
+  ReviewComplete,
+  Review,
+  Product,
+} from '@/app/lib/definitions';
 
 import { auth as mockAuth } from '@/auth';
-import { fetchProduct } from '@/app/lib/model/data/product';
+import { fetchProduct, findProductsFts } from '@/app/lib/model/data/product';
 import { createUser, findUser, getAllowCredentials, getPasskeyWithUserId } from '@/app/lib/model/data/user';
 import { createCart, getCart } from '@/app/lib/model/data/cart';
 import { addReview, getTopReviews } from '@/app/lib/model/data/review';
@@ -130,6 +138,19 @@ describe('data platform test', () => {
 
       // Then
       expect(actualProduct).toEqual(expectedProductMastrumBomberReturned);
+    });
+  });
+
+  describe('findProductsFts', () => {
+    it('shall fetch Napapijri product when searching for nap', async () => {
+      // Given
+      const expectedSearchText = 'Napapijri';
+
+      // When
+      const actualProducts: Product[] = await findProductsFts(expectedSearchText);
+
+      // Then
+      expect(actualProducts).toEqual([expectedProductNapapijriMin]);
     });
   });
 
