@@ -13,8 +13,8 @@ import {
 import { STRIPE_SESSION_CREATE_PARAMS } from './config';
 import { AddToCartFormSchema, OrderProductsFormSchema, ReviewFormSchema } from './form_schemas';
 import { transformProductsData } from './transformers';
-import { addReview } from '@/app/lib/model/data/product';
 import { createCart } from '@/app/lib/model/data/cart';
+import { addReview } from '@/app/lib/model/data/review';
 
 export type AddToCartFormState = {
   errors?: {

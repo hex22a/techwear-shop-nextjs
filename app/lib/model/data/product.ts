@@ -1,6 +1,5 @@
-import { FetchProductRow, Product, ProductComplete, ProductRow, Review, ReviewComplete } from '@/app/lib/definitions';
+import { FetchProductRow, Product, ProductComplete, ProductRow } from '@/app/lib/definitions';
 import { db } from '@/app/lib/model/db';
-import { auth } from '@/auth';
 
 const MAIN_PAGE_PRODUCTS = 4;
 
@@ -28,13 +27,17 @@ export async function fetchNewArrivals(): Promise<Product[]> {
       ORDER BY product.created_at DESC
       LIMIT ${MAIN_PAGE_PRODUCTS}
       `;
-    return queryResult.rows.map((row: ProductRow): Product => ({
-      ...row,
-      discount: row.discount_percent ? {
-        percent: parseInt(row.discount_percent, 10),
-        newPrice: row.price * (100 - parseInt(row.discount_percent, 10)) / 100,
-      } : undefined
-    }));
+    return queryResult.rows.map(
+      (row: ProductRow): Product => ({
+        ...row,
+        discount: row.discount_percent
+          ? {
+              percent: parseInt(row.discount_percent, 10),
+              newPrice: (row.price * (100 - parseInt(row.discount_percent, 10))) / 100,
+            }
+          : undefined,
+      }),
+    );
   } catch (error) {
     console.error(`Database error: ${error}`);
     throw new Error('Failed to fetch new arrivals.');
@@ -65,22 +68,24 @@ export async function fetchTopSelling(): Promise<Product[]> {
       ORDER BY average_rating DESC
       LIMIT ${MAIN_PAGE_PRODUCTS}
     `;
-    return queryResult.rows.map((row: ProductRow): Product => ({
-      ...row,
-      discount: row.discount_percent ? {
-        percent: parseInt(row.discount_percent, 10),
-        newPrice: row.price * (100 - parseInt(row.discount_percent, 10)) / 100,
-      } : undefined
-    }));
+    return queryResult.rows.map(
+      (row: ProductRow): Product => ({
+        ...row,
+        discount: row.discount_percent
+          ? {
+              percent: parseInt(row.discount_percent, 10),
+              newPrice: (row.price * (100 - parseInt(row.discount_percent, 10))) / 100,
+            }
+          : undefined,
+      }),
+    );
   } catch (error) {
     console.error(`Database error: ${error}`);
     throw new Error('Failed to fetch new arrivals.');
   }
 }
 
-function filterToProductFullProperties<T extends Record<string, unknown>>(
-  obj: T,
-): ProductComplete {
+function filterToProductFullProperties<T extends Record<string, unknown>>(obj: T): ProductComplete {
   const productFullInstance: ProductComplete = {
     average_rating: 0,
     category: {
@@ -213,62 +218,5 @@ export async function fetchProduct(id: number): Promise<ProductComplete> {
   } catch (error) {
     console.error(`Database error: ${error}`);
     throw new Error(`Failed to fetch product id: ${id}`);
-  }
-}
-const MAIN_PAGE_REVIEWS = 7;
-
-export async function addReview(review: Review): Promise<ReviewComplete> {
-  const user_session = await auth();
-  if (!user_session) {
-    throw new Error('User not logged in.');
-  }
-  const { user } = user_session;
-  const { product_id, title, rating, review_text } = review;
-  try {
-    const queryResult = await db.query<ReviewComplete>`
-            INSERT INTO review (
-                author_id,
-                product_id,
-                rating,
-                title,
-                review
-            )
-            VALUES (
-                ${user?.id},
-                ${product_id},
-                ${rating},
-                ${title},
-                ${review_text}
-            )
-            RETURNING id, product_id, rating, title, review as review_text, created_at
-        `;
-    return queryResult.rows[0];
-  } catch (error) {
-    console.error(`Database error: ${error}`);
-    throw new Error(`Failed to add review: ${review}`);
-  }
-}
-
-export async function getTopReviews(): Promise<ReviewComplete[]> {
-  try {
-    const queryResult = await db.query<ReviewComplete>`
-            SELECT
-                r.id as id,
-                r.verified as verified,
-                r.product_id as product_id,
-                r.rating as rating,
-                r.title as title,
-                r.review as review_text,
-                r.created_at as created_at,
-                u.username as author
-            FROM review r
-            LEFT JOIN public.user u on r.author_id = u.id
-            ORDER BY rating desc 
-            LIMIT ${MAIN_PAGE_REVIEWS}
-        `;
-    return queryResult.rows.map((row) => ({ ...row }));
-  } catch (error) {
-    console.error(`Database error: ${error}`);
-    throw new Error('Failed to fetch reviews');
   }
 }

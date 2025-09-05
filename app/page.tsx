@@ -5,7 +5,8 @@ import Featured from "@/app/ui/featured";
 import Carousel from "@/app/ui/carousel";
 import Footer from "@/app/ui/footer";
 import Header from "@/app/ui/header/header";
-import { fetchNewArrivals, fetchTopSelling, getTopReviews } from '@/app/lib/model/data/product';
+import { fetchNewArrivals, fetchTopSelling } from '@/app/lib/model/data/product';
+import { getTopReviews } from '@/app/lib/model/data/review';
 
 export default async function Home() {
   const [reviews, newArrivals, topSelling] = await Promise.all([

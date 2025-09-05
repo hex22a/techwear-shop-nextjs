@@ -26,8 +26,8 @@ import { stripe as mockStripe } from './stripe';
 import { headers as mockHeaders } from 'next/headers';
 import { STRIPE_SESSION_CREATE_PARAMS } from '@/app/lib/config';
 import { Cart } from '@/app/lib/definitions';
-import { addReview as mockAddReview } from './model/data/product';
 import { createCart as mockCreateCart } from './model/data/cart';
+import { addReview as mockAddReview } from '@/app/lib/model/data/review';
 
 jest.mock('@/auth', () => ({
   auth: jest.fn(),
@@ -35,7 +35,7 @@ jest.mock('@/auth', () => ({
 jest.mock('./model/data/cart', () => ({
   createCart: jest.fn(),
 }));
-jest.mock('./model/data/product', () => ({
+jest.mock('./model/data/review', () => ({
   addReview: jest.fn(),
 }));
 jest.mock('./stripe', () => ({

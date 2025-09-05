@@ -36,9 +36,10 @@ import {
 import { Cart, CartSubmission, PasskeySerialized, ProductComplete, ReviewComplete, Review } from '@/app/lib/definitions';
 
 import { auth as mockAuth } from '@/auth';
-import { addReview, fetchProduct, getTopReviews } from '@/app/lib/model/data/product';
+import { fetchProduct } from '@/app/lib/model/data/product';
 import { createUser, findUser, getAllowCredentials, getPasskeyWithUserId } from '@/app/lib/model/data/user';
 import { createCart, getCart } from '@/app/lib/model/data/cart';
+import { addReview, getTopReviews } from '@/app/lib/model/data/review';
 
 jest.mock('@/auth', () => ({
   auth: jest.fn(),
