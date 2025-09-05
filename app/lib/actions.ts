@@ -1,7 +1,6 @@
 'use server';
 
 import { auth } from '@/auth';
-import { addReview, createCart } from './model/data';
 import { stripe } from "./stripe";
 import { headers } from 'next/headers';
 import {
@@ -14,6 +13,8 @@ import {
 import { STRIPE_SESSION_CREATE_PARAMS } from './config';
 import { AddToCartFormSchema, OrderProductsFormSchema, ReviewFormSchema } from './form_schemas';
 import { transformProductsData } from './transformers';
+import { addReview } from '@/app/lib/model/data/product';
+import { createCart } from '@/app/lib/model/data/cart';
 
 export type AddToCartFormState = {
   errors?: {

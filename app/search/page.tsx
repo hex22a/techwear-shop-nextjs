@@ -6,7 +6,7 @@ import Arrow from "@/app/ui/vector/arrow.svg";
 
 import Filters from "./ui/filters";
 import SearchResultsHeader, { SearchResultsHeaderProps } from "@/app/search/ui/search_results_header";
-import {fetchAllCategories, fetchAllColors, fetchAllSizes, fetchAllStyles} from "@/app/lib/model/data";
+import {fetchAllCategories, fetchAllColors, fetchAllSizes, fetchAllStyles} from "@/app/lib/model/data/common";
 import { Product } from '@/app/lib/definitions';
 
 const sitePath = [

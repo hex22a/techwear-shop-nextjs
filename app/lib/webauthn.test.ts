@@ -4,12 +4,6 @@ import {
   verifyWebAuthnRegistration, WebAuthnResponse,
 } from './webauthn';
 import {
-  findUser as mockFindUser,
-  getAllowCredentials as mockGetAllowCredentials,
-  createUser as mockCreateUser,
-  getPasskeyWithUserId as mockGetPasskeyWithUserId,
-} from './model/data';
-import {
   deleteCurrentWebauthnSession as mockDeleteCurrentWebauthnSession,
   getCurrentWebauthnSession as mockGetCurrentWebauthnSession,
   updateCurrentWebauthnSession as mockUpdateCurrentWebauthnSession,
@@ -44,8 +38,14 @@ import {
   USER_ALREADY_EXISTS_ERROR_MESSAGE,
   USER_NOT_FOUND_ERROR_MESSAGE,
 } from '@/app/lib/constants';
+import {
+  createUser as mockCreateUser,
+  findUser as mockFindUser,
+  getAllowCredentials as mockGetAllowCredentials,
+  getPasskeyWithUserId as mockGetPasskeyWithUserId,
+} from '@/app/lib/model/data/user';
 
-jest.mock('./model/data', () => ({
+jest.mock('./model/data/user', () => ({
   findUser: jest.fn(),
   getAllowCredentials: jest.fn(),
   createUser: jest.fn(),

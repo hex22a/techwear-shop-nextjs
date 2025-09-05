@@ -1,14 +1,11 @@
 import Seed from './helpers/seed';
 import {
-  addReview, createCart,
-  createUser,
   fetchAllCategories,
   fetchAllColors,
   fetchAllSizes,
   fetchAllStyles,
-  fetchProduct, findUser, getAllowCredentials, getCart, getPasskeyWithUserId,
-  getTopReviews,
-} from '../data';
+
+} from '../data/common';
 import {
   expectedCategories,
   expectedColorHexValueRed,
@@ -39,6 +36,9 @@ import {
 import { Cart, CartSubmission, PasskeySerialized, ProductComplete, ReviewComplete, Review } from '@/app/lib/definitions';
 
 import { auth as mockAuth } from '@/auth';
+import { addReview, fetchProduct, getTopReviews } from '@/app/lib/model/data/product';
+import { createUser, findUser, getAllowCredentials, getPasskeyWithUserId } from '@/app/lib/model/data/user';
+import { createCart, getCart } from '@/app/lib/model/data/cart';
 
 jest.mock('@/auth', () => ({
   auth: jest.fn(),

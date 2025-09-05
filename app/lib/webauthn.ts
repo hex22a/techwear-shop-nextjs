@@ -18,7 +18,6 @@ import {
     updateCurrentWebauthnSession
 } from './session';
 import {isoBase64URL} from '@simplewebauthn/server/helpers';
-import {createUser, findUser, getAllowCredentials, getPasskeyWithUserId} from "@/app/lib/model/data";
 import {PasskeySerialized} from "@/app/lib/definitions";
 import {
     PASSKEY_NOT_FOUND_ERROR_MESSAGE,
@@ -32,32 +31,32 @@ import {
     WEBAUTHN_GENERATE_REGISTRATION_OPTIONS, WEBAUTHN_VERIFY_AUTHENTICATION_RESPONSE_OPTIONS,
     WEBAUTHN_VERIFY_REGISTRATION_RESPONSE_OPTIONS,
 } from '@/app/lib/config';
-
+import { createUser, findUser, getAllowCredentials, getPasskeyWithUserId } from '@/app/lib/model/data/user';
 
 export const generateWebAuthnRegistrationOptions = async (username: string) => {
-    const user = await findUser(username);
+  const user = await findUser(username);
 
-    if (user) {
-        return {
-            success: false,
-            message: USER_ALREADY_EXISTS_ERROR_MESSAGE,
-        };
-    }
-
-    const opts: GenerateRegistrationOptionsOpts = {
-        userID: new TextEncoder().encode(username),
-        userName: username,
-        ...WEBAUTHN_GENERATE_REGISTRATION_OPTIONS,
-    };
-
-    const options = await generateRegistrationOptions(opts);
-
-    await updateCurrentWebauthnSession({ currentChallenge: options.challenge, username });
-
+  if (user) {
     return {
-        success: true,
-        data: options,
+      success: false,
+      message: USER_ALREADY_EXISTS_ERROR_MESSAGE,
     };
+  }
+
+  const opts: GenerateRegistrationOptionsOpts = {
+    userID: new TextEncoder().encode(username),
+    userName: username,
+    ...WEBAUTHN_GENERATE_REGISTRATION_OPTIONS,
+  };
+
+  const options = await generateRegistrationOptions(opts);
+
+  await updateCurrentWebauthnSession({ currentChallenge: options.challenge, username });
+
+  return {
+    success: true,
+    data: options,
+  };
 };
 
 export const verifyWebAuthnRegistration = async (data: RegistrationResponseJSON) => {

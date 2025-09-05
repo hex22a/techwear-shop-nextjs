@@ -6,7 +6,7 @@ import {
   submitReview,
   SubmitReviewFormState,
 } from './actions';
-import { typeToFlattenedError, ZodError } from 'zod';
+import { ZodFlattenedError, ZodError } from 'zod';
 import {
   USER_NOT_LOGGED_IN_MESSAGE,
   ADD_TO_CART_MISSING_FIELDS_ERROR_MESSAGE,
@@ -21,21 +21,21 @@ import {
   OrderProductsFormSchema as MockOrderProductsFormSchema,
   ReviewFormSchema as MockReviewFormSchema,
 } from './form_schemas';
-import {
-  createCart as mockCreateCart,
-  addReview as mockAddReview,
-} from './model/data';
 import { transformProductsData as mockTransformProductsData } from './transformers';
 import { stripe as mockStripe } from './stripe';
 import { headers as mockHeaders } from 'next/headers';
 import { STRIPE_SESSION_CREATE_PARAMS } from '@/app/lib/config';
 import { Cart } from '@/app/lib/definitions';
+import { addReview as mockAddReview } from './model/data/product';
+import { createCart as mockCreateCart } from './model/data/cart';
 
 jest.mock('@/auth', () => ({
   auth: jest.fn(),
 }));
-jest.mock('./model/data', () => ({
+jest.mock('./model/data/cart', () => ({
   createCart: jest.fn(),
+}));
+jest.mock('./model/data/product', () => ({
   addReview: jest.fn(),
 }));
 jest.mock('./stripe', () => ({
@@ -130,8 +130,8 @@ describe('actions', () => {
         };
         const expectedFieldErrors = { product_id: ['Wrong product id'] };
         const expectedValidationErrors: Partial<ZodError> = {
-          flatten<U>(): typeToFlattenedError<U> {
-            return { fieldErrors: expectedFieldErrors } as unknown as typeToFlattenedError<U>;
+          flatten<U>(): ZodFlattenedError<U> {
+            return { fieldErrors: expectedFieldErrors } as unknown as ZodFlattenedError<U>;
           },
         };
         const expectedNewState: AddToCartFormState = {
@@ -272,8 +272,8 @@ describe('actions', () => {
       };
       const expectedFieldErrors = { total: ['Expected numeric total'] };
       const expectedValidationErrors: Partial<ZodError> = {
-        flatten<U>(): typeToFlattenedError<U> {
-          return { fieldErrors: expectedFieldErrors } as unknown as typeToFlattenedError<U>;
+        flatten<U>(): ZodFlattenedError<U> {
+          return { fieldErrors: expectedFieldErrors } as unknown as ZodFlattenedError<U>;
         },
       };
       const expectedNewState: OrderProductsFormState = {
@@ -359,8 +359,8 @@ describe('actions', () => {
       const expectedFormData = new FormData();
       const expectedFieldErrors = { review_title: ['Missing review title'], review_text: ['Missing review text'], rating: ['Missing rating'] };
       const expectedValidationErrors: Partial<ZodError> = {
-        flatten<U>(): typeToFlattenedError<U> {
-          return { fieldErrors: expectedFieldErrors } as unknown as typeToFlattenedError<U>;
+        flatten<U>(): ZodFlattenedError<U> {
+          return { fieldErrors: expectedFieldErrors } as unknown as ZodFlattenedError<U>;
         },
       };
       const expectedNewState: SubmitReviewFormState = {

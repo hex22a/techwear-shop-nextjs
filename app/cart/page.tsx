@@ -4,7 +4,8 @@ import Breadcrumbs from "@/app/ui/breadcrumbs";
 import OrderForm from "@/app/cart/ui/order_form";
 import { Cart } from '@/app/lib/definitions';
 import { auth } from '@/auth';
-import { getCart } from '@/app/lib/model/data';
+
+import { getCart } from '@/app/lib/model/data/cart';
 
 const sitePath = [
     {
