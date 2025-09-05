@@ -1,7 +1,7 @@
 'use server';
 
 import { auth } from '@/auth';
-import { db } from './model/db';
+import { db } from './db';
 import {
   Cart,
   CartSubmission,

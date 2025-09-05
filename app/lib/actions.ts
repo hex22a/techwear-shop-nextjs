@@ -1,7 +1,7 @@
 'use server';
 
 import { auth } from '@/auth';
-import { addReview, createCart } from './data';
+import { addReview, createCart } from './model/data';
 import { stripe } from "./stripe";
 import { headers } from 'next/headers';
 import {

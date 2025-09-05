@@ -8,7 +8,7 @@ import Featured from "@/app/ui/featured";
 
 import AddToCartForm from "./ui/add_to_cart_form";
 import {Color, ProductComplete, Size} from "@/app/lib/definitions";
-import {fetchProduct} from "@/app/lib/data";
+import {fetchProduct} from "@/app/lib/model/data";
 import Tabs from "./ui/tabs";
 import {Tab} from "@/app/product/[id]/ui/tabs_header";
 

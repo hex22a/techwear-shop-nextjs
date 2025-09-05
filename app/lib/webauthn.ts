@@ -18,7 +18,7 @@ import {
     updateCurrentWebauthnSession
 } from './session';
 import {isoBase64URL} from '@simplewebauthn/server/helpers';
-import {createUser, findUser, getAllowCredentials, getPasskeyWithUserId} from "@/app/lib/data";
+import {createUser, findUser, getAllowCredentials, getPasskeyWithUserId} from "@/app/lib/model/data";
 import {PasskeySerialized} from "@/app/lib/definitions";
 import {
     PASSKEY_NOT_FOUND_ERROR_MESSAGE,

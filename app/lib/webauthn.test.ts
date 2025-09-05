@@ -8,7 +8,7 @@ import {
   getAllowCredentials as mockGetAllowCredentials,
   createUser as mockCreateUser,
   getPasskeyWithUserId as mockGetPasskeyWithUserId,
-} from './data';
+} from './model/data';
 import {
   deleteCurrentWebauthnSession as mockDeleteCurrentWebauthnSession,
   getCurrentWebauthnSession as mockGetCurrentWebauthnSession,
@@ -45,7 +45,7 @@ import {
   USER_NOT_FOUND_ERROR_MESSAGE,
 } from '@/app/lib/constants';
 
-jest.mock('./data', () => ({
+jest.mock('./model/data', () => ({
   findUser: jest.fn(),
   getAllowCredentials: jest.fn(),
   createUser: jest.fn(),

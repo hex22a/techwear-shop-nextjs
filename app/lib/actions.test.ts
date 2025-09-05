@@ -24,7 +24,7 @@ import {
 import {
   createCart as mockCreateCart,
   addReview as mockAddReview,
-} from './data';
+} from './model/data';
 import { transformProductsData as mockTransformProductsData } from './transformers';
 import { stripe as mockStripe } from './stripe';
 import { headers as mockHeaders } from 'next/headers';
@@ -34,7 +34,7 @@ import { Cart } from '@/app/lib/definitions';
 jest.mock('@/auth', () => ({
   auth: jest.fn(),
 }));
-jest.mock('./data', () => ({
+jest.mock('./model/data', () => ({
   createCart: jest.fn(),
   addReview: jest.fn(),
 }));
