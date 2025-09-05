@@ -8,7 +8,7 @@ import { ORIGIN, RP_ID, RP_NAME, USER_VERIFICATION_MODE } from '@/app/lib/consta
 
 export const STRIPE_CONFIG: Stripe.StripeConfig = {
   // https://github.com/stripe/stripe-node#configuration
-  apiVersion: '2025-07-30.basil',
+  apiVersion: '2025-08-27.basil',
   appInfo: {
     name: 'techwear-shop-demo',
     url: 'https://techwear-shop-nextjs.vercel.app/',
