@@ -15,12 +15,15 @@ import {
 } from '@/app/lib/definitions';
 import { AuthenticatorTransportFuture } from '@simplewebauthn/server';
 
-export const expectedUserId = '1d34ef0e-08cd-4439-9017-894d45074c0a';
-
+// region dates
 const expectedUserCreatedAt = new Date("2025-09-29T09:52:52.000Z");
 const expectedReviewCreatedAt = new Date("2025-10-20T09:52:52.000Z");
 const expectedPasskeyCreatedAt = new Date("2025-11-20T09:52:52.000Z");
 const expectedPasskeyLastUsed = new Date("2025-12-20T09:52:52.000Z");
+// endregion dates
+
+// region users
+export const expectedUserId = '1d34ef0e-08cd-4439-9017-894d45074c0a';
 export const expectedUserUsername = 'crash';
 
 export const expectedUser: User = {
@@ -59,7 +62,9 @@ export const expectedUserCredentials: UserCredentials = {
 export const expectedUsers: User[] = [
   expectedUser,
 ];
+// endregion users
 
+// region categories
 const expectedCategoryJackets: Category = {
   id: 1,
   name: 'Jackets',
@@ -72,7 +77,9 @@ export const expectedCategories: Category[] = [
   expectedCategoryJackets,
   expectedCategoryPants,
 ];
+// endregion categories
 
+// region colors
 const expectedColorGreen: Color = {
   id: 1,
   hex_value: '00C12B',
@@ -139,7 +146,9 @@ export const expectedColors: Color[] = [
   expectedColorWhite,
   expectedColorBlack,
 ];
+// endregion colors
 
+// region styles
 const expectedStyleCasual: Style = {
   id: 1,
   name: 'Casual',
@@ -162,7 +171,9 @@ export const expectedStyles: Style[] = [
   expectedStyleOutdoor,
   expectedStyleParty,
 ];
+// endregion styles
 
+// region sizes
 const expectedSizeXxs: Size = {
   id: 1,
   size: 'XX-Small',
@@ -222,7 +233,9 @@ export const expectedSizes: Size[] = [
   expectedSize3xl,
   expectedSize4xl,
 ];
+// endregion sizes
 
+/* region products */
 const expectedPhotoNapapijri1: Photo = {
   id: 1,
   url: '/items/NA4I5F176-ALT1.webp',
@@ -306,8 +319,9 @@ export const expectedProducts: ProductComplete[] = [
   expectedProductNapapijri,
   expectedProductMastrumBomber,
 ];
+/* endregion products */
 
-
+// region reviews
 const expectedNegativeReviewTitle = 'Awful Jacket';
 const expectedNegativeReviewText = 'Very bad product. 1/10';
 
@@ -520,7 +534,9 @@ export const expectedNapapijriReviews: ReviewComplete[] = [
   expectedReviewNapapijri7,
   expectedReviewNapapijri8,
 ];
+// endregion reviews
 
+// region product w/ reviews
 export const expectedProductNapapijriReturned: ProductComplete = {
   id: expectedProductIdNapapijri,
   colors: new Map([expectedColorRed, expectedColorBlue, expectedColorPurple].map((color) => [color.id, color])),
@@ -549,3 +565,4 @@ export const expectedProductMastrumBomberReturned: ProductComplete = {
   photo_url: expectedProductPhotoUrlMastrumBomber,
   price: 150,
 };
+// endregion product w/ reviews
