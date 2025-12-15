@@ -235,7 +235,7 @@ export const expectedSizes: Size[] = [
 ];
 // endregion sizes
 
-/* region products */
+// region photos
 const expectedPhotoNapapijri1: Photo = {
   id: 1,
   url: '/items/NA4I5F176-ALT1.webp',
@@ -261,7 +261,9 @@ const expectedPhotoMastrumBomber3: Photo = {
   id: 6,
   url: expectedProductPhotoUrlMastrumBomber,
 };
+// endregion photos
 
+// region products
 export const expectedProductIdNapapijri = 1;
 
 export const expectedProductNameNapapijri = 'Skidoo 2.0 Anorak Jacket';
