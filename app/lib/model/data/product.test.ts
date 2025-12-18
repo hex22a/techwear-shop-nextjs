@@ -18,6 +18,7 @@ describe('helper functions tests', () => {
     test('source object has missing fields', () => {
       // Arrange
       const { sizes, ...expectedSourceObject } = expectedProductNapapijri;
+      void sizes;
 
       // Act
       const actualProductComplete: ProductComplete = filterToProductFullProperties(expectedSourceObject);
@@ -42,6 +43,7 @@ describe('helper functions tests', () => {
     test('source object has missing fields', () => {
       // Arrange
       const { photo_url, ...expectedSourceObject } = expectedProductNapapijriMin;
+      void photo_url;
 
       // Act
       const actualProduct: Product = filterToProductThumbnailProperties(expectedSourceObject);

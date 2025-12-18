@@ -2,7 +2,6 @@ import Redis from 'ioredis';
 import { REDIS_LOCAL_URL } from '@/app/lib/constants';
 
 declare global {
-  // eslint-disable-next-line no-var
   var redis: Redis | undefined;
 }
 

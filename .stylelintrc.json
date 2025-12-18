@@ -1,5 +1,6 @@
 {
   "extends": "stylelint-config-standard",
+  "ignoreFiles": ["node_modules/**", "coverage/**"],
   "rules": {
     "declaration-block-no-duplicate-properties": true,
     "declaration-block-no-redundant-longhand-properties": null,
