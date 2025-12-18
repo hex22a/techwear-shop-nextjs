@@ -1,8 +1,7 @@
-/* stylelint-disable-next-line import-notation */
+/* stylelint-disable import-notation */
 @import "tailwindcss";
+@import "tailwindcss/preflight";
 
-@tailwind base;
-@tailwind components;
 @tailwind utilities;
 
 :root {
@@ -60,7 +59,7 @@ body {
   background: var(--background);
 
   /* noinspection CssUnresolvedCustomProperty */
-  font-family: var(--font-satoshi);
+  font-family: var(--font-satoshi) sans-serif;
 }
 
 @media screen and (width >= 768px) {
@@ -75,7 +74,7 @@ body, html {
 
 h1, h2, h3, h4, h5, h6 {
   /* noinspection CssUnresolvedCustomProperty */
-  font-family: var(--font-integral);
+  font-family: var(--font-integral) sans-serif;
 }
 
 footer {
