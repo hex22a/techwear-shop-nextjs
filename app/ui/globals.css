@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import url("tailwindcss");
 
 @tailwind base;
 @tailwind components;
