@@ -1,4 +1,5 @@
-@import url("tailwindcss");
+/* stylelint-disable-next-line import-notation */
+@import "tailwindcss";
 
 @tailwind base;
 @tailwind components;
